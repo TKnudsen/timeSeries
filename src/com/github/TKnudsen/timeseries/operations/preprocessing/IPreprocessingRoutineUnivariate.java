@@ -3,7 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessing;
-import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
  * <p>
@@ -21,8 +21,8 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * @author Juergen Bernard
  * @version 1.02
  */
-public interface IPreprocessingRoutineUnivariate extends IDataProcessing<TimeSeriesUnivariate> {
+public interface IPreprocessingRoutineUnivariate extends IDataProcessing<ITimeSeriesUnivariate> {
 
-	public void process(List<TimeSeriesUnivariate> data);
+	public void process(List<ITimeSeriesUnivariate> data);
 
 }

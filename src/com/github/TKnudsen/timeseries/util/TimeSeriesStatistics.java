@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
  * <p>
@@ -50,7 +50,7 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	 * 
 	 * @param vector
 	 */
-	public TimeSeriesStatistics(TimeSeriesUnivariate timeSeries) {
+	public TimeSeriesStatistics(ITimeSeriesUnivariate timeSeries) {
 		List<Double> values = timeSeries.getValues();
 		for (int i = 0; i < values.size(); i++)
 			if (!Double.isNaN(values.get(i)))

@@ -20,7 +20,7 @@ import com.github.TKnudsen.timeseries.data.TimeSeries;
  * @author Juergen Bernard
  * @version 1.01
  */
-public interface TimeSeriesMultivariate extends TimeSeries<List<Double>> {
+public interface ITimeSeriesMultivariate extends TimeSeries<List<Double>> {
 
 	public int getDimensionality();
 

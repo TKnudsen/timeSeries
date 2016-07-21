@@ -16,7 +16,7 @@ package com.github.TKnudsen.timeseries.data;
  * @author Juergen Bernard
  * @version 1.02
  */
-public interface TimeValuePair<V extends Object> {
+public interface ITimeValuePair<V extends Object> {
 
 	/**
 	 * @return the time stamp

@@ -18,6 +18,6 @@ import com.github.TKnudsen.timeseries.data.TimeSeries;
  * @author Juergen Bernard
  * @version 1.03
  */
-public interface TimeSeriesUnivariate extends TimeSeries<Double> {
+public interface ITimeSeriesUnivariate extends TimeSeries<Double> {
 
 }

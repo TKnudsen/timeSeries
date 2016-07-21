@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 
 import com.github.TKnudsen.timeseries.data.TimeDuration;
 import com.github.TKnudsen.timeseries.data.TimeQuantization;
-import com.github.TKnudsen.timeseries.data.TimeValuePair;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.ITimeValuePair;
+import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
 /**
@@ -35,7 +35,7 @@ public final class TimeSeriesTools {
 	private TimeSeriesTools() {
 	}
 
-	public static double getMinValue(TimeSeriesUnivariate ts) {
+	public static double getMinValue(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -47,7 +47,7 @@ public final class TimeSeriesTools {
 		return min;
 	}
 
-	public static double getMaxValue(TimeSeriesUnivariate ts) {
+	public static double getMaxValue(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -59,7 +59,7 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
-	public static double getMean(TimeSeriesUnivariate ts) {
+	public static double getMean(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -84,7 +84,7 @@ public final class TimeSeriesTools {
 		return means;
 	}
 
-	public static double getVariance(TimeSeriesUnivariate ts) {
+	public static double getVariance(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -107,7 +107,7 @@ public final class TimeSeriesTools {
 		return variance;
 	}
 
-	public static double getStdDeviation(TimeSeriesUnivariate ts) {
+	public static double getStdDeviation(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -116,7 +116,7 @@ public final class TimeSeriesTools {
 		return Math.sqrt(getVariance(ts));
 	}
 
-	public static double getLinearTrend(TimeSeriesUnivariate ts) {
+	public static double getLinearTrend(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -151,7 +151,7 @@ public final class TimeSeriesTools {
 		return numerator / denominator;
 	}
 
-	public static void calculateMovingAverageTimeSensitive(TimeSeriesUnivariate ts, long window) {
+	public static void calculateMovingAverageTimeSensitive(ITimeSeriesUnivariate ts, long window) {
 		for (int i = 0; i < ts.size(); i++) {
 			double d = 0;
 			double w = 0;
@@ -218,16 +218,16 @@ public final class TimeSeriesTools {
 		return ret;
 	}
 
-	public static List<TimeValuePair<Double>> getTimeValuePairs(TimeSeriesUnivariate ts) {
+	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
-		List<TimeValuePair<Double>> list = new ArrayList<TimeValuePair<Double>>();
+		List<ITimeValuePair<Double>> list = new ArrayList<ITimeValuePair<Double>>();
 		for (int i = 0; i < ts.size(); i++)
 			list.add(new TimeValuePairUnivariate(ts.getTimestamp(i), ts.getValue(i)));
 		return list;
 	}
 
-	public static List<Entry<Long, List<Double>>> getTimeValueLists(TimeSeriesMultivariate ts) {
+	public static List<Entry<Long, List<Double>>> getTimeValueLists(ITimeSeriesMultivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 
@@ -238,7 +238,7 @@ public final class TimeSeriesTools {
 		return pairs;
 	}
 
-	public static long[] getQuantizationAsLong(TimeSeriesUnivariate ts) {
+	public static long[] getQuantizationAsLong(ITimeSeriesUnivariate ts) {
 		long[] quantisation = new long[ts.size() - 1];
 		for (int i = 0; i < quantisation.length; i++) {
 			quantisation[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
@@ -246,7 +246,7 @@ public final class TimeSeriesTools {
 		return quantisation;
 	}
 
-	public static double[] getQuantizationAsDouble(TimeSeriesUnivariate ts) {
+	public static double[] getQuantizationAsDouble(ITimeSeriesUnivariate ts) {
 		double[] quantisation = new double[ts.size() - 1];
 		for (int i = 0; i < quantisation.length; i++) {
 			quantisation[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);

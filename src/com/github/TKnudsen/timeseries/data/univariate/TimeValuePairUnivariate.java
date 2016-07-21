@@ -1,6 +1,6 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
-import com.github.TKnudsen.timeseries.data.TimeValuePair;
+import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 
 /**
  * <p>
@@ -18,7 +18,7 @@ import com.github.TKnudsen.timeseries.data.TimeValuePair;
  * @author Juergen Bernard
  * @version 1.01
  */
-public class TimeValuePairUnivariate implements TimeValuePair<Double> {
+public class TimeValuePairUnivariate implements ITimeValuePair<Double> {
 
 	private final long timestamp;
 	private Double value;
@@ -54,10 +54,10 @@ public class TimeValuePairUnivariate implements TimeValuePair<Double> {
 			return false;
 		if (obj == this)
 			return true;
-		if (!(obj instanceof TimeValuePair))
+		if (!(obj instanceof ITimeValuePair))
 			return false;
 
-		TimeValuePair<?> tvp = (TimeValuePair<?>) obj;
+		ITimeValuePair<?> tvp = (ITimeValuePair<?>) obj;
 		if (timestamp == tvp.getTimestamp() && value == tvp.getValue())
 			return true;
 		return false;
