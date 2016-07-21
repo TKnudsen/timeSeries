@@ -16,7 +16,6 @@ import com.github.TKnudsen.timeseries.data.TimeSeries;
  * </p>
  * 
  * @author Juergen Bernard
- * @author David Sessler
  * @version 1.03
  */
 public interface TimeSeriesUnivariate extends TimeSeries<Double> {
