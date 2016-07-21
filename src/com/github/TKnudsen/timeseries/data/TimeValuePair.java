@@ -1,0 +1,35 @@
+package com.github.TKnudsen.timeseries.data;
+
+/**
+ * <p>
+ * Title: TimeValuePair
+ * </p>
+ * 
+ * <p>
+ * Description: structure that contains a time stamp as key and a T as value
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2015-2016
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.02
+ */
+public interface TimeValuePair<V extends Object> {
+
+	/**
+	 * @return the time stamp
+	 */
+	public long getTimestamp();
+
+	/**
+	 * @return the value
+	 */
+	public V getValue();
+
+	/**
+	 * sets the value
+	 */
+	public void setValue(V value);
+}
