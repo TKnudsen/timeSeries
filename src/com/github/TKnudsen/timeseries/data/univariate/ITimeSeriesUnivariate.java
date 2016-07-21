@@ -1,6 +1,6 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
-import com.github.TKnudsen.timeseries.data.TimeSeries;
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
  * <p>
@@ -18,6 +18,6 @@ import com.github.TKnudsen.timeseries.data.TimeSeries;
  * @author Juergen Bernard
  * @version 1.03
  */
-public interface ITimeSeriesUnivariate extends TimeSeries<Double> {
+public interface ITimeSeriesUnivariate extends ITimeSeries<Double> {
 
 }

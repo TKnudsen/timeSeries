@@ -3,9 +3,9 @@ package com.github.TKnudsen.timeseries.util;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.github.TKnudsen.timeseries.data.TimeDuration;
-import com.github.TKnudsen.timeseries.data.TimeQuantization;
-import com.github.TKnudsen.timeseries.data.TimeSeries;
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
+import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
+import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
 /**
  * <p>
@@ -108,7 +108,7 @@ public class TimeDurationTools {
 	 * @param timeSeries
 	 * @return TimeSeriesInterval of the dominating quantization
 	 */
-	public static TimeDuration getDominatingTimeSeriesQuantization(TimeSeries<?> timeSeries) {
+	public static TimeDuration getDominatingTimeSeriesQuantization(ITimeSeries<?> timeSeries) {
 
 		HashMap<Long, Integer> durationCounts = new HashMap<Long, Integer>();
 

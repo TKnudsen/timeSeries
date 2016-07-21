@@ -1,7 +1,7 @@
 package com.github.TKnudsen.timeseries.util;
 
-import com.github.TKnudsen.timeseries.data.TimeQuantization;
-import com.github.TKnudsen.timeseries.data.TimeSeries;
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
+import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
 /**
  * <p>
@@ -46,7 +46,7 @@ public class TimeQuantizationTools {
 		}
 	}
 
-	public static boolean isQuantizationValid(long quantization, TimeQuantization qType, TimeSeries<?> tsd) {
+	public static boolean isQuantizationValid(long quantization, TimeQuantization qType, ITimeSeries<?> tsd) {
 		long binCount = tsd.size();
 		long startTime = tsd.getFirstTimestamp();
 		long endTime = tsd.getLastTimestamp();

@@ -3,7 +3,7 @@ package com.github.TKnudsen.timeseries.operations.segmentation;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.DataProcessingCategory;
-import com.github.TKnudsen.timeseries.data.TimeSeries;
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
  * <p>
@@ -21,7 +21,7 @@ import com.github.TKnudsen.timeseries.data.TimeSeries;
  * @author Juergen Bernard
  * @version 1.01
  */
-public interface ITimeSeriesSegmenter<T extends TimeSeries<Number>> {
+public interface ITimeSeriesSegmenter<T extends ITimeSeries<Number>> {
 
 	public List<T> process(List<T> data);
 

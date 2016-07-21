@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.data;
+package com.github.TKnudsen.timeseries.data.primitives;
 
 import java.io.Serializable;
 

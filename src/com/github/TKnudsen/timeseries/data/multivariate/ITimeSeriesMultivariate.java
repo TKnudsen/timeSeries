@@ -2,7 +2,7 @@ package com.github.TKnudsen.timeseries.data.multivariate;
 
 import java.util.List;
 
-import com.github.TKnudsen.timeseries.data.TimeSeries;
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
  * <p>
@@ -20,13 +20,13 @@ import com.github.TKnudsen.timeseries.data.TimeSeries;
  * @author Juergen Bernard
  * @version 1.01
  */
-public interface ITimeSeriesMultivariate extends TimeSeries<List<Double>> {
+public interface ITimeSeriesMultivariate extends ITimeSeries<List<Double>> {
 
 	public int getDimensionality();
 
-	public List<TimeSeries<Double>> getTimeSeriesList();
+	public List<ITimeSeries<Double>> getTimeSeriesList();
 
-	public TimeSeries<Double> getTimeSeries(String attributeName);
+	public ITimeSeries<Double> getTimeSeries(String attributeName);
 
 	public List<String> getAttributeNames();
 

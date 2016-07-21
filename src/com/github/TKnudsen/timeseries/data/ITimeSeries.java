@@ -21,7 +21,7 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
  * @author Juergen Bernard
  * @version 1.01
  */
-public interface TimeSeries<T> extends IDObject, ISelfDescription {
+public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 
 	public int size();
 
