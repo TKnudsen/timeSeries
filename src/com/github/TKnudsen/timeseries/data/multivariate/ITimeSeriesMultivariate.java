@@ -29,6 +29,8 @@ public interface ITimeSeriesMultivariate extends ITimeSeries<List<Double>> {
 
 	public ITimeSeriesUnivariate getTimeSeries(String attributeName);
 
+	public ITimeSeriesUnivariate getTimeSeries(int attributeIndex);
+
 	public List<String> getAttributeNames();
 
 	public String getAttributeName(int attributeIndex);

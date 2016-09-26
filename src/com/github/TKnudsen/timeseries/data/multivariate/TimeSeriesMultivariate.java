@@ -3,9 +3,9 @@ package com.github.TKnudsen.timeseries.data.multivariate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.util.RandomTools;
 
 /**
  * <p>
@@ -39,7 +39,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	private String description;
 
 	public TimeSeriesMultivariate(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
-		this.id = getRandomLong();
+		this.id = RandomTools.getRandomLong();
 		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
 		this.timeSeriesNames = timeSeriesNames;
 
@@ -251,6 +251,14 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	}
 
 	@Override
+	public ITimeSeriesUnivariate getTimeSeries(int attributeIndex) {
+		if (attributeIndex < 0 || attributeIndex >= timeSeriesUnivariateList.size())
+			throw new IndexOutOfBoundsException("TimeSeriesMultivariate: dimension out of bounds");
+
+		return timeSeriesUnivariateList.get(attributeIndex);
+	}
+
+	@Override
 	public List<String> getAttributeNames() {
 		List<String> attributeNames = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
@@ -293,15 +301,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		return ts.getValue(index);
 	}
 
-	/**
-	 * Little helper for the generation of a unique identifier.
-	 * 
-	 * @return unique ID
-	 */
-	private long getRandomLong() {
-		return UUID.randomUUID().getMostSignificantBits();
-	}
-
 	@Override
 	public int hashCode() {
 		int hash = 23;
@@ -314,4 +313,28 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 		return hash;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+
+		if (!(obj instanceof TimeSeriesMultivariate))
+			return false;
+
+		TimeSeriesMultivariate otherTimeSeries = (TimeSeriesMultivariate) obj;
+
+		if (size() != otherTimeSeries.size())
+			return false;
+
+		if (getDimensionality() != otherTimeSeries.getDimensionality())
+			return false;
+
+		for (int i = 0; i < getDimensionality(); i++)
+			if (!getTimeSeries(i).equals(otherTimeSeries.getTimestamp(i)))
+				return false;
+
+		return true;
+	}
+
 }

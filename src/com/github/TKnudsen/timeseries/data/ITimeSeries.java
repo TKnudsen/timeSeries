@@ -61,7 +61,7 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 
 	boolean containsTimestamp(long timestamp);
 
-	void insert(long timstamp, T value);
+	void insert(long timestamp, T value);
 
 	void removeTimeValue(long timestamp);
 
