@@ -3,6 +3,7 @@ package com.github.TKnudsen.timeseries.data.multivariate;
 import java.util.List;
 
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
  * <p>
@@ -24,9 +25,9 @@ public interface ITimeSeriesMultivariate extends ITimeSeries<List<Double>> {
 
 	public int getDimensionality();
 
-	public List<ITimeSeries<Double>> getTimeSeriesList();
+	public List<ITimeSeriesUnivariate> getTimeSeriesList();
 
-	public ITimeSeries<Double> getTimeSeries(String attributeName);
+	public ITimeSeriesUnivariate getTimeSeries(String attributeName);
 
 	public List<String> getAttributeNames();
 
@@ -34,7 +35,7 @@ public interface ITimeSeriesMultivariate extends ITimeSeries<List<Double>> {
 
 	public List<String> getAttributeDescriptions();
 
-	public String getAttributeDescriptions(int attributeIndex);
+	public String getAttributeDescription(int attributeIndex);
 
 	public Double getValue(int index, String attribute);
 }
