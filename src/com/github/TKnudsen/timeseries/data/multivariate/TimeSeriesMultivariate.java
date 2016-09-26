@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.data.multivariate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	private int size;
 	private int dimensionality;
 
-	private List<Double> missingValueIndicator;
+	private List<Double> missingValueIndicators;
 
 	private String name;
 	private String description;
@@ -89,9 +90,9 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 		dimensionality = getFirstTimeseriesUnivariate().size();
 
-		missingValueIndicator = new ArrayList<>();
+		missingValueIndicators = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
-			missingValueIndicator.add(timeSeriesUnivariateList.get(i).getMissingValueIndicator());
+			missingValueIndicators.add(timeSeriesUnivariateList.get(i).getMissingValueIndicator());
 	}
 
 	private ITimeSeriesUnivariate getFirstTimeseriesUnivariate() {
@@ -112,7 +113,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public List<Double> getMissingValueIndicator() {
-		return missingValueIndicator;
+		return Collections.unmodifiableList(missingValueIndicators);
 	}
 
 	@Override
@@ -125,7 +126,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		List<Double> values = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			values.add(timeSeriesUnivariateList.get(i).getValue(index));
-		return values;
+		return Collections.unmodifiableList(values);
 	}
 
 	@Override
@@ -133,7 +134,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		List<Double> values = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			values.add(timeSeriesUnivariateList.get(i).getValue(timestamp, allowInterpolation));
-		return values;
+		return Collections.unmodifiableList(values);
 	}
 
 	@Override
@@ -156,7 +157,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		List<List<Double>> values = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			values.add(timeSeriesUnivariateList.get(i).getValues());
-		return values;
+		return Collections.unmodifiableList(values);
 	}
 
 	@Override
@@ -254,7 +255,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		List<String> attributeNames = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			attributeNames.add(timeSeriesUnivariateList.get(i).getName());
-		return attributeNames;
+		return Collections.unmodifiableList(attributeNames);
 	}
 
 	@Override
@@ -270,7 +271,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		List<String> attributeDescriptions = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			attributeDescriptions.add(timeSeriesUnivariateList.get(i).getDescription());
-		return attributeDescriptions;
+		return Collections.unmodifiableList(attributeDescriptions);
 	}
 
 	@Override
@@ -299,5 +300,18 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	 */
 	private long getRandomLong() {
 		return UUID.randomUUID().getMostSignificantBits();
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 23;
+
+		if (getValues() == null)
+			hash = 23 * hash;
+		else
+			for (List<Double> values : getValues())
+				hash = 23 * hash + values.hashCode();
+
+		return hash;
 	}
 }
