@@ -43,7 +43,10 @@ public final class TimeSeriesTools {
 
 		double min = Double.POSITIVE_INFINITY;
 		for (double d : ts.getValues())
-			min = Math.min(min, d);
+			if (Double.isNaN(d))
+				continue;
+			else
+				min = Math.min(min, d);
 		return min;
 	}
 
@@ -55,7 +58,10 @@ public final class TimeSeriesTools {
 
 		double max = Double.NEGATIVE_INFINITY;
 		for (double d : ts.getValues())
-			max = Math.max(max, d);
+			if (Double.isNaN(d))
+				continue;
+			else
+				max = Math.max(max, d);
 		return max;
 	}
 

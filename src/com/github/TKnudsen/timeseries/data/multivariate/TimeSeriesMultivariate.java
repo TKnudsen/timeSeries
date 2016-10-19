@@ -88,7 +88,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 					throw new IllegalArgumentException("TimeSeriesMultivariate: time series time stamps are inconsistent");
 		}
 
-		dimensionality = getFirstTimeseriesUnivariate().size();
+		// dimensionality = getFirstTimeseriesUnivariate().size();
+		dimensionality = timeSeriesUnivariateList.size();
 
 		missingValueIndicators = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
@@ -243,9 +244,9 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public ITimeSeriesUnivariate getTimeSeries(String attributeName) {
-		for (ITimeSeriesUnivariate ts : timeSeriesUnivariateList)
-			if (ts.getName().equals(attributeName))
-				return ts;
+		for (int i = 0; i < timeSeriesNames.size(); i++)
+			if (timeSeriesNames.get(i).equals(attributeName))
+				return timeSeriesUnivariateList.get(i);
 
 		return null;
 	}
