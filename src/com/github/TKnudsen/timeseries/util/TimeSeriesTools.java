@@ -12,6 +12,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
 /**
@@ -362,5 +363,34 @@ public final class TimeSeriesTools {
 			}
 		}
 		return equidistanceInMillis;
+	}
+
+	/**
+	 * Provides a clone of a given time series.
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate cloneTimeSeries(ITimeSeriesUnivariate timeSeries) {
+		if (timeSeries == null)
+			return null;
+
+		List<Long> times = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		// Currently both lists are unmodifiable.
+		// However, two new lists are built
+
+		for (int i = 0; i < timeSeries.size(); i++) {
+			times.add(new Long(timeSeries.getTimestamp(i)));
+			values.add(new Double(timeSeries.getValue(i).doubleValue()));
+		}
+
+		TimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(times, values, Double.NaN);
+		returnTimeSeries.setName(new String(timeSeries.getName()));
+		returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
+		returnTimeSeries.setMissingValueIndicator(new Double(timeSeries.getMissingValueIndicator()));
+
+		return returnTimeSeries;
 	}
 }
