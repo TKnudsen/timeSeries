@@ -2,7 +2,7 @@ package com.github.TKnudsen.timeseries.data.multivariate;
 
 import java.util.List;
 
-import com.github.TKnudsen.timeseries.data.AbstractTimeValuePair;
+import com.github.TKnudsen.timeseries.data.primitives.AbstractTimeValuePair;
 
 public class TimeValuePairMultivariate extends AbstractTimeValuePair<List<Double>> {
 

@@ -1,6 +1,6 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
-import com.github.TKnudsen.timeseries.data.AbstractTimeValuePair;
+import com.github.TKnudsen.timeseries.data.primitives.AbstractTimeValuePair;
 
 /**
  * <p>

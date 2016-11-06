@@ -1,4 +1,6 @@
-package com.github.TKnudsen.timeseries.data;
+package com.github.TKnudsen.timeseries.data.primitives;
+
+import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 
 /**
  * <p>
