@@ -8,6 +8,22 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
+/**
+ * <p>
+ * Title: TimeSeriesToolsTester
+ * </p>
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2016
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.01
+ */
 public class TimeSeriesToolsTester {
 
 	public static void main(String[] args) {

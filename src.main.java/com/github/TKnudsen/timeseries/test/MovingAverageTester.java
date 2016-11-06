@@ -10,6 +10,22 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.MovingAverage;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
+/**
+ * <p>
+ * Title: MovingAverageTester
+ * </p>
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2016
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.01
+ */
 public class MovingAverageTester {
 
 	public static void main(String[] args) {

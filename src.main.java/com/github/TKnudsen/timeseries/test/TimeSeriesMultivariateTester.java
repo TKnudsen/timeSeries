@@ -3,18 +3,18 @@ package com.github.TKnudsen.timeseries.test;
 import java.util.Date;
 
 import com.github.TKnudsen.timeseries.data.dataGeneration.SyntheticTimeSeriesGenerator;
+import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
-import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 
 /**
  * <p>
- * Title: TimeSeriesUnivariateTester
+ * Title: TimeSeriesMultivariateTester
  * </p>
  * 
  * <p>
- * Description: 
+ * Description:
  * </p>
  * 
  * <p>
@@ -24,17 +24,17 @@ import com.github.TKnudsen.timeseries.operations.tools.DateTools;
  * @author Juergen Bernard
  * @version 1.01
  */
-public class TimeSeriesUnivariateTester {
+public class TimeSeriesMultivariateTester {
 
 	public static void main(String[] args) {
-		ITimeSeriesUnivariate timeSeries = SyntheticTimeSeriesGenerator.generateSyntheticTimeSeriesUnivariate(DateTools.createDate(2015, 3, 13, 13, 0, 0, 0).getTime(), DateTools.createDate(2015, 3, 13, 13, 0, 10, 0).getTime(),
+		ITimeSeriesMultivariate timeSeries = SyntheticTimeSeriesGenerator.generateSyntheticTimeSeriesMultivariate(DateTools.createDate(2015, 3, 13, 13, 0, 0, 0).getTime(), DateTools.createDate(2015, 3, 13, 13, 0, 10, 0).getTime(), 3,
 				new TimeDuration(TimeQuantization.SECONDS, 1), true);
 
 		testFindDate(timeSeries);
 		System.out.println("Test finished.");
 	}
 
-	private static boolean testFindDate(ITimeSeriesUnivariate timeSeries) {
+	private static boolean testFindDate(ITimeSeriesMultivariate timeSeries) {
 		try {
 			Date findDate = DateTools.createDate(2015, 3, 13, 13, 0, 5, 0);
 			int findByDate = timeSeries.findByDate(findDate.getTime(), true);
