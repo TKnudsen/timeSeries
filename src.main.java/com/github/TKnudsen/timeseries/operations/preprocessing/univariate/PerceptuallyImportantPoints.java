@@ -20,6 +20,12 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * used for data reduction purposes. The timeseries to be processed is
  * subsequently reduced to the size of a given pipCount. The criterion of
  * reduction is based on the preservation of perceived points (min/max values).
+ * 
+ * The implementation of the algorithm is in accordance to the publication
+ * 
+ * Chung, F.L., Fu, T.C., Luk, R., Ng, V., Flexible Time Series Pattern Matching
+ * Based on Perceptually Important Points. In: Workshop on Learning from
+ * Temporal and Spatial Data at IJCAI (2001) 1-7
  * </p>
  * 
  * <p>
@@ -27,13 +33,13 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class PerceptualImportantPoints implements ITimeSeriesPreprocessorUnivariate {
+public class PerceptuallyImportantPoints implements ITimeSeriesPreprocessorUnivariate {
 
 	private int pipCount;
 
-	public PerceptualImportantPoints(int pipCount) {
+	public PerceptuallyImportantPoints(int pipCount) {
 		if (pipCount < 2)
 			throw new IllegalArgumentException("PIP: parameter value <2");
 
@@ -72,20 +78,21 @@ public class PerceptualImportantPoints implements ITimeSeriesPreprocessorUnivari
 		pipTmp.add(TimeSeriesTools.getTimeValuePair(data, 0));
 		pipTmp.add(TimeSeriesTools.getTimeValuePair(data, data.size() - 1));
 
+		List<ITimeValuePair<Double>> subSequence = new ArrayList<ITimeValuePair<Double>>(getPipCount());
+		
 		double dist = Double.NaN;
 		double pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
-		List<ITimeValuePair<Double>> subSequence = new ArrayList<ITimeValuePair<Double>>(getPipCount());
-		int iterator = 1;
+		int pipIterator = 1;
 		int nextPipIndex = 0;
 
 		for (int index = 0; index < getPipCount() - 2; index++) {
-			iterator = 1;
+			pipIterator = 1;
 			nextPipIndex = -1;
 			pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
 			for (int i = 1; i < data.size(); i++) {
-				if (data.getTimestamp(i) == pipTmp.get(iterator).getTimestamp()) {
-					double steigung = (pipTmp.get(iterator).getValue() - pipTmp.get(iterator - 1).getValue()) / (pipTmp.get(iterator).getTimestamp() - pipTmp.get(iterator - 1).getTimestamp());
-					double xAxisIntercept = pipTmp.get(iterator).getValue() - (pipTmp.get(iterator).getTimestamp() * steigung);
+				if (data.getTimestamp(i) == pipTmp.get(pipIterator).getTimestamp()) {
+					double steigung = (pipTmp.get(pipIterator).getValue() - pipTmp.get(pipIterator - 1).getValue()) / (pipTmp.get(pipIterator).getTimestamp() - pipTmp.get(pipIterator - 1).getTimestamp());
+					double xAxisIntercept = pipTmp.get(pipIterator).getValue() - (pipTmp.get(pipIterator).getTimestamp() * steigung);
 					for (int sub = 0; sub < subSequence.size(); sub++) {
 						dist = Math.abs(steigung * subSequence.get(sub).getTimestamp() + xAxisIntercept - subSequence.get(sub).getValue());
 						if (dist > pipYOffsetCurrent) {
@@ -94,7 +101,7 @@ public class PerceptualImportantPoints implements ITimeSeriesPreprocessorUnivari
 						}
 					}
 					subSequence.clear();
-					iterator++;
+					pipIterator++;
 				} else {
 					subSequence.add(TimeSeriesTools.getTimeValuePair(data, i));
 				}

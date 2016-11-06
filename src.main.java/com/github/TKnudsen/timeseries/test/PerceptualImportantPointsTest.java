@@ -7,7 +7,7 @@ import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptualImportantPoints;
+import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptuallyImportantPoints;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
@@ -22,7 +22,7 @@ public class PerceptualImportantPointsTest {
 		ITimeSeriesUnivariate ts = TimeSeriesGenerator.generateSyntheticTimeSeriesUnivariate(startDate.getTime(), endDate.getTime(), quantization, true);
 		ITimeSeriesUnivariate cloneTimeSeries = TimeSeriesTools.cloneTimeSeries(ts);
 
-		PerceptualImportantPoints pip = new PerceptualImportantPoints(10);
+		PerceptuallyImportantPoints pip = new PerceptuallyImportantPoints(10);
 		pip.process(Arrays.asList(cloneTimeSeries));
 		System.out.println(cloneTimeSeries);
 	}
