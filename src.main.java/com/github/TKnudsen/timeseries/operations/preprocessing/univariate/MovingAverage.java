@@ -7,9 +7,26 @@ import com.github.TKnudsen.ComplexDataObject.model.preprocessing.DataProcessingC
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.IPreprocessingRoutineUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessorUnivariate;
 
-public class MovingAverage implements IPreprocessingRoutineUnivariate {
+/**
+ * <p>
+ * Title: MovingAverage
+ * </p>
+ * 
+ * <p>
+ * Description: Moving average preprocessing routine. A kernel function handles
+ * the range parameter.
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2016
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.03
+ */
+public class MovingAverage implements ITimeSeriesPreprocessorUnivariate {
 
 	private IIntegerWeightingKernel kernel;
 	private boolean considerFutureValues = false;

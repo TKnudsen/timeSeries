@@ -21,7 +21,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * @author Juergen Bernard
  * @version 1.02
  */
-public interface IPreprocessingRoutineMultivariate extends IDataProcessing<ITimeSeriesMultivariate> {
+public interface ITimeSeriesPreprocessorMultivariate extends IDataProcessing<ITimeSeriesMultivariate> {
 
 	public void process(List<ITimeSeriesMultivariate> data);
 

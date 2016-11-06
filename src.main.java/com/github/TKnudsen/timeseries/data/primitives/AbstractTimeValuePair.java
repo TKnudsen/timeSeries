@@ -34,6 +34,14 @@ public class AbstractTimeValuePair<T> implements ITimeValuePair<T> {
 		this.value = value;
 	}
 
+	@Override
+	public int compareTo(ITimeValuePair<T> o) {
+		if (o == null)
+			return -1;
+
+		return this.timestamp < o.getTimestamp() ? -1 : this.timestamp > o.getTimestamp() ? 1 : 0;
+	}
+
 	/**
 	 * equals function for a general time value pair.
 	 * 

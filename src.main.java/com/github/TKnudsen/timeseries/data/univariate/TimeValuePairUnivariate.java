@@ -29,4 +29,9 @@ public class TimeValuePairUnivariate extends AbstractTimeValuePair<Double> {
 	public TimeValuePairUnivariate(long timestamp, Double value) {
 		super(timestamp, value);
 	}
+
+	@Override
+	public TimeValuePairUnivariate clone() {
+		return new TimeValuePairUnivariate(timestamp, new Double(value));
+	}
 }

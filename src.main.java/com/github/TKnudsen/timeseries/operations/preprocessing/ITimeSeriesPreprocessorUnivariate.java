@@ -21,7 +21,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * @author Juergen Bernard
  * @version 1.02
  */
-public interface IPreprocessingRoutineUnivariate extends IDataProcessing<ITimeSeriesUnivariate> {
+public interface ITimeSeriesPreprocessorUnivariate extends IDataProcessing<ITimeSeriesUnivariate> {
 
 	public void process(List<ITimeSeriesUnivariate> data);
 

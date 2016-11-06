@@ -121,7 +121,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public Double getValue(long timeStamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException{
+	public Double getValue(long timeStamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException {
 		if (allowInterpolation) {
 			int index = findByDate(timeStamp, false);
 			if (getTimestamp(index) == timeStamp)
@@ -135,7 +135,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				long lAfter = getTimestamp(index + 1);
 				double vAfter = getValue(index + 1);
 
-				long deltaBefore = timeStamp + lBefore;
+				long deltaBefore = timeStamp - lBefore;
 				double value = vBefore + ((vAfter - vBefore) * (deltaBefore / (lAfter - lBefore)));
 				return value;
 			}
@@ -195,11 +195,17 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		if (indexStart == indexEnd)
 			return indexStart;
 
+		if (indexEnd - indexStart == 1)
+			if (!requireExactMatch)
+				return indexStart;
+			else
+				throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
+
 		// interpolate appropriate index
 		long l1 = getTimestamp(indexStart);
 		long l2 = getTimestamp(indexEnd);
 
-		if (l1 > timeStamp)
+		if (l1 > timeStamp && requireExactMatch)
 			throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
 
 		if (l2 < timeStamp && requireExactMatch)
@@ -214,9 +220,9 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 		if (newLong == timeStamp)
 			return newSplitIndex;
-		else if (newLong < timeStamp)
+		else if (newLong > timeStamp) // earlier bin
 			return interpolationSearch(indexStart, newSplitIndex, timeStamp, requireExactMatch);
-		else
+		else // later bin
 			return interpolationSearch(newSplitIndex, indexEnd, timeStamp, requireExactMatch);
 	}
 

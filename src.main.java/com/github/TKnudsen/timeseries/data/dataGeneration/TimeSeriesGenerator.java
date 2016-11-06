@@ -44,7 +44,7 @@ public class TimeSeriesGenerator {
 			else
 				l += ((long) (duration * Math.random() * 2));
 
-			lastValue = lastValue + Math.random() * 0.1 - 0.05;
+			lastValue = lastValue + Math.random() * 0.2 - 0.1;
 		}
 
 		return new TimeSeriesUnivariate(timeStamps, values, Double.NaN);
@@ -74,7 +74,7 @@ public class TimeSeriesGenerator {
 
 			for (int j = 0; j < timeStamps.size(); j++) {
 				values.add(lastValue);
-				lastValue = lastValue + Math.random() * 0.1 - 0.05;
+				lastValue = lastValue + Math.random() * 0.2 - 0.1;
 			}
 
 			timeSeriesUnivariateList.add(new TimeSeriesUnivariate(timeStamps, values, Double.NaN));

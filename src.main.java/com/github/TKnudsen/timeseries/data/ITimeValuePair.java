@@ -1,5 +1,7 @@
 package com.github.TKnudsen.timeseries.data;
 
+import java.util.Comparator;
+
 /**
  * <p>
  * Title: TimeValuePair
@@ -16,7 +18,7 @@ package com.github.TKnudsen.timeseries.data;
  * @author Juergen Bernard
  * @version 1.02
  */
-public interface ITimeValuePair<V extends Object> {
+public interface ITimeValuePair<V extends Object> extends Comparable<ITimeValuePair<V>> {
 
 	/**
 	 * @return the time stamp

@@ -225,6 +225,14 @@ public final class TimeSeriesTools {
 		return ret;
 	}
 
+	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeriesUnivariate ts, int i) {
+		if (ts == null)
+			throw new IllegalStateException("TimeSeries is null");
+		if (ts.size() - 1 < i)
+			return null;
+		return new TimeValuePairUnivariate(ts.getTimestamp(i), ts.getValue(i));
+	}
+
 	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
