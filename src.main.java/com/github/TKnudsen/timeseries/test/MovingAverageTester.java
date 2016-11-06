@@ -1,13 +1,14 @@
 package com.github.TKnudsen.timeseries.test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.Date;
 
+import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
+import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
+import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.MovingAverage;
+import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
@@ -16,7 +17,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Description: 
+ * Description:
  * </p>
  * 
  * <p>
@@ -30,24 +31,15 @@ public class MovingAverageTester {
 
 	public static void main(String[] args) {
 
-		List<Long> timestamps = new ArrayList<>();
-		List<Double> values = new ArrayList<>();
+		Date startDate = DateTools.createDate(2016, 4, 3, 2, 1, 0, 0);
+		Date endDate = DateTools.createDate(2016, 4, 3, 3, 1, 0, 0);
+		TimeDuration quantization = new TimeDuration(TimeQuantization.MINUTES, 2);
 
-		Random random = new Random();
-		double d = 0.5;
-		for (int i = 0; i < 100; i++) {
-			timestamps.add(new Long(i * 10000000L));
-			d = d + (random.nextDouble() * 0.06 - 0.03);
-			values.add(d);
-		}
-
-		TimeSeriesUnivariate ts = new TimeSeriesUnivariate(timestamps, values);
-		System.out.println(ts);
-
+		ITimeSeriesUnivariate ts = TimeSeriesGenerator.generateSyntheticTimeSeriesUnivariate(startDate.getTime(), endDate.getTime(), quantization, true);
 		ITimeSeriesUnivariate cloneTimeSeries = TimeSeriesTools.cloneTimeSeries(ts);
+
 		MovingAverage movingAverage = new MovingAverage(3, false);
-		for (int i = 0; i < 100; i++)
-			movingAverage.process(Arrays.asList(cloneTimeSeries));
+		movingAverage.process(Arrays.asList(cloneTimeSeries));
 		System.out.println(cloneTimeSeries);
 	}
 

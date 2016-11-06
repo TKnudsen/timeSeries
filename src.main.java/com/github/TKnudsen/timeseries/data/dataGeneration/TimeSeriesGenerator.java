@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * @author Juergen Bernard
  * @version 1.01
  */
-public class SyntheticTimeSeriesGenerator {
+public class TimeSeriesGenerator {
 	public static ITimeSeriesUnivariate generateSyntheticTimeSeriesUnivariate(long startDate, long endDate, TimeDuration quantization, boolean equidistant) {
 
 		List<Long> timeStamps = new ArrayList<>();

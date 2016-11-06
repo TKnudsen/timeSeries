@@ -2,7 +2,7 @@ package com.github.TKnudsen.timeseries.test;
 
 import java.util.Date;
 
-import com.github.TKnudsen.timeseries.data.dataGeneration.SyntheticTimeSeriesGenerator;
+import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
@@ -27,7 +27,7 @@ import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 public class TimeSeriesUnivariateTester {
 
 	public static void main(String[] args) {
-		ITimeSeriesUnivariate timeSeries = SyntheticTimeSeriesGenerator.generateSyntheticTimeSeriesUnivariate(DateTools.createDate(2015, 3, 13, 13, 0, 0, 0).getTime(), DateTools.createDate(2015, 3, 13, 13, 0, 10, 0).getTime(),
+		ITimeSeriesUnivariate timeSeries = TimeSeriesGenerator.generateSyntheticTimeSeriesUnivariate(DateTools.createDate(2015, 3, 13, 13, 0, 0, 0).getTime(), DateTools.createDate(2015, 3, 13, 13, 0, 10, 0).getTime(),
 				new TimeDuration(TimeQuantization.SECONDS, 1), true);
 
 		testFindDate(timeSeries);
