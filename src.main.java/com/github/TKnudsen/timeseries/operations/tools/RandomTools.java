@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.util;
+package com.github.TKnudsen.timeseries.operations.tools;
 
 import java.util.UUID;
 

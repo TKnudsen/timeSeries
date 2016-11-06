@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.util;
+package com.github.TKnudsen.timeseries.operations.tools;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -387,9 +387,12 @@ public final class TimeSeriesTools {
 		}
 
 		TimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(times, values, Double.NaN);
-		returnTimeSeries.setName(new String(timeSeries.getName()));
-		returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
-		returnTimeSeries.setMissingValueIndicator(new Double(timeSeries.getMissingValueIndicator()));
+		if (timeSeries.getName() != null)
+			returnTimeSeries.setName(new String(timeSeries.getName()));
+		if (timeSeries.getDescription() != null)
+			returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
+		if (timeSeries.getMissingValueIndicator() != null)
+			returnTimeSeries.setMissingValueIndicator(new Double(timeSeries.getMissingValueIndicator()));
 
 		return returnTimeSeries;
 	}

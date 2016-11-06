@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.util;
+package com.github.TKnudsen.timeseries.operations.tools;
 
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;

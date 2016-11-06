@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.util.RandomTools;
+import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
 
 /**
  * <p>
@@ -131,10 +131,12 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	}
 
 	@Override
-	public List<Double> getValue(long timestamp, boolean allowInterpolation) {
+	public List<Double> getValue(long timestamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException {
 		List<Double> values = new ArrayList<>();
-		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
+		for (int i = 0; i < timeSeriesUnivariateList.size(); i++) {
 			values.add(timeSeriesUnivariateList.get(i).getValue(timestamp, allowInterpolation));
+		}
+
 		return Collections.unmodifiableList(values);
 	}
 
@@ -162,8 +164,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	}
 
 	@Override
-	public int findByDate(long timestamp) {
-		return getFirstTimeseriesUnivariate().findByDate(timestamp);
+	public int findByDate(long timestamp, boolean requireExactMatch) throws IllegalArgumentException {
+		return getFirstTimeseriesUnivariate().findByDate(timestamp, requireExactMatch);
 	}
 
 	@Override

@@ -33,33 +33,25 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 
 	T getValue(int index);
 
-	T getValue(long timestamp, boolean allowInterpolation);
+	T getValue(long timestamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException;
 
 	long getFirstTimestamp();
 
 	long getLastTimestamp();
 
 	/**
-	 * @return the sorted list of timestamps
+	 * @return the sorted list of time stamps
 	 */
 	List<Long> getTimestamps();
 
 	/**
-	 * @return the list of values following the order of their timestamps
+	 * @return the list of values following the order of their time stamps
 	 */
 	List<T> getValues();
 
-	/**
-	 * @param timestamp
-	 *            the timestamp
-	 * @return if the is timestamp present: positive index representing the
-	 *         position of the timestamp, if the timestamp is not present:
-	 *         negative value that can be converted to the calculated position
-	 *         to insert the timestamp by calculating (-index - 1)
-	 */
-	int findByDate(long timestamp);
+	int findByDate(long timestamp, boolean requireExactMatch) throws IllegalArgumentException;
 
-	boolean containsTimestamp(long timestamp);
+	boolean containsTimestamp(long timeStamp);
 
 	void insert(long timestamp, T value);
 

@@ -1,9 +1,10 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-import com.github.TKnudsen.timeseries.util.RandomTools;
+import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
 
 /**
  * <p>
@@ -120,12 +121,34 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public Double getValue(long timestamp, boolean allowInterpolation) {
-		int index = findByDate(timestamp);
-		if (index > 0)
-			return values.get(index);
+	public Double getValue(long timeStamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException{
+		if (allowInterpolation) {
+			int index = findByDate(timeStamp, false);
+			if (getTimestamp(index) == timeStamp)
+				return getValue(index);
+			else {
+				long lBefore = getTimestamp(index);
+				double vBefore = getValue(index);
 
-		throw new UnsupportedOperationException("TimeSeriesUnivariate: get vlaues with temporal interpolation is still to be implemented.");
+				if (timestamps.size() - 1 < index + 1)
+					throw new IndexOutOfBoundsException("TimeSeriesUnivariate.getValue: given time stamp outside bouds");
+				long lAfter = getTimestamp(index + 1);
+				double vAfter = getValue(index + 1);
+
+				long deltaBefore = timeStamp + lBefore;
+				double value = vBefore + ((vAfter - vBefore) * (deltaBefore / (lAfter - lBefore)));
+				return value;
+			}
+		} else {
+			try {
+				int index = findByDate(timeStamp, true);
+				return getValue(index);
+			} catch (IllegalArgumentException e) {
+
+			}
+		}
+
+		throw new IllegalArgumentException("TimeSeriesUnivariate.getValue(long): time stamp does not exist");
 	}
 
 	@Override
@@ -155,23 +178,58 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public int findByDate(long timeStamp) {
-		int ret = -1;
-		try {
-			for (int i = 0; i < timestamps.size(); i++)
-				if (timestamps.get(i).longValue() == timeStamp)
-					return i;
-		} catch (Exception e) {
+	public int findByDate(long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
+		if (getFirstTimestamp() > timeStamp)
+			throw new IllegalArgumentException("Time stamp outside time timeinterval");
 
-		}
-		return ret;
+		if (getFirstTimestamp() > timeStamp)
+			throw new IllegalArgumentException("Time stamp outside time timeinterval");
+
+		return interpolationSearch(0, timestamps.size() - 1, timeStamp, requireExactMatch);
+	}
+
+	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
+		if (indexStart > indexEnd)
+			System.out.println("Debug: this must be fixed for the next release!");
+
+		if (indexStart == indexEnd)
+			return indexStart;
+
+		// interpolate appropriate index
+		long l1 = getTimestamp(indexStart);
+		long l2 = getTimestamp(indexEnd);
+
+		if (l1 > timeStamp)
+			throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
+
+		if (l2 < timeStamp && requireExactMatch)
+			throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
+
+		double deltaLStartToEnd = l2 - l1;
+		double deltaLStartToTime = timeStamp - l1;
+		double deltaIndex = indexEnd - indexStart;
+		int newSplitIndex = indexStart + (int) (deltaIndex * deltaLStartToTime / deltaLStartToEnd);
+
+		long newLong = getTimestamp(newSplitIndex);
+
+		if (newLong == timeStamp)
+			return newSplitIndex;
+		else if (newLong < timeStamp)
+			return interpolationSearch(indexStart, newSplitIndex, timeStamp, requireExactMatch);
+		else
+			return interpolationSearch(newSplitIndex, indexEnd, timeStamp, requireExactMatch);
 	}
 
 	@Override
 	public boolean containsTimestamp(long timestamp) {
-		if (findByDate(timestamp) == -1)
-			return false;
-		return true;
+		try {
+			int index = findByDate(timestamp, true);
+			if (index >= 0)
+				return true;
+		} catch (IllegalArgumentException e) {
+		}
+
+		return false;
 	}
 
 	@Override
@@ -223,11 +281,13 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public void replaceValue(long timestamp, Double value) {
-		int index = findByDate(timestamp);
+	public void replaceValue(long timestamp, Double value) throws IllegalArgumentException {
+		int index = findByDate(timestamp, true);
 
-		if (index > 0)
-			values.set(index, value);
+		if (index < 0 || index >= timestamps.size())
+			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: timestamp out of bounds");
+
+		values.set(index, value);
 	}
 
 	@Override
@@ -251,6 +311,15 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer stringBuffer = new StringBuffer();
+		for (int i = 0; i < this.size(); i++)
+			stringBuffer.append(new Date(timestamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
+
+		return stringBuffer.toString();
 	}
 
 	@Override

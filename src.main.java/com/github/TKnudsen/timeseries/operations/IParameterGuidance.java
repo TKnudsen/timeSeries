@@ -10,7 +10,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.IPreprocessingRou
  * </p>
  * 
  * <p>
- * Description: An interface which allows PreprocessingRoutine to suggest
+ * Description: An interface allowing PreprocessingRoutines to suggest
  * alternative parameteritzations.
  * </p>
  * 
@@ -19,7 +19,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.IPreprocessingRou
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.01
  */
 
 public interface IParameterGuidance {
