@@ -7,7 +7,7 @@ import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.MovingAverage;
+import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverage;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 

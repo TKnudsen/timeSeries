@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.preprocessing;
+package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import com.github.TKnudsen.ComplexDataObject.model.preprocessing.DataProcessingC
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.IPreprocessingRoutineUnivariate;
 
 public class MovingAverage implements IPreprocessingRoutineUnivariate {
 
