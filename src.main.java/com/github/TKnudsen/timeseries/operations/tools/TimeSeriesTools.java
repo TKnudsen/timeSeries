@@ -404,4 +404,27 @@ public final class TimeSeriesTools {
 
 		return returnTimeSeries;
 	}
+
+	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, Long time1, Long time2, Long target) throws IllegalArgumentException, IndexOutOfBoundsException {
+		if (timeSeries == null || time1 == null || time2 == null || target == null)
+			throw new IllegalArgumentException("TimeSeriesTools.getInterpolatedValue: given time stamps null");
+
+		if (time1 >= time2)
+			throw new IllegalArgumentException("TimeSeriesTools.getInterpolatedValue: given time stamps are unsorted");
+
+		if (time1 < timeSeries.getFirstTimestamp() || time1 > timeSeries.getLastTimestamp())
+			throw new IndexOutOfBoundsException("TimeSeriesTools.getInterpolatedValue: given time out of bounds");
+
+		if (time2 < timeSeries.getFirstTimestamp() || time2 > timeSeries.getLastTimestamp())
+			throw new IndexOutOfBoundsException("TimeSeriesTools.getInterpolatedValue: given time out of bounds");
+
+		if (target < timeSeries.getFirstTimestamp() || target > timeSeries.getLastTimestamp())
+			throw new IndexOutOfBoundsException("TimeSeriesTools.getInterpolatedValue: given time out of bounds");
+
+		// may throw an IllegalArgumentException if time stamps don't exist
+		double value1 = timeSeries.getValue(time1, false);
+		double value2 = timeSeries.getValue(time2, false);
+
+		return value1 + ((target - time1) / (double)(time2 - time1) * (value2 - value1));
+	}
 }

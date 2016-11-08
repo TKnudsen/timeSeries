@@ -214,7 +214,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		double deltaLStartToEnd = l2 - l1;
 		double deltaLStartToTime = timeStamp - l1;
 		double deltaIndex = indexEnd - indexStart;
-		int newSplitIndex = indexStart + (int) (deltaIndex * deltaLStartToTime / deltaLStartToEnd);
+		int newSplitIndex = indexStart + Math.max(1, (int) (deltaIndex * deltaLStartToTime / deltaLStartToEnd));
 
 		long newLong = getTimestamp(newSplitIndex);
 

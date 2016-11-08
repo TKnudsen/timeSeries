@@ -81,16 +81,6 @@ public class MovingAverage implements ITimeSeriesPreprocessorUnivariate {
 		}
 	}
 
-	// private int getLocalKernel(int index, int timeSeriesSize) {
-	// if (index < kernel)
-	// return index;
-	//
-	// if (index + 1 + kernel > timeSeriesSize)
-	// return timeSeriesSize - (index + 1);
-	//
-	// return kernel;
-	// }
-
 	public int getKernelInterval() {
 		return getKernelInterval();
 	}
