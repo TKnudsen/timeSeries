@@ -11,7 +11,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Percep
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
-public class PerceptualImportantPointsTest {
+public class PerceptuallyImportantPointsTest {
 
 	public static void main(String[] args) {
 

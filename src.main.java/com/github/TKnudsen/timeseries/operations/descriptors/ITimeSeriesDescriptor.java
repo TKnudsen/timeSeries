@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.descriptors;
 
-import com.github.TKnudsen.ComplexDataObject.model.descriptors.IMixedDataFeatureVectorDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.descriptors.INumericFeatureVectorDescriptor;
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
  * <p>
@@ -12,12 +13,12 @@ import com.github.TKnudsen.ComplexDataObject.model.descriptors.IMixedDataFeature
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 22016
+ * Copyright: Copyright (c) 2016
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.03
  */
-public interface ITimeSeriesDescriptor extends IMixedDataFeatureVectorDescriptor {
+public interface ITimeSeriesDescriptor<TS extends ITimeSeries<Double>> extends INumericFeatureVectorDescriptor<TS> {
 
 }
