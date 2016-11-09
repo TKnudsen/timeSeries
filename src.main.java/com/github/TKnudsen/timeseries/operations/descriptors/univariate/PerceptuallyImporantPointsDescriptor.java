@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.descriptors;
+package com.github.TKnudsen.timeseries.operations.descriptors.univariate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,10 +7,29 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptuallyImportantPoints;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
+/**
+ * <p>
+ * Title: PerceptuallyImporantPointsDescriptor
+ * </p>
+ * 
+ * <p>
+ * Description: The perceptually important points algorithm approximates a time
+ * series with respect to it's local extreme values (perceptually important
+ * points). The algorithm can be seen as a data reduction algorithm reducing
+ * less perceptually less important points until the target time series is
+ * shrinked to a pre-given number of points (pipCount).
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2016
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.02
+ */
 public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivariateDescriptor {
 
 	private int pipCount;
@@ -40,7 +59,7 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 
 		NumericalFeatureVector featureVector = new NumericalFeatureVector(features);
 		featureVector.setMaster(timeSeries);
-		featureVector.add("Descriptor", "PerceptuallyImporantPointsDescriptor, pipCount = " + pipCount);
+		featureVector.add("Descriptor", getName());
 		if (timeSeries.getName() != null)
 			featureVector.setName(timeSeries.getName());
 
