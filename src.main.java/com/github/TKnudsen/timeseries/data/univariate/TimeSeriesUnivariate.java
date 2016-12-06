@@ -180,10 +180,10 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	@Override
 	public int findByDate(long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
 		if (getFirstTimestamp() > timeStamp)
-			throw new IllegalArgumentException("Time stamp outside time timeinterval");
+			throw new IllegalArgumentException("Time stamp outside time interval");
 
-		if (getFirstTimestamp() > timeStamp)
-			throw new IllegalArgumentException("Time stamp outside time timeinterval");
+		if (getLastTimestamp() < timeStamp)
+			throw new IllegalArgumentException("Time stamp outside time interval");
 
 		return interpolationSearch(0, timestamps.size() - 1, timeStamp, requireExactMatch);
 	}
@@ -204,6 +204,12 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		// interpolate appropriate index
 		long l1 = getTimestamp(indexStart);
 		long l2 = getTimestamp(indexEnd);
+
+		if (l1 == timeStamp)
+			return indexStart;
+
+		if (l2 == timeStamp)
+			return indexEnd;
 
 		if (l1 > timeStamp && requireExactMatch)
 			throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
