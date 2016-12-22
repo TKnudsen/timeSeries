@@ -17,8 +17,8 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public interface ITimeSeriesDescriptor<TS extends ITimeSeries<Double>> extends INumericFeatureVectorDescriptor<TS> {
+public interface ITimeSeriesDescriptor<TS extends ITimeSeries<?>> extends INumericFeatureVectorDescriptor<TS> {
 
 }

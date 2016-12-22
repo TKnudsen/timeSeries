@@ -3,7 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 import java.util.Date;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessorUnivariate;

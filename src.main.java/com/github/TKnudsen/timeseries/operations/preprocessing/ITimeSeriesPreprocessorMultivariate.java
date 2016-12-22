@@ -2,7 +2,6 @@ package com.github.TKnudsen.timeseries.operations.preprocessing;
 
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessing;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
 /**
@@ -19,9 +18,9 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public interface ITimeSeriesPreprocessorMultivariate extends IDataProcessing<ITimeSeriesMultivariate> {
+public interface ITimeSeriesPreprocessorMultivariate extends ITimeSeriesPreprocessing<ITimeSeriesMultivariate> {
 
 	public void process(List<ITimeSeriesMultivariate> data);
 

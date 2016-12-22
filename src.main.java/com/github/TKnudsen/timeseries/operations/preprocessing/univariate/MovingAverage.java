@@ -3,7 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
