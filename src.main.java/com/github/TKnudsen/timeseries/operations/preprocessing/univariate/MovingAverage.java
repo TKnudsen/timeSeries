@@ -7,7 +7,6 @@ import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObje
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessorUnivariate;
 
 /**
  * <p>
@@ -26,7 +25,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPrepro
  * @author Juergen Bernard
  * @version 1.03
  */
-public class MovingAverage implements ITimeSeriesPreprocessorUnivariate {
+public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 
 	private IIntegerWeightingKernel kernel;
 	private boolean considerFutureValues = false;

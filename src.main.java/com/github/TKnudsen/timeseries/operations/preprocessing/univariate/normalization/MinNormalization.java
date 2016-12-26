@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessorUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
@@ -23,7 +23,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * @author Juergen Bernard
  * @version 1.0
  */
-public class MinNormalization implements ITimeSeriesPreprocessorUnivariate {
+public class MinNormalization implements ITimeSeriesUnivariatePreprocessor {
 
 	@Override
 	public void process(List<ITimeSeriesUnivariate> data) {

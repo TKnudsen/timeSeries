@@ -8,7 +8,7 @@ import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessorUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization.AmplitudeScaling;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization.MinMaxNormalization;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
@@ -27,7 +27,7 @@ public class NormalizationTester {
 		ITimeSeriesUnivariate ts1clone = TimeSeriesTools.cloneTimeSeries(ts1);
 		ITimeSeriesUnivariate ts2clone = TimeSeriesTools.cloneTimeSeries(ts2);
 
-		ITimeSeriesPreprocessorUnivariate normalization = new AmplitudeScaling(true);
+		ITimeSeriesUnivariatePreprocessor normalization = new AmplitudeScaling(true);
 		normalization.process(new ArrayList<ITimeSeriesUnivariate>(Arrays.asList(ts1clone, ts2clone)));
 		System.out.println(ts1clone);
 		System.out.println(ts2clone);
