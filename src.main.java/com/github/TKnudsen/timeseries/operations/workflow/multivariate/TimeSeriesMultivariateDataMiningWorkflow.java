@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.workflow.univariate;
+package com.github.TKnudsen.timeseries.operations.workflow.multivariate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,18 +6,18 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.features.IFeatureVectorProcessor;
-import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.operations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
+import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.ITimeSeriesMultivariatePreprocessor;
 
 /**
  * <p>
- * Title: TimeSeriesUnivariateDataMiningWorkflow
+ * Title: TimeSeriesMultivariateDataMiningWorkflow
  * </p>
  * 
  * <p>
- * Description: general implementation for data mining workflows applied on
- * univariate time series.
+ * Description: general implementation for data mining workflows to be applied
+ * on multivariate time series.
  * </p>
  * 
  * <p>
@@ -25,12 +25,12 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.01
  */
-public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
+public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMultivariateDataMiningWorkflow {
 
-	List<ITimeSeriesUnivariatePreprocessor> dataProcessors = new ArrayList<>();
-	ITimeSeriesUnivariateDescriptor descriptor = null;
+	List<ITimeSeriesMultivariatePreprocessor> dataProcessors = new ArrayList<>();
+	ITimeSeriesMultivariateDescriptor descriptor = null;
 
 	private List<NumericalFeatureVector> featureVectors;
 
@@ -38,12 +38,12 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
-	public void addPreProcessor(ITimeSeriesUnivariatePreprocessor processor) {
+	public void addPreProcessor(ITimeSeriesMultivariatePreprocessor processor) {
 		dataProcessors.add(processor);
 	}
 
 	@Override
-	public void setDescriptor(ITimeSeriesUnivariateDescriptor descriptor) {
+	public void setDescriptor(ITimeSeriesMultivariateDescriptor descriptor) {
 		this.descriptor = descriptor;
 	}
 
@@ -58,8 +58,8 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	}
 
 	@Override
-	public List<NumericalFeatureVector> apply(List<ITimeSeriesUnivariate> data) {
-		for (ITimeSeriesUnivariatePreprocessor p : dataProcessors)
+	public List<NumericalFeatureVector> apply(List<ITimeSeriesMultivariate> data) {
+		for (ITimeSeriesMultivariatePreprocessor p : dataProcessors)
 			p.process(data);
 
 		if (descriptor != null)
