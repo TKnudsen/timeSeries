@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
 
