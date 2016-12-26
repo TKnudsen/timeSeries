@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.workflow.univariate;
 
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
@@ -18,8 +19,8 @@ import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningW
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public interface ITimeSeriesUnivariateDataMiningWorkflow extends ITimeSeriesDataMiningWorkflow<TimeSeriesUnivariate, ITimeSeriesUnivariatePreprocessor> {
+public interface ITimeSeriesUnivariateDataMiningWorkflow extends ITimeSeriesDataMiningWorkflow<TimeSeriesUnivariate, ITimeSeriesUnivariatePreprocessor, ITimeSeriesUnivariateDescriptor> {
 
 }

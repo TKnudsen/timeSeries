@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.ComplexDataObject.model.descriptors.IDescriptor;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 
 /**
@@ -30,6 +30,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
 public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
 
 	List<ITimeSeriesUnivariatePreprocessor> dataProcessors = new ArrayList<>();
+	ITimeSeriesUnivariateDescriptor descriptor = null;
 
 	@Override
 	public void addPreProcessor(ITimeSeriesUnivariatePreprocessor processor) {
@@ -37,9 +38,8 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	}
 
 	@Override
-	public void setDescriptor(IDescriptor<TimeSeriesUnivariate, Double, NumericalFeatureVector> descriptor) {
-		// TODO Auto-generated method stub
-
+	public void setDescriptor(ITimeSeriesUnivariateDescriptor descriptor) {
+		this.descriptor = descriptor;
 	}
 
 	@Override
