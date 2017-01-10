@@ -21,11 +21,11 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
 
@@ -71,5 +71,10 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 					fvProcessor.process(featureVectors);
 
 		return featureVectors;
+	}
+
+	@Override
+	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
+		return distanceMeasure;
 	}
 }

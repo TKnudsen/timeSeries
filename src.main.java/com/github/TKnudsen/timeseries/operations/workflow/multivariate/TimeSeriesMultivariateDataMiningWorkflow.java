@@ -72,4 +72,9 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 
 		return featureVectors;
 	}
+
+	@Override
+	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
+		return distanceMeasure;
+	}
 }
