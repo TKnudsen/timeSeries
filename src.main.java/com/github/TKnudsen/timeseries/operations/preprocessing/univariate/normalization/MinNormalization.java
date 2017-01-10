@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.univariate.norma
 
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
@@ -17,11 +18,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.02
  */
 public class MinNormalization implements ITimeSeriesUnivariatePreprocessor {
 
@@ -44,5 +45,10 @@ public class MinNormalization implements ITimeSeriesUnivariatePreprocessor {
 	@Override
 	public DataProcessingCategory getPreprocessingCategory() {
 		return DataProcessingCategory.DATA_NORMALIZATION;
+	}
+
+	@Override
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
+		return null;
 	}
 }

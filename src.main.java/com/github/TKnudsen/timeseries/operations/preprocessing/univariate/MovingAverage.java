@@ -3,6 +3,8 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
@@ -19,11 +21,11 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 
@@ -94,6 +96,17 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 
 	public void setConsiderFutureValues(boolean considerFutureValues) {
 		this.considerFutureValues = considerFutureValues;
+	}
+
+	@Override
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
+		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(kernel.getInterval(), count);
+
+		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
+		for (Integer i : integers)
+			processors.add(new MovingAverage(i, considerFutureValues));
+
+		return processors;
 	}
 
 }

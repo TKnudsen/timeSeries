@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing;
 
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IParameterSupport;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
@@ -19,6 +20,6 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * @author Juergen Bernard
  * @version 1.01
  */
-public interface ITimeSeriesPreprocessor<TS extends ITimeSeries<?>> extends IDataProcessor<TS> {
+public interface ITimeSeriesPreprocessor<TS extends ITimeSeries<?>> extends IDataProcessor<TS>, IParameterSupport<TS> {
 
 }

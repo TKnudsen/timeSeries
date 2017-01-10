@@ -1,5 +1,6 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.interfaces.IKeyValueProvider;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
@@ -18,6 +19,6 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * @author Juergen Bernard
  * @version 1.03
  */
-public interface ITimeSeriesUnivariate extends ITimeSeries<Double> {
+public interface ITimeSeriesUnivariate extends ITimeSeries<Double>, IKeyValueProvider<Object> {
 
 }

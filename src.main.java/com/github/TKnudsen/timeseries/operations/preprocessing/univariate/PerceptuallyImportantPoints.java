@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
@@ -28,11 +30,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreprocessor {
 
@@ -78,7 +80,7 @@ public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreproc
 		pipTmp.add(TimeSeriesTools.getTimeValuePair(data, data.size() - 1));
 
 		List<ITimeValuePair<Double>> subSequence = new ArrayList<ITimeValuePair<Double>>(getPipCount());
-		
+
 		double dist = Double.NaN;
 		double pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
 		int pipIterator = 1;
@@ -114,5 +116,16 @@ public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreproc
 			while (pipTmp.get(i).getTimestamp() != data.getTimestamp(i))
 				data.removeTimeValue(i);
 		}
+	}
+
+	@Override
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
+		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(pipCount, count);
+
+		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
+		for (Integer i : integers)
+			processors.add(new PerceptuallyImportantPoints(i));
+
+		return processors;
 	}
 }

@@ -1,8 +1,11 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
@@ -18,11 +21,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 
@@ -161,5 +164,16 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 
 	public void setMaximumAllowedGap(TimeDuration maximumAllowedGap) {
 		this.maximumAllowedGap = maximumAllowedGap;
+	}
+
+	@Override
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
+		List<Long> longs = ParameterSupportTools.getAlternativeLongs(quantization.getDuration(), count);
+
+		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
+		for (Long l : longs)
+			processors.add(new TemporalQuantization(new TimeDuration(quantization.getType(), l)));
+
+		return processors;
 	}
 }

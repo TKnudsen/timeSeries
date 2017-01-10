@@ -1,8 +1,11 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -17,11 +20,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.02
  */
 public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 
@@ -52,22 +55,10 @@ public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 			double max = TimeSeriesTools.getMaxValue(timeSeries);
 			for (int i = 0; i < timeSeries.size(); i++)
 				if (globalMinMax)
-					timeSeries.replaceValue(i, normalize(globalMin, globalMax, timeSeries.getValue(i)));
+					timeSeries.replaceValue(i, MathFunctions.linearScale(globalMin, globalMax, timeSeries.getValue(i)));
 				else
-					timeSeries.replaceValue(i, normalize(min, max, timeSeries.getValue(i)));
+					timeSeries.replaceValue(i, MathFunctions.linearScale(min, max, timeSeries.getValue(i)));
 		}
-	}
-
-	private double normalize(double min, double max, double value) {
-		if (!Double.isNaN(value))
-			if (max != min)
-				return (value - min) / (max - min);
-			else if (max != 0)
-				return (value - min) / (max);
-			else
-				return 1.0;
-		else
-			return Double.NaN;
 	}
 
 	@Override
@@ -81,5 +72,10 @@ public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 
 	public void setGlobalMinMax(boolean globalMinMax) {
 		this.globalMinMax = globalMinMax;
+	}
+
+	@Override
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
+		return Arrays.asList(new MinMaxNormalization(!globalMinMax));
 	}
 }

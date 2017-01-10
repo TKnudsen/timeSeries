@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -16,11 +17,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2016
+ * Copyright: Copyright (c) 2015-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class MissingValueRemover implements ITimeSeriesUnivariatePreprocessor {
 
@@ -56,5 +57,10 @@ public class MissingValueRemover implements ITimeSeriesUnivariatePreprocessor {
 	@Override
 	public DataProcessingCategory getPreprocessingCategory() {
 		return DataProcessingCategory.DATA_CLEANING;
+	}
+
+	@Override
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
+		return null;
 	}
 }

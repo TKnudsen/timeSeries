@@ -2,7 +2,12 @@ package com.github.TKnudsen.timeseries.data.univariate;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
 
@@ -17,11 +22,11 @@ import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.03
  */
 
 public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
@@ -33,6 +38,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	protected final List<Long> timestamps;
 	protected final List<Double> values;
 	protected Double missingValueIndicator;
+
+	protected SortedMap<String, Object> attributes = new TreeMap<String, Object>();
 
 	public TimeSeriesUnivariate(List<Long> timestamps, List<Double> values) {
 		this.id = RandomTools.getRandomLong();
@@ -373,5 +380,45 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				return false;
 
 		return true;
+	}
+
+	@Override
+	public void add(String attribute, Object value) {
+		attributes.put(attribute, value);
+	}
+
+	@Override
+	public Object get(String attribute) {
+		return attributes.get(attribute);
+	}
+
+	@Override
+	public Class<?> getType(String attribute) {
+		if (attributes.get(attribute) != null)
+			return attributes.get(attribute).getClass();
+		return null;
+	}
+
+	@Override
+	public Set<String> keySet() {
+		return attributes.keySet();
+	}
+
+	@Override
+	public Map<String, Class<?>> getTypes() {
+		Map<String, Class<?>> ret = new HashMap<>();
+		for (String string : attributes.keySet())
+			if (attributes.get(string) == null)
+				ret.put(string, null);
+			else
+				ret.put(string, attributes.get(string).getClass());
+		return null;
+	}
+
+	@Override
+	public Object remove(String attribute) {
+		if (attributes.get(attribute) != null)
+			return attributes.remove(attribute);
+		return null;
 	}
 }

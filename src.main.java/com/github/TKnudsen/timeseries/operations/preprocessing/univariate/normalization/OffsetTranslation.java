@@ -1,7 +1,9 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
@@ -17,11 +19,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class OffsetTranslation implements ITimeSeriesUnivariatePreprocessor {
 
@@ -70,5 +72,10 @@ public class OffsetTranslation implements ITimeSeriesUnivariatePreprocessor {
 
 	public void setGlobalMeans(boolean globalMeans) {
 		this.globalMeans = globalMeans;
+	}
+
+	@Override
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
+		return Arrays.asList(new OffsetTranslation(!globalMeans));
 	}
 }
