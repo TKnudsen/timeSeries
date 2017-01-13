@@ -65,7 +65,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 		if (descriptor != null)
 			featureVectors = descriptor.transform(data);
 
-		if (featureVectors != null)
+		if (featureVectorProcessors != null && featureVectors != null)
 			for (IFeatureVectorProcessor<Double, NumericalFeatureVector> fvProcessor : featureVectorProcessors)
 				if (fvProcessor != null)
 					fvProcessor.process(featureVectors);
