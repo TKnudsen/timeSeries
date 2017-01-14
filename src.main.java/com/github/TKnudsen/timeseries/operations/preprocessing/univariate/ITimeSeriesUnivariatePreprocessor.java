@@ -15,7 +15,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPrepro
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2016
+ * Copyright: Copyright (c) 2015-2017
  * </p>
  * 
  * @author Juergen Bernard

@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
+import com.github.TKnudsen.ComplexDataObject.model.descriptors.IDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptuallyImportantPoints;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -24,11 +26,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivariateDescriptor {
 
@@ -93,6 +95,18 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 
 	public void setPipCount(int pipCount) {
 		this.pipCount = pipCount;
+	}
+
+	@Override
+	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
+		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(pipCount, count);
+
+		List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> processors = new ArrayList<>();
+		for (Integer i : integers)
+			// TODO improve data model in the interfaces!
+			processors.add((IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>) new PerceptuallyImportantPoints(i));
+
+		return processors;
 	}
 
 }

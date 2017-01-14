@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
+import com.github.TKnudsen.ComplexDataObject.model.descriptors.IDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.preprocessing.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.TemporalQuantization;
@@ -30,11 +32,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUnivariateDescriptor {
 
@@ -137,6 +139,17 @@ public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUni
 
 	public void setQuantization(TimeDuration quantization) {
 		this.quantization = quantization;
+	}
+
+	@Override
+	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
+		List<Long> longs = ParameterSupportTools.getAlternativeLongs(quantization.getDuration(), count);
+
+		List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> processors = new ArrayList<>();
+		for (Long l : longs)
+			processors.add(new PiecewiseAggregateApproximationDescriptor(new TimeDuration(quantization.getType(), l)));
+
+		return processors;
 	}
 
 }

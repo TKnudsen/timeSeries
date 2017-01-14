@@ -35,7 +35,7 @@ public final class TimeSeriesTools {
 
 	private TimeSeriesTools() {
 	}
-
+	
 	public static double getMinValue(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
