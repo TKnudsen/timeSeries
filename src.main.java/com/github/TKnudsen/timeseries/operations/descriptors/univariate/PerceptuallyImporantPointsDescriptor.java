@@ -9,6 +9,8 @@ import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.Numeric
 import com.github.TKnudsen.ComplexDataObject.model.descriptors.IDescriptor;
 import com.github.TKnudsen.ComplexDataObject.model.preprocessing.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.descriptors.ITimeSeriesDescriptorInverseFunction;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptuallyImportantPoints;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
@@ -30,9 +32,9 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivariateDescriptor {
+public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
 
 	private int pipCount;
 	private PerceptuallyImportantPoints perceptuallyImportantPointsAlgorithm;
@@ -64,6 +66,8 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 		featureVector.add("Descriptor", getName());
 		if (timeSeries.getName() != null)
 			featureVector.setName(timeSeries.getName());
+		featureVector.add("FirstTimestamp", timeSeries.getFirstTimestamp());
+		featureVector.add("LastTimestamp", timeSeries.getLastTimestamp());
 
 		featureVectors.add(featureVector);
 		return featureVectors;
@@ -109,4 +113,46 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 		return processors;
 	}
 
+	@Override
+	public ITimeSeriesUnivariate invertFunction(NumericalFeatureVector featureVector) {
+		if (featureVector == null)
+			return null;
+
+		// start
+		Long start = 0L;
+		if (featureVector.get("FirstTimestamp") != null)
+			try {
+				start = (Long) featureVector.get("FirstTimestamp");
+			} catch (Exception e) {
+
+			}
+
+		// end
+		Long end = 0L;
+		if (featureVector.get("LastTimestamp") != null)
+			try {
+				end = (Long) featureVector.get("LastTimestamp");
+			} catch (Exception e) {
+
+			}
+
+		double[] vector = featureVector.getVector();
+		if (vector == null)
+			return null;
+
+		double scale = (end - start) / (double) (vector.length - 1);
+
+		List<Long> timeStamps = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		for (int i = 0; i < vector.length - 1; i++) {
+			timeStamps.add((long) (start + i * scale));
+			values.add(vector[i]);
+		}
+		// end
+		timeStamps.add(end);
+		values.add(vector[vector.length - 1]);
+
+		return new TimeSeriesUnivariate(timeStamps, values);
+	}
 }

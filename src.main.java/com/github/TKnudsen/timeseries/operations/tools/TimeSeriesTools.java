@@ -25,17 +25,17 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2016
+ * Copyright: Copyright (c) 2015-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
 public final class TimeSeriesTools {
 
 	private TimeSeriesTools() {
 	}
-	
+
 	public static double getMinValue(ITimeSeriesUnivariate ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
@@ -425,6 +425,79 @@ public final class TimeSeriesTools {
 		double value1 = timeSeries.getValue(time1, false);
 		double value2 = timeSeries.getValue(time2, false);
 
-		return value1 + ((target - time1) / (double)(time2 - time1) * (value2 - value1));
+		return value1 + ((target - time1) / (double) (time2 - time1) * (value2 - value1));
+	}
+
+	/**
+	 * segments a given time series
+	 * 
+	 * @param timeSeries
+	 * @param start
+	 * @param end
+	 * @param requireExactMatch
+	 *            whether or not the identification of the subsequencec is sort
+	 *            of sophisticated in case of NOT exact matches.
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end, boolean requireExactMatch) {
+		if (timeSeries == null)
+			return null;
+		if (timeSeries.isEmpty())
+			return null;
+		if (start > end)
+			return null;
+		if (start < timeSeries.getFirstTimestamp())
+			return null;
+		if (end > timeSeries.getLastTimestamp())
+			return null;
+
+		int indexStart = timeSeries.findByDate(start, requireExactMatch);
+		if (indexStart < 0 && indexStart >= timeSeries.size())
+			return null;
+
+		int indexEnd = timeSeries.findByDate(end, requireExactMatch);
+		if (indexEnd < 0 && indexEnd >= timeSeries.size())
+			return null;
+
+		if (indexStart >= indexEnd)
+			return null;
+
+		List<Long> timestamps = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		for (int i = indexStart; i <= indexEnd; i++) {
+			timestamps.add(timeSeries.getTimestamp(i));
+			values.add(timeSeries.getValue(i));
+		}
+
+		ITimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(timestamps, values);
+		return returnTimeSeries;
+	}
+
+	/**
+	 * segments a time series w.r.t. a given duration pattern.
+	 * 
+	 * @param timeSeries
+	 * @param timeDuration
+	 * @return
+	 */
+	public static List<ITimeSeriesUnivariate> segmentTimeSeries(ITimeSeriesUnivariate timeSeries, TimeDuration timeDuration) {
+		if (timeSeries == null)
+			return null;
+
+		List<ITimeSeriesUnivariate> subSeqences = new ArrayList<ITimeSeriesUnivariate>();
+
+		if (timeSeries.size() == 0)
+			return subSeqences;
+
+		long duration = calculateEquidistanceInMillis(timeDuration);
+
+		for (long l = timeSeries.getFirstTimestamp(); l <= timeSeries.getLastTimestamp(); l += duration) {
+			ITimeSeriesUnivariate subSeqence = TimeSeriesTools.getSubsequence(timeSeries, l, l + duration, true);
+			if (subSeqence != null)
+				subSeqences.add(subSeqence);
+		}
+
+		return subSeqences;
 	}
 }
