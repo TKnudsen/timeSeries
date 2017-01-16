@@ -158,7 +158,7 @@ public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUni
 	/**
 	 * inverts a NumericalFeatureVector w.r.t. the PAA aggregation theme.
 	 * Problem: averages of every Feature represent a duration, not a concrete
-	 * time stamp (gartenzaunproblem). Time series must be created by
+	 * time stamp (Gartenzaunproblem). Time series must be created by
 	 * extra/interpolation between adjacent feature values.
 	 * 
 	 */

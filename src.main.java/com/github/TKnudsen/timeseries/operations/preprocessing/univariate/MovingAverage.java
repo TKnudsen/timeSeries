@@ -108,5 +108,4 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 
 		return processors;
 	}
-
 }
