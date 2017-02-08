@@ -25,17 +25,17 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
 
-	List<ITimeSeriesUnivariatePreprocessor> dataProcessors = new ArrayList<>();
-	ITimeSeriesUnivariateDescriptor descriptor = null;
+	private List<ITimeSeriesUnivariatePreprocessor> dataProcessors = new ArrayList<>();
+	private ITimeSeriesUnivariateDescriptor descriptor = null;
 
 	private List<NumericalFeatureVector> featureVectors;
 
-	List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
-	IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
+	private List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
+	private IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
 	public void addPreProcessor(ITimeSeriesUnivariatePreprocessor processor) {
@@ -76,5 +76,17 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	@Override
 	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
 		return distanceMeasure;
+	}
+
+	public List<ITimeSeriesUnivariatePreprocessor> getDataProcessors() {
+		return dataProcessors;
+	}
+
+	public ITimeSeriesUnivariateDescriptor getDescriptor() {
+		return descriptor;
+	}
+
+	public List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> getFeatureVectorProcessors() {
+		return featureVectorProcessors;
 	}
 }
