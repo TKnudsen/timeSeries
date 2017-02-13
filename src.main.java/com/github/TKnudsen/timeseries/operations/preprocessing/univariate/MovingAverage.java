@@ -83,7 +83,7 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 	}
 
 	public int getKernelInterval() {
-		return getKernelInterval();
+		return kernel.getInterval();
 	}
 
 	public void setKernelInterval(int kernelInterval) {

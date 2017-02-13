@@ -107,6 +107,10 @@ public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreproc
 					subSequence.add(TimeSeriesTools.getTimeValuePair(data, i));
 				}
 			}
+			//// TODO: nextPipIndex == -1
+			if (nextPipIndex >= data.size() || nextPipIndex < 0)
+				continue;
+			//////
 			pipTmp.add(TimeSeriesTools.getTimeValuePair(data, nextPipIndex));
 			Collections.sort(pipTmp);
 		}
