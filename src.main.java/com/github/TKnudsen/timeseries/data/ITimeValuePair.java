@@ -1,7 +1,5 @@
 package com.github.TKnudsen.timeseries.data;
 
-import java.util.Comparator;
-
 /**
  * <p>
  * Title: TimeValuePair

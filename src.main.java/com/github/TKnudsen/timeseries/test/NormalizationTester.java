@@ -10,7 +10,6 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization.AmplitudeScaling;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization.MinMaxNormalization;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
