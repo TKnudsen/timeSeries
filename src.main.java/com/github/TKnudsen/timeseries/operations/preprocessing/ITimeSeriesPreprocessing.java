@@ -2,7 +2,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing;
 
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
@@ -21,6 +21,7 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * @author Juergen Bernard
  * @version 1.02
  */
+@Deprecated
 public interface ITimeSeriesPreprocessing<TS extends ITimeSeries<?>> extends IDataProcessor<TS> {
 
 	public void process(List<TS> data);

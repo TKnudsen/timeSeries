@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.features.IFeatureVectorProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;

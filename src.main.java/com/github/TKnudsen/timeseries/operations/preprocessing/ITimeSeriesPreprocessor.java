@@ -1,7 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing;
 
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.IParameterSupport;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IParameterSupport;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**

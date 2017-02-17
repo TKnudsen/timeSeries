@@ -6,8 +6,9 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.ComplexDataObject.model.descriptors.IDescriptor;
-import com.github.TKnudsen.ComplexDataObject.model.preprocessing.ParameterSupportTools;
+import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.descriptors.ITimeSeriesDescriptorInverseFunction;
@@ -154,5 +155,10 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 		values.add(vector[vector.length - 1]);
 
 		return new TimeSeriesUnivariate(timeStamps, values);
+	}
+
+	@Override
+	public DataTransformationCategory getDataTransformationCategory() {
+		return DataTransformationCategory.DESCRIPTOR;
 	}
 }
