@@ -15,11 +15,11 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 
@@ -29,10 +29,43 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 
 	T getMissingValueIndicator();
 
+	/**
+	 * index access
+	 * 
+	 * @param index
+	 * @return
+	 */
 	long getTimestamp(int index);
 
 	T getValue(int index);
 
+	/**
+	 * temporal access
+	 * 
+	 * @param timestamp
+	 * @param requireExactMatch
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	int findByDate(long timestamp, boolean requireExactMatch) throws IllegalArgumentException;
+
+	/**
+	 * temporal access
+	 * 
+	 * @param timeStamp
+	 * @return
+	 */
+	boolean containsTimestamp(long timeStamp);
+
+	/**
+	 * temporal access
+	 * 
+	 * @param timestamp
+	 * @param allowInterpolation
+	 * @return
+	 * @throws IndexOutOfBoundsException
+	 * @throws IllegalArgumentException
+	 */
 	T getValue(long timestamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException;
 
 	long getFirstTimestamp();
@@ -48,10 +81,6 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	 * @return the list of values following the order of their time stamps
 	 */
 	List<T> getValues();
-
-	int findByDate(long timestamp, boolean requireExactMatch) throws IllegalArgumentException;
-
-	boolean containsTimestamp(long timeStamp);
 
 	void insert(long timestamp, T value);
 

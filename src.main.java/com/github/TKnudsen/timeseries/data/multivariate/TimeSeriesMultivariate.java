@@ -18,11 +18,11 @@ import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.01
  */
 
 public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
@@ -339,5 +339,4 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 		return true;
 	}
-
 }

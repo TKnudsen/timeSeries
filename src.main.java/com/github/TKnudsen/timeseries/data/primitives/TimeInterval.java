@@ -1,5 +1,7 @@
 package com.github.TKnudsen.timeseries.data.primitives;
 
+import java.util.Date;
+
 /**
  * <p>
  * Title: TimeInterval
@@ -10,16 +12,16 @@ package com.github.TKnudsen.timeseries.data.primitives;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class TimeInterval {
 
-	private long startTime;
-	private long endTime;
+	protected Long startTime;
+	protected Long endTime;
 
 	public TimeInterval(long startTime, long endTime) {
 		this.startTime = startTime;
@@ -55,5 +57,10 @@ public class TimeInterval {
 		hash += (39 * hash + startTime);
 		hash += (39 * hash + endTime);
 		return hash;
+	}
+
+	@Override
+	public String toString() {
+		return "TimeInterval: [" + new Date(startTime) + "-" + new Date(endTime) + "]";
 	}
 }
