@@ -91,4 +91,11 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	void replaceValue(int index, T value);
 
 	void replaceValue(long timestamp, T value);
+
+	/**
+	 * time series can be renamed
+	 * 
+	 * @param name
+	 */
+	public void setName(String name);
 }

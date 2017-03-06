@@ -319,6 +319,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}

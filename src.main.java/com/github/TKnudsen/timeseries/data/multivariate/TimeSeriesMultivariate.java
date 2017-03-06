@@ -22,14 +22,13 @@ import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 
 public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	protected long id;
 	private List<ITimeSeriesUnivariate> timeSeriesUnivariateList;
-	private List<String> timeSeriesNames;
 	private int size;
 	private int dimensionality;
 
@@ -38,20 +37,46 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	private String name;
 	private String description;
 
+	public TimeSeriesMultivariate(List<ITimeSeriesUnivariate> timeSeriesUnivariateList) {
+		this.id = RandomTools.getRandomLong();
+		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
+
+		initialize();
+	}
+
+	public TimeSeriesMultivariate(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList) {
+		this.id = id;
+		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
+
+		initialize();
+	}
+
 	public TimeSeriesMultivariate(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
 		this.id = RandomTools.getRandomLong();
 		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
-		this.timeSeriesNames = timeSeriesNames;
 
 		initialize();
+
+		if (timeSeriesNames != null)
+			if (timeSeriesUnivariateList.size() != timeSeriesNames.size())
+				throw new IllegalArgumentException("TimeSeriesMultivariate: content and attributes have different sizes");
+
+		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
+			timeSeriesUnivariateList.get(i).setName(timeSeriesNames.get(i));
 	}
 
 	public TimeSeriesMultivariate(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
 		this.id = id;
 		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
-		this.timeSeriesNames = timeSeriesNames;
 
 		initialize();
+
+		if (timeSeriesNames != null)
+			if (timeSeriesUnivariateList.size() != timeSeriesNames.size())
+				throw new IllegalArgumentException("TimeSeriesMultivariate: content and attributes have different sizes");
+
+		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
+			timeSeriesUnivariateList.get(i).setName(timeSeriesNames.get(i));
 	}
 
 	private void initialize() {
@@ -60,10 +85,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 		if (timeSeriesUnivariateList.size() == 0)
 			throw new IllegalArgumentException("TimeSeriesMultivariate: time series empty");
-
-		if (timeSeriesNames != null)
-			if (timeSeriesUnivariateList.size() != timeSeriesNames.size())
-				throw new IllegalArgumentException("TimeSeriesMultivariate: content and attributes have different sizes");
 
 		long l = getFirstTimeseriesUnivariate().getFirstTimestamp();
 		for (int i = 1; i < timeSeriesUnivariateList.size(); i++)
@@ -221,6 +242,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		return name;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -246,9 +268,9 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public ITimeSeriesUnivariate getTimeSeries(String attributeName) {
-		for (int i = 0; i < timeSeriesNames.size(); i++)
-			if (timeSeriesNames.get(i).equals(attributeName))
-				return timeSeriesUnivariateList.get(i);
+		for (ITimeSeriesUnivariate tsu : this.timeSeriesUnivariateList)
+			if (tsu.getName().equals(attributeName))
+				return tsu;
 
 		return null;
 	}
