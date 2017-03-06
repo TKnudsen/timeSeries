@@ -29,7 +29,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	protected long id;
 	private List<ITimeSeriesUnivariate> timeSeriesUnivariateList;
-	private int size;
 	private int dimensionality;
 
 	private List<Double> missingValueIndicators;
@@ -96,10 +95,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 			if (timeSeriesUnivariateList.get(i).getLastTimestamp() != l)
 				throw new IllegalArgumentException("TimeSeriesMultivariate: time series out of sync");
 
-		size = getFirstTimeseriesUnivariate().size();
-
 		for (int i = 1; i < timeSeriesUnivariateList.size(); i++)
-			if (timeSeriesUnivariateList.get(i).size() != size)
+			if (timeSeriesUnivariateList.get(i).size() != size())
 				throw new IllegalArgumentException("TimeSeriesMultivariate: time series have different sizes");
 
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++) {
@@ -125,7 +122,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public int size() {
-		return size;
+		return getFirstTimeseriesUnivariate().size();
 	}
 
 	@Override
@@ -221,7 +218,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 			throw new IllegalArgumentException("TimeSeriesMultivariate: insert values are invalid");
 
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
-			timeSeriesUnivariateList.get(index).replaceValue(index, values.get(i));
+			timeSeriesUnivariateList.get(i).replaceValue(index, values.get(i));
 	}
 
 	@Override
