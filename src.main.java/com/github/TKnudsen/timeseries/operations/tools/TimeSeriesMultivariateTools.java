@@ -1,7 +1,11 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
  * <p>
@@ -64,5 +68,37 @@ public class TimeSeriesMultivariateTools {
 		}
 
 		return mean / count;
+	}
+	
+	/**
+	 * Provides a clone of a given multivariate time series.
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
+	public static ITimeSeriesMultivariate cloneTimeSeries(ITimeSeriesMultivariate timeSeries) {
+		if (timeSeries == null)
+			return null;
+
+		List<Long> times = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		// Currently both lists are unmodifiable.
+		// However, two new lists are built
+
+		for (int i = 0; i < timeSeries.size(); i++) {
+			times.add(new Long(timeSeries.getTimestamp(i)));
+			values.add(new Double(timeSeries.getValue(i).doubleValue()));
+		}
+
+		TimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(times, values, Double.NaN);
+		if (timeSeries.getName() != null)
+			returnTimeSeries.setName(new String(timeSeries.getName()));
+		if (timeSeries.getDescription() != null)
+			returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
+		if (timeSeries.getMissingValueIndicator() != null)
+			returnTimeSeries.setMissingValueIndicator(new Double(timeSeries.getMissingValueIndicator()));
+
+		return returnTimeSeries;
 	}
 }
