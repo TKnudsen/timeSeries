@@ -396,8 +396,14 @@ public final class TimeSeriesTools {
 		TimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(times, values, Double.NaN);
 		if (timeSeries.getName() != null)
 			returnTimeSeries.setName(new String(timeSeries.getName()));
+		else
+			returnTimeSeries.setName(null);
+
 		if (timeSeries.getDescription() != null)
 			returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
+		else
+			returnTimeSeries.setDescription(null);
+
 		if (timeSeries.getMissingValueIndicator() != null)
 			returnTimeSeries.setMissingValueIndicator(new Double(timeSeries.getMissingValueIndicator()));
 

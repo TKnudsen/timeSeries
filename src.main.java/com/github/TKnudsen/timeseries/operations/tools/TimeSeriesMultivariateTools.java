@@ -8,7 +8,6 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
  * <p>
@@ -89,8 +88,15 @@ public class TimeSeriesMultivariateTools {
 		}
 
 		ITimeSeriesMultivariate returnTimeSeries = new TimeSeriesMultivariate(timeSeriesUnivariateList);
-		returnTimeSeries.setName(new String(timeSeries.getName()));
-		returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
+		if (timeSeries.getName() != null)
+			returnTimeSeries.setName(new String(timeSeries.getName()));
+		else
+			returnTimeSeries.setName(null);
+
+		if (timeSeries.getDescription() != null)
+			returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
+		else
+			returnTimeSeries.setDescription(null);
 
 		if (timeSeries instanceof ITemporalLabeling<?>) {
 			ITemporalLabeling<?> returnTimeSeriesLabeled = new TimeSeriesMultivariateLabeled(returnTimeSeries);
