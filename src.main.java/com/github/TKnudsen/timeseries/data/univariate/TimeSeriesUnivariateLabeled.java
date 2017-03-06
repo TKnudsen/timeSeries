@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.data.multivariate;
+package com.github.TKnudsen.timeseries.data.univariate;
 
 import java.util.List;
 import java.util.SortedMap;
@@ -9,15 +9,14 @@ import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
 import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
-import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
  * <p>
- * Title: TimeSeriesMultivariateLabelable
+ * Title: TimeSeriesUnivariateLabeled
  * </p>
  * 
  * <p>
- * Description: wraps a multivariate time series with labeling support.
+ * Description: wraps an univariate time series with labeling support.
  * </p>
  * 
  * <p>
@@ -25,23 +24,31 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public class TimeSeriesMultivariateLabelable extends TimeSeriesMultivariate implements ITemporalLabeling<String> {
+public class TimeSeriesUnivariateLabeled extends TimeSeriesUnivariate implements ITemporalLabeling<String> {
 
 	private SortedMap<Long, String> eventLabels = new TreeMap<>();
 	private Ranking<TimeIntervalLabel<String>> intervalLabels = new Ranking<TimeIntervalLabel<String>>();
 
-	public TimeSeriesMultivariateLabelable(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
-		super(timeSeriesUnivariateList, timeSeriesNames);
+	public TimeSeriesUnivariateLabeled(List<Long> timestamps, List<Double> values) {
+		super(timestamps, values);
 	}
 
-	public TimeSeriesMultivariateLabelable(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
-		super(id, timeSeriesUnivariateList, timeSeriesNames);
+	public TimeSeriesUnivariateLabeled(List<Long> timestamps, List<Double> values, Double missingValueIndicator) {
+		super(timestamps, values, missingValueIndicator);
 	}
 
-	public TimeSeriesMultivariateLabelable(ITimeSeriesMultivariate tsm) {
-		super(tsm.getID(), tsm.getTimeSeriesList(), tsm.getAttributeNames());
+	public TimeSeriesUnivariateLabeled(long id, List<Long> timestamps, List<Double> values) {
+		super(id, timestamps, values);
+	}
+
+	public TimeSeriesUnivariateLabeled(long id, List<Long> timestamps, List<Double> values, Double missingValueIndicator) {
+		super(id, timestamps, values, missingValueIndicator);
+	}
+
+	public TimeSeriesUnivariateLabeled(ITimeSeriesUnivariate ts) {
+		super(ts.getID(), ts.getTimestamps(), ts.getValues(), ts.getMissingValueIndicator());
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabelable;
+import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 
 import TimeSeriesLabelingTools.TimeSeriesLabelingTools;
@@ -23,7 +23,7 @@ public class TimeSeriesLabelingTester {
 
 		ITimeSeriesUnivariate ts = TimeSeriesGenerator.generateSyntheticTimeSeriesUnivariate(startDate.getTime(), endDate.getTime(), quantization, true);
 
-		ITemporalLabeling<String> timeSeries = new TimeSeriesUnivariateLabelable(ts);
+		ITemporalLabeling<String> timeSeries = new TimeSeriesUnivariateLabeled(ts);
 		timeSeries.addEventLabel(DateTools.createDate(2016, 4, 5, 0, 0, 0, 0).getTime(), "2");
 		timeSeries.addTimeDurationLabel(DateTools.createDate(2016, 4, 4, 0, 0, 0, 0).getTime(), new TimeDuration(TimeQuantization.DAYS, 3), "1");
 		timeSeries.addTimeIntervalLabel(new TimeInterval(DateTools.createDate(2016, 4, 9, 0, 0, 0, 0).getTime(), DateTools.createDate(2016, 4, 11, 0, 0, 0, 0).getTime()), "3");

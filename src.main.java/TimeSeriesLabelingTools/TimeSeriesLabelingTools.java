@@ -34,6 +34,13 @@ public class TimeSeriesLabelingTools {
 		return null;
 	}
 
+	/**
+	 * retrieves events of changing labels for a ITemporalLabeling data
+	 * structure
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
 	public static <O extends Object> SortedMap<Long, O> getLabelChangeEvents(ITemporalLabeling<O> timeSeries) {
 		if (timeSeries == null)
 			return null;
