@@ -3,7 +3,10 @@ package com.github.TKnudsen.timeseries.operations.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
@@ -69,7 +72,7 @@ public class TimeSeriesMultivariateTools {
 
 		return mean / count;
 	}
-	
+
 	/**
 	 * Provides a clone of a given multivariate time series.
 	 * 
@@ -80,24 +83,21 @@ public class TimeSeriesMultivariateTools {
 		if (timeSeries == null)
 			return null;
 
-		List<Long> times = new ArrayList<>();
-		List<Double> values = new ArrayList<>();
-
-		// Currently both lists are unmodifiable.
-		// However, two new lists are built
-
-		for (int i = 0; i < timeSeries.size(); i++) {
-			times.add(new Long(timeSeries.getTimestamp(i)));
-			values.add(new Double(timeSeries.getValue(i).doubleValue()));
+		List<ITimeSeriesUnivariate> timeSeriesUnivariateList = new ArrayList<>();
+		for (int i = 0; i < timeSeries.getDimensionality(); i++) {
+			timeSeriesUnivariateList.add(TimeSeriesTools.cloneTimeSeries(timeSeries.getTimeSeries(i)));
 		}
 
-		TimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(times, values, Double.NaN);
-		if (timeSeries.getName() != null)
-			returnTimeSeries.setName(new String(timeSeries.getName()));
-		if (timeSeries.getDescription() != null)
-			returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
-		if (timeSeries.getMissingValueIndicator() != null)
-			returnTimeSeries.setMissingValueIndicator(new Double(timeSeries.getMissingValueIndicator()));
+		ITimeSeriesMultivariate returnTimeSeries = new TimeSeriesMultivariate(timeSeriesUnivariateList);
+		returnTimeSeries.setName(new String(timeSeries.getName()));
+		returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
+
+		if (timeSeries instanceof ITemporalLabeling<?>) {
+			ITemporalLabeling<?> returnTimeSeriesLabeled = new TimeSeriesMultivariateLabeled(returnTimeSeries);
+			returnTimeSeriesLabeled.setEventLabels(TimeSeriesLabelingTools.cloneEventLabels(((TimeSeriesMultivariateLabeled) timeSeries).getEventLabels()));
+			returnTimeSeriesLabeled.setIntervalLabels(TimeSeriesLabelingTools.cloneIntervalLabels(((TimeSeriesMultivariateLabeled) timeSeries).getIntervalLabels()));
+			return (ITimeSeriesMultivariate) returnTimeSeriesLabeled;
+		}
 
 		return returnTimeSeries;
 	}

@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
 /**
@@ -386,9 +388,6 @@ public final class TimeSeriesTools {
 		List<Long> times = new ArrayList<>();
 		List<Double> values = new ArrayList<>();
 
-		// Currently both lists are unmodifiable.
-		// However, two new lists are built
-
 		for (int i = 0; i < timeSeries.size(); i++) {
 			times.add(new Long(timeSeries.getTimestamp(i)));
 			values.add(new Double(timeSeries.getValue(i).doubleValue()));
@@ -401,6 +400,13 @@ public final class TimeSeriesTools {
 			returnTimeSeries.setDescription(new String(timeSeries.getDescription()));
 		if (timeSeries.getMissingValueIndicator() != null)
 			returnTimeSeries.setMissingValueIndicator(new Double(timeSeries.getMissingValueIndicator()));
+
+		if (timeSeries instanceof ITemporalLabeling<?>) {
+			ITemporalLabeling<?> returnTimeSeriesLabeled = new TimeSeriesUnivariateLabeled(returnTimeSeries);
+			returnTimeSeriesLabeled.setEventLabels(TimeSeriesLabelingTools.cloneEventLabels(((TimeSeriesUnivariateLabeled) timeSeries).getEventLabels()));
+			returnTimeSeriesLabeled.setIntervalLabels(TimeSeriesLabelingTools.cloneIntervalLabels(((TimeSeriesUnivariateLabeled) timeSeries).getIntervalLabels()));
+			return (ITimeSeriesUnivariate) returnTimeSeriesLabeled;
+		}
 
 		return returnTimeSeries;
 	}

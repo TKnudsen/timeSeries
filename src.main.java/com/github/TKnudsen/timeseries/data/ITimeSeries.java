@@ -19,7 +19,7 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 
@@ -98,4 +98,6 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	 * @param name
 	 */
 	public void setName(String name);
+
+	public void setDescription(String description);
 }

@@ -1,6 +1,7 @@
-package TimeSeriesLabelingTools;
+package com.github.TKnudsen.timeseries.operations.tools;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -170,5 +171,67 @@ public class TimeSeriesLabelingTools {
 		}
 
 		return sortedEvents;
+	}
+
+	/**
+	 * Attention: O will not be copied but also added to the clone
+	 * 
+	 * @param eventMap
+	 * @return
+	 */
+	public static <O extends Object> SortedMap<Long, O> cloneEventLabels(SortedMap<Long, O> eventMap) {
+		SortedMap<Long, O> newMap = new TreeMap<>();
+
+		for (Map.Entry<Long, O> entry : eventMap.entrySet()) {
+			O value = entry.getValue();
+			Long key = new Long(entry.getKey());
+			newMap.put(key, value);
+		}
+
+		return newMap;
+	}
+
+	/**
+	 * clones labels
+	 * 
+	 * @param eventMap
+	 * @return
+	 */
+	public static SortedMap<Long, String> cloneEventLabelStrings(SortedMap<Long, String> eventMap) {
+		SortedMap<Long, String> newMap = new TreeMap<>();
+
+		for (Map.Entry<Long, String> entry : eventMap.entrySet()) {
+			String value = new String(entry.getValue());
+			Long key = new Long(entry.getKey());
+			newMap.put(key, value);
+		}
+
+		return newMap;
+	}
+
+	/**
+	 * Attention: O will not be copied but also added to the clone
+	 * 
+	 * @param intervalLabels
+	 * @return
+	 */
+	public static <O extends Object> Ranking<TimeIntervalLabel<O>> cloneIntervalLabels(Ranking<TimeIntervalLabel<O>> intervalLabels) {
+		Ranking<TimeIntervalLabel<O>> newIntervalLabels = new Ranking<TimeIntervalLabel<O>>();
+
+		for (int i = 0; i < intervalLabels.size(); i++) {
+			newIntervalLabels.add(new TimeIntervalLabel<O>(new Long(intervalLabels.get(i).getStartTime()), new Long(intervalLabels.get(i).getEndTime()), intervalLabels.get(i).getLabel()));
+		}
+
+		return newIntervalLabels;
+	}
+
+	public static Ranking<TimeIntervalLabel<String>> cloneIntervalLabelStrings(Ranking<TimeIntervalLabel<String>> intervalLabels) {
+		Ranking<TimeIntervalLabel<String>> newIntervalLabels = new Ranking<TimeIntervalLabel<String>>();
+
+		for (int i = 0; i < intervalLabels.size(); i++) {
+			newIntervalLabels.add(new TimeIntervalLabel<String>(new Long(intervalLabels.get(i).getStartTime()), new Long(intervalLabels.get(i).getEndTime()), new String(intervalLabels.get(i).getLabel())));
+		}
+
+		return newIntervalLabels;
 	}
 }

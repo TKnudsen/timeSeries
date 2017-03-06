@@ -252,6 +252,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		return description;
 	}
 
+	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}

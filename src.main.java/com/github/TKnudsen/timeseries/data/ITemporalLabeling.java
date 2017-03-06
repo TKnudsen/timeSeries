@@ -21,7 +21,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public interface ITemporalLabeling<O extends Object> {
 
@@ -35,5 +35,9 @@ public interface ITemporalLabeling<O extends Object> {
 
 	public SortedMap<Long, O> getEventLabels();
 
+	public void setEventLabels(SortedMap<Long, String> eventLabels);
+
 	public Ranking<TimeIntervalLabel<O>> getIntervalLabels();
+
+	public void setIntervalLabels(Ranking<TimeIntervalLabel<String>> intervalLabels);
 }

@@ -11,8 +11,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
-
-import TimeSeriesLabelingTools.TimeSeriesLabelingTools;
+import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesLabelingTools;
 
 public class TimeSeriesLabelingTester {
 

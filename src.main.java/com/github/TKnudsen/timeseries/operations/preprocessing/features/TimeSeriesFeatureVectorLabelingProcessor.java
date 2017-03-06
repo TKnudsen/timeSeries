@@ -7,8 +7,7 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.IDObject;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
-
-import TimeSeriesLabelingTools.TimeSeriesLabelingTools;
+import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesLabelingTools;
 
 public class TimeSeriesFeatureVectorLabelingProcessor implements IFeatureVectorProcessor<Double, NumericalFeatureVector> {
 
