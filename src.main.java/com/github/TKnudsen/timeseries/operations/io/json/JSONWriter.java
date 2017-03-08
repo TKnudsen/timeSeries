@@ -22,14 +22,12 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.02
  */
 public class JSONWriter {
 
 	public static String writeToString(ITimeSeriesUnivariate ts) {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
 		String writeValueAsString;
 		try {
@@ -42,7 +40,7 @@ public class JSONWriter {
 	}
 
 	public static void writeToFile(ITimeSeriesUnivariate ts, String file) {
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 

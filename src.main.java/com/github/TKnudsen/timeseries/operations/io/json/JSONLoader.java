@@ -3,7 +3,6 @@ package com.github.TKnudsen.timeseries.operations.io.json;
 import java.io.File;
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
@@ -22,14 +21,12 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.02
  */
 public class JSONLoader {
 
 	public static ITimeSeriesUnivariate loadConfigsFromString(String json) {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
 		ITimeSeriesUnivariate readValue;
 		try {
@@ -43,9 +40,7 @@ public class JSONLoader {
 	}
 
 	public static ITimeSeriesUnivariate loadConfigsFromFile(String file) {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
 		ITimeSeriesUnivariate readValue;
 		try {
