@@ -217,8 +217,13 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		if (indexEnd - indexStart == 1)
 			if (!requireExactMatch)
 				return indexStart;
-			else
+			else {
+				if (getTimestamp(indexStart) == timeStamp)
+					return indexStart;
+				else if (getTimestamp(indexEnd) == timeStamp)
+					return indexEnd;
 				throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
+			}
 
 		// interpolate appropriate index
 		long l1 = getTimestamp(indexStart);

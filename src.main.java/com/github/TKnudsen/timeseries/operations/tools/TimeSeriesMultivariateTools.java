@@ -2,12 +2,19 @@ package com.github.TKnudsen.timeseries.operations.tools;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
+import org.apache.commons.math3.exception.MathArithmeticException;
+
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
  * <p>
@@ -73,6 +80,55 @@ public class TimeSeriesMultivariateTools {
 	}
 
 	/**
+	 * creates an univariate timeSeries representing the mean value progression
+	 * of all dimensions.
+	 * 
+	 * @param tsmv
+	 * @return mean time series
+	 */
+	public static ITimeSeriesUnivariate createMinMaxMeanTimeSeriesBundle(ITimeSeriesMultivariate tsmv) {
+		List<Long> timeStamps = new ArrayList<>();
+		List<Double> means = new ArrayList<>();
+
+		for (Long timeStamp : tsmv.getTimestamps()) {
+			timeStamps.add(timeStamp);
+			means.add(TimeSeriesMultivariateTools.getMeanValue(timeStamp, tsmv));
+		}
+
+		ITimeSeriesUnivariate tsMean = new TimeSeriesUnivariate(timeStamps, means, Double.NaN);
+		return tsMean;
+	}
+
+	/**
+	 * creates an univariate timeSeries representing the mean value progression
+	 * of all dimensions.
+	 * 
+	 * @param tsmv
+	 * @return mean time series
+	 */
+	public static ITimeSeriesUnivariate createMinMaxMeanTimeSeriesBundle(List<ITimeSeriesUnivariate> tsmv) {
+		SortedMap<Long, List<Double>> keyValuePairs = new TreeMap<>();
+
+		for (ITimeSeriesUnivariate ts : tsmv)
+			for (Long l : ts.getTimestamps()) {
+				if (keyValuePairs.get(l) == null)
+					keyValuePairs.put(l, new ArrayList<>());
+				keyValuePairs.get(l).add(ts.getValue(l, false));
+			}
+
+		List<Long> timeStamps = new ArrayList<>();
+		List<Double> means = new ArrayList<>();
+
+		for (Long timeStamp : keyValuePairs.keySet()) {
+			timeStamps.add(timeStamp);
+			means.add(getMean(keyValuePairs.get(timeStamp)));
+		}
+
+		ITimeSeriesUnivariate tsMean = new TimeSeriesUnivariate(timeStamps, means, Double.NaN);
+		return tsMean;
+	}
+
+	/**
 	 * Provides a clone of a given multivariate time series.
 	 * 
 	 * @param timeSeries
@@ -106,5 +162,28 @@ public class TimeSeriesMultivariateTools {
 		}
 
 		return returnTimeSeries;
+	}
+
+	/**
+	 * Calculates the mean value for a given series of values. Ignores
+	 * Double.NAN
+	 * 
+	 * @param values
+	 * @return
+	 */
+	@Deprecated // use lib in future!
+	private static double getMean(List<Double> values) {
+		if (values == null)
+			return Double.NaN;
+
+		double sum = 0;
+		double count = 0;
+		for (double d : values)
+			if (!Double.isNaN(d)) {
+				sum += d;
+				count++;
+			}
+
+		return sum / count;
 	}
 }

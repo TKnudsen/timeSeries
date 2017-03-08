@@ -102,13 +102,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 			if (timeSeriesUnivariateList.get(i).size() != size())
 				throw new IllegalArgumentException("TimeSeriesMultivariate: time series have different sizes");
 
-		for (int i = 0; i < timeSeriesUnivariateList.size(); i++) {
-			l = getFirstTimeseriesUnivariate().getTimestamp(i);
-			for (int j = 1; j < timeSeriesUnivariateList.size(); j++)
-				if (timeSeriesUnivariateList.get(j).getTimestamp(i) != l)
-					throw new IllegalArgumentException("TimeSeriesMultivariate: time series time stamps are inconsistent");
-		}
-
 		// dimensionality = getFirstTimeseriesUnivariate().size();
 		dimensionality = timeSeriesUnivariateList.size();
 
