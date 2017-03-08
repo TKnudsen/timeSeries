@@ -61,7 +61,10 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 				throw new IllegalArgumentException("TimeSeriesMultivariate: content and attributes have different sizes");
 
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
-			timeSeriesUnivariateList.get(i).setName(timeSeriesNames.get(i));
+			if (timeSeriesNames != null && timeSeriesNames.get(i) != null)
+				timeSeriesUnivariateList.get(i).setName(timeSeriesNames.get(i));
+			else
+				timeSeriesUnivariateList.get(i).setName("");
 	}
 
 	public TimeSeriesMultivariate(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
