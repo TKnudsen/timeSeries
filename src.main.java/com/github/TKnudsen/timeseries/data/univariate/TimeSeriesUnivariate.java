@@ -1,5 +1,6 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,6 +41,17 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	protected Double missingValueIndicator;
 
 	protected SortedMap<String, Object> attributes = new TreeMap<String, Object>();
+
+	/**
+	 * used for JSON, reflection, serialization & stuff
+	 */
+	@SuppressWarnings("unused")
+	private TimeSeriesUnivariate() {
+		this.id = RandomTools.getRandomLong();
+		this.timestamps = new ArrayList<>();
+		this.values = new ArrayList<>();
+		this.missingValueIndicator = Double.NaN;
+	}
 
 	public TimeSeriesUnivariate(List<Long> timestamps, List<Double> values) {
 		this.id = RandomTools.getRandomLong();
