@@ -23,7 +23,8 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
  * </p>
  * 
  * <p>
- * Description:
+ * Description: tools class for general statistical operations and routines
+ * applied on univariate time series
  * </p>
  * 
  * <p>
@@ -31,11 +32,49 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.06
+ * @version 1.07
  */
 public final class TimeSeriesTools {
 
 	private TimeSeriesTools() {
+	}
+
+	/**
+	 * retrieves the minimum time stamp of all time series
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
+	public static long getMinStart(List<ITimeSeriesUnivariate> timeSeries) {
+		long min = Long.MAX_VALUE - 1;
+
+		for (ITimeSeriesUnivariate ts : timeSeries)
+			if (ts != null)
+				min = Math.min(min, ts.getFirstTimestamp());
+
+		if (min == Long.MAX_VALUE - 1)
+			return Long.MIN_VALUE;
+
+		return min;
+	}
+
+	/**
+	 * retrieves the minimum time stamp of all time series
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
+	public static long getMaxEnd(List<ITimeSeriesUnivariate> timeSeries) {
+		long max = Long.MIN_VALUE + 1;
+
+		for (ITimeSeriesUnivariate ts : timeSeries)
+			if (ts != null)
+				max = Math.max(max, ts.getLastTimestamp());
+
+		if (max == Long.MIN_VALUE + 1)
+			return Long.MAX_VALUE;
+
+		return max;
 	}
 
 	public static double getMinValue(ITimeSeriesUnivariate ts) {
@@ -160,6 +199,24 @@ public final class TimeSeriesTools {
 		return numerator / denominator;
 	}
 
+	private static double getMean(double[] x) {
+		double sum = 0;
+		for (int i = 0; i < x.length; i++) {
+			sum += x[i];
+		}
+		double d = sum / (double) x.length;
+		return d;
+	}
+
+	private static double getMean(List<Double> data) {
+		double sum = 0;
+		for (double d : data)
+			sum += d;
+
+		double mean = sum / (double) data.size();
+		return mean;
+	}
+
 	public static void calculateMovingAverageTimeSensitive(ITimeSeriesUnivariate ts, long window) {
 		for (int i = 0; i < ts.size(); i++) {
 			double d = 0;
@@ -269,24 +326,6 @@ public final class TimeSeriesTools {
 			quantisation[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
 		}
 		return quantisation;
-	}
-
-	private static double getMean(double[] x) {
-		double sum = 0;
-		for (int i = 0; i < x.length; i++) {
-			sum += x[i];
-		}
-		double d = sum / (double) x.length;
-		return d;
-	}
-
-	private static double getMean(List<Double> data) {
-		double sum = 0;
-		for (double d : data)
-			sum += d;
-
-		double mean = sum / (double) data.size();
-		return mean;
 	}
 
 	public static TimeQuantization calculateSuitableTimeQuantization(long equidistanceInMillis) {

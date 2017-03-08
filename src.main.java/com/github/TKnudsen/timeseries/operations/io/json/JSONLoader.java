@@ -49,7 +49,7 @@ public class JSONLoader {
 
 		ITimeSeriesUnivariate readValue;
 		try {
-			readValue = mapper.readValue(new File("ts.json"), TimeSeriesUnivariate.class);
+			readValue = mapper.readValue(new File(file), TimeSeriesUnivariate.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
