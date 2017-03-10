@@ -312,6 +312,21 @@ public final class TimeSeriesTools {
 		return pairs;
 	}
 
+	public static ITimeSeriesUnivariate createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs, Double missingValueIndicator) {
+		if (timeValuePairs == null)
+			return null;
+
+		List<Long> timeStamps = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		for (ITimeValuePair<Double> pair : timeValuePairs) {
+			timeStamps.add(pair.getTimestamp());
+			values.add(pair.getValue());
+		}
+
+		return new TimeSeriesUnivariate(timeStamps, values, missingValueIndicator);
+	}
+
 	public static long[] getQuantizationAsLong(ITimeSeriesUnivariate ts) {
 		long[] quantisation = new long[ts.size() - 1];
 		for (int i = 0; i < quantisation.length; i++) {

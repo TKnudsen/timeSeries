@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2011-2016
+ * Copyright: Copyright (c) 2011-2017
  * </p>
  * 
  * @author Juergen Bernard
