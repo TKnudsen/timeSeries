@@ -2,7 +2,7 @@ package com.github.TKnudsen.timeseries.operations;
 
 import java.util.List;
 
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessor;
 
 /**
  * <p>
@@ -23,6 +23,6 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  */
 
 public interface IParameterGuidance {
-	public List<? extends ITimeSeriesUnivariatePreprocessor> getAlternativeParameterizations(int maxNumber);
+	public List<? extends ITimeSeriesPreprocessor<?>> getAlternativeParameterizations(int maxNumber);
 
 }

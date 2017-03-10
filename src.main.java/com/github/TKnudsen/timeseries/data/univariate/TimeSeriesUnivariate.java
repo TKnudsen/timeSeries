@@ -407,7 +407,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public Object get(String attribute) {
+	public Object getAttribute(String attribute) {
 		return attributes.get(attribute);
 	}
 
@@ -435,7 +435,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public Object remove(String attribute) {
+	public Object removeAttribute(String attribute) {
 		if (attributes.get(attribute) != null)
 			return attributes.remove(attribute);
 		return null;

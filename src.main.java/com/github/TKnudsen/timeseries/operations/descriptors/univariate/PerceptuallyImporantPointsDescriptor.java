@@ -121,18 +121,18 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 
 		// start
 		Long start = 0L;
-		if (featureVector.get("FirstTimestamp") != null)
+		if (featureVector.getAttribute("FirstTimestamp") != null)
 			try {
-				start = (Long) featureVector.get("FirstTimestamp");
+				start = (Long) featureVector.getAttribute("FirstTimestamp");
 			} catch (Exception e) {
 
 			}
 
 		// end
 		Long end = 0L;
-		if (featureVector.get("LastTimestamp") != null)
+		if (featureVector.getAttribute("LastTimestamp") != null)
 			try {
-				end = (Long) featureVector.get("LastTimestamp");
+				end = (Long) featureVector.getAttribute("LastTimestamp");
 			} catch (Exception e) {
 
 			}

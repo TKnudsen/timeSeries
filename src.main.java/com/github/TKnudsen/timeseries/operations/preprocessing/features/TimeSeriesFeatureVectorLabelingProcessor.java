@@ -48,11 +48,11 @@ public class TimeSeriesFeatureVectorLabelingProcessor implements IFeatureVectorP
 		if (fv == null || ts == null)
 			return null;
 
-		if (fv.get(timeStampAttribute) == null)
+		if (fv.getAttribute(timeStampAttribute) == null)
 			return null;
 
 		try {
-			Long l = (Long) fv.get(timeStampAttribute);
+			Long l = (Long) fv.getAttribute(timeStampAttribute);
 			return l;
 		} catch (Exception e) {
 
