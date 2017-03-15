@@ -86,7 +86,7 @@ public class TimeSeriesMultivariateTools {
 	 * @param tsmv
 	 * @return mean time series
 	 */
-	public static ITimeSeriesUnivariate createMinMaxMeanTimeSeriesBundle(ITimeSeriesMultivariate tsmv) {
+	public static ITimeSeriesUnivariate createMeanTimeSeries(ITimeSeriesMultivariate tsmv) {
 		List<Long> timeStamps = new ArrayList<>();
 		List<Double> means = new ArrayList<>();
 
@@ -106,7 +106,7 @@ public class TimeSeriesMultivariateTools {
 	 * @param tsmv
 	 * @return mean time series
 	 */
-	public static ITimeSeriesUnivariate createMinMaxMeanTimeSeriesBundle(List<ITimeSeriesUnivariate> tsmv) {
+	public static ITimeSeriesUnivariate createMeanTimeSeries(List<ITimeSeriesUnivariate> tsmv) {
 		SortedMap<Long, List<Double>> keyValuePairs = new TreeMap<>();
 
 		for (ITimeSeriesUnivariate ts : tsmv)

@@ -100,8 +100,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 			throw new IllegalArgumentException("TimeSeriesUnivariate: input data inconsistent");
 
 		for (int i = 0; i < timestamps.size() - 1; i++)
-			if (timestamps.get(i) > timestamps.get(i + 1))
-				throw new IllegalArgumentException("TimeSeriesUnivariate: temporal information needs to be sorted");
+			if (timestamps.get(i) >= timestamps.get(i + 1))
+				throw new IllegalArgumentException("TimeSeriesUnivariate: temporal information needs to be sorted and unique");
 	}
 
 	@Override
