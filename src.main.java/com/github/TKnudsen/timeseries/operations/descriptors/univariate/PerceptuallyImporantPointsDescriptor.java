@@ -40,6 +40,15 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 	private int pipCount;
 	private PerceptuallyImportantPoints perceptuallyImportantPointsAlgorithm;
 
+	/**
+	 * for serialization purposes
+	 */
+	private PerceptuallyImporantPointsDescriptor() {
+		this.pipCount = 5;
+
+		initialize();
+	}
+
 	public PerceptuallyImporantPointsDescriptor(int pipCount) {
 		this.pipCount = pipCount;
 
@@ -161,4 +170,16 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 	public DataTransformationCategory getDataTransformationCategory() {
 		return DataTransformationCategory.DESCRIPTOR;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof PerceptuallyImporantPointsDescriptor))
+			return false;
+
+		PerceptuallyImporantPointsDescriptor other = (PerceptuallyImporantPointsDescriptor) o;
+		return other.pipCount == pipCount;
+	}
+
 }

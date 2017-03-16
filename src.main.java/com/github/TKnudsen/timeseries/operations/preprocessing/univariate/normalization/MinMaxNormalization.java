@@ -24,7 +24,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 
@@ -78,4 +78,17 @@ public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
 		return Arrays.asList(new MinMaxNormalization(!globalMinMax));
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof MinMaxNormalization))
+			return false;
+
+		MinMaxNormalization other = (MinMaxNormalization) o;
+
+		return other.globalMinMax == globalMinMax;
+	}
+
 }

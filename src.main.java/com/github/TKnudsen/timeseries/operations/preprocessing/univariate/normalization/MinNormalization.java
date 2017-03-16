@@ -22,7 +22,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class MinNormalization implements ITimeSeriesUnivariatePreprocessor {
 
@@ -51,4 +51,14 @@ public class MinNormalization implements ITimeSeriesUnivariatePreprocessor {
 	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
 		return null;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof MinNormalization))
+			return false;
+		return true;
+	}
+
 }

@@ -10,6 +10,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTo
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
+import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.descriptors.ITimeSeriesDescriptorInverseFunction;
@@ -44,6 +45,13 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
 
 	private TimeDuration quantization;
+
+	/**
+	 * for serialization purposes
+	 */
+	private PiecewiseAggregateApproximationDescriptor() {
+		this.quantization = new TimeDuration(TimeQuantization.DAYS, 10);
+	}
 
 	public PiecewiseAggregateApproximationDescriptor(TimeDuration quantization) {
 		this.quantization = quantization;
@@ -214,4 +222,17 @@ public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUni
 	public DataTransformationCategory getDataTransformationCategory() {
 		return DataTransformationCategory.DESCRIPTOR;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof PiecewiseAggregateApproximationDescriptor))
+			return false;
+
+		PiecewiseAggregateApproximationDescriptor other = (PiecewiseAggregateApproximationDescriptor) o;
+
+		return other.quantization.equals(quantization);
+	}
+
 }

@@ -89,4 +89,17 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	public List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> getFeatureVectorProcessors() {
 		return featureVectorProcessors;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof TimeSeriesUnivariateDataMiningWorkflow))
+			return false;
+
+		TimeSeriesUnivariateDataMiningWorkflow other = (TimeSeriesUnivariateDataMiningWorkflow) o;
+
+		return other.dataProcessors.equals(dataProcessors) && other.descriptor.equals(descriptor) && other.featureVectorProcessors.equals(featureVectorProcessors) && other.distanceMeasure.equals(distanceMeasure);
+	}
+
 }

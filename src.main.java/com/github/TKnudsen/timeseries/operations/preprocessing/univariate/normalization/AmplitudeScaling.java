@@ -23,7 +23,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public class AmplitudeScaling implements ITimeSeriesUnivariatePreprocessor {
 
@@ -88,4 +88,17 @@ public class AmplitudeScaling implements ITimeSeriesUnivariatePreprocessor {
 	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
 		return Arrays.asList(new AmplitudeScaling(!globalMeans));
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof AmplitudeScaling))
+			return false;
+
+		AmplitudeScaling other = (AmplitudeScaling) o;
+
+		return other.globalMeans == globalMeans;
+	}
+
 }

@@ -78,4 +78,17 @@ public class OffsetTranslation implements ITimeSeriesUnivariatePreprocessor {
 	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
 		return Arrays.asList(new OffsetTranslation(!globalMeans));
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof OffsetTranslation))
+			return false;
+
+		OffsetTranslation other = (OffsetTranslation) o;
+
+		return other.globalMeans == globalMeans;
+	}
+
 }

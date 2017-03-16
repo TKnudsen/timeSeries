@@ -32,6 +32,14 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 	private IIntegerWeightingKernel kernel;
 	private boolean considerFutureValues = false;
 
+	/**
+	 * for serialization purposes
+	 */
+	public MovingAverage() {
+		this.kernel = new LinearIndexWeightingKernel(3);
+		this.considerFutureValues = false;
+	}
+
 	public MovingAverage(int kernelInterval, boolean considerFutureValues) {
 		this.kernel = new LinearIndexWeightingKernel(kernelInterval);
 		this.considerFutureValues = considerFutureValues;
@@ -108,4 +116,17 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 
 		return processors;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof MovingAverage))
+			return false;
+
+		MovingAverage other = (MovingAverage) o;
+
+		return other.kernel.equals(kernel) && other.considerFutureValues == considerFutureValues;
+	}
+
 }

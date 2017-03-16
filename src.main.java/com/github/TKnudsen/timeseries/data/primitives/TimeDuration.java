@@ -23,6 +23,14 @@ public class TimeDuration implements Cloneable {
 	private TimeQuantization type;
 	private long typeFactor;
 
+	/**
+	 * for serialization and stuff
+	 */
+	private TimeDuration() {
+		this.type = TimeQuantization.MILLISECONDS;
+		this.typeFactor = 1000;
+	}
+
 	public TimeDuration(TimeQuantization type, long typeFactor) {
 		this.type = type;
 		this.typeFactor = typeFactor;
