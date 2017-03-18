@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.operations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
@@ -21,21 +22,23 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.ITim
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMultivariateDataMiningWorkflow {
 
 	List<ITimeSeriesMultivariatePreprocessor> dataProcessors = new ArrayList<>();
+
 	ITimeSeriesMultivariateDescriptor descriptor = null;
 
 	private List<NumericalFeatureVector> featureVectors;
 
 	List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
-	IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
+	
+	IDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
 
 	@Override
 	public void addPreProcessor(ITimeSeriesMultivariatePreprocessor processor) {
