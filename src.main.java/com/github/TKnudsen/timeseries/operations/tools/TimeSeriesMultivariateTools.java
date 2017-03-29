@@ -121,7 +121,7 @@ public class TimeSeriesMultivariateTools {
 
 		for (Long timeStamp : keyValuePairs.keySet()) {
 			timeStamps.add(timeStamp);
-			means.add(getMean(keyValuePairs.get(timeStamp)));
+			means.add(MathFunctions.getMean(keyValuePairs.get(timeStamp)));
 		}
 
 		ITimeSeriesUnivariate tsMean = new TimeSeriesUnivariate(timeStamps, means, Double.NaN);
@@ -162,28 +162,5 @@ public class TimeSeriesMultivariateTools {
 		}
 
 		return returnTimeSeries;
-	}
-
-	/**
-	 * Calculates the mean value for a given series of values. Ignores
-	 * Double.NAN
-	 * 
-	 * @param values
-	 * @return
-	 */
-	@Deprecated // use lib in future!
-	private static double getMean(List<Double> values) {
-		if (values == null)
-			return Double.NaN;
-
-		double sum = 0;
-		double count = 0;
-		for (double d : values)
-			if (!Double.isNaN(d)) {
-				sum += d;
-				count++;
-			}
-
-		return sum / count;
 	}
 }
