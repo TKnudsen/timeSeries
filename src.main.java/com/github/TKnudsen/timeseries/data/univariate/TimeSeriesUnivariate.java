@@ -155,7 +155,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				double vAfter = getValue(index + 1);
 
 				long deltaBefore = timeStamp - lBefore;
-				double value = vBefore + ((vAfter - vBefore) * (deltaBefore / (lAfter - lBefore)));
+				double value = vBefore + ((vAfter - vBefore) * ((double) deltaBefore / (lAfter - lBefore)));
 				return value;
 			}
 		} else {
