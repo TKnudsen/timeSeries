@@ -431,7 +431,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				ret.put(string, null);
 			else
 				ret.put(string, attributes.get(string).getClass());
-		return null;
+		return ret;
 	}
 
 	@Override
