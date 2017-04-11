@@ -32,6 +32,9 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 	private TimeDuration quantization;
 	private TimeDuration maximumAllowedGap;
 
+	private TemporalQuantization() {
+	}
+
 	public TemporalQuantization(TimeDuration quantization) {
 		if (quantization == null || quantization.getDuration() == 0)
 			throw new IllegalArgumentException("TemporalQuantization: illegal quantization definition.");
@@ -147,6 +150,8 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 
 	@Override
 	public String toString() {
+		if (quantization == null || maximumAllowedGap == null)
+			return "TemporalQuantization with undefined values";
 		return "TemporalQuantization: quantization: " + quantization.toString() + ", maximumAllowedGap" + maximumAllowedGap.toString();
 	}
 

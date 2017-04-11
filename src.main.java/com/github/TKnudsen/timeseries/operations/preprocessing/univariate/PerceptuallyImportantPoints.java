@@ -40,6 +40,9 @@ public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreproc
 
 	private int pipCount;
 
+	private PerceptuallyImportantPoints() {
+	}
+
 	public PerceptuallyImportantPoints(int pipCount) {
 		if (pipCount < 2)
 			throw new IllegalArgumentException("PIP: parameter value <2");
@@ -128,7 +131,8 @@ public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreproc
 
 		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
 		for (Integer i : integers)
-			processors.add(new PerceptuallyImportantPoints(i));
+			if (i >= 2)
+				processors.add(new PerceptuallyImportantPoints(i));
 
 		return processors;
 	}
