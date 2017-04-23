@@ -39,13 +39,17 @@ public class JSONWriter {
 		return null;
 	}
 
-	public static void writeToFile(ITimeSeriesUnivariate ts, String file) {
+	public static void writeToFile(ITimeSeriesUnivariate ts, String fileName) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 
+		// create dirs when necessary
+		File file = new File(fileName);
+		file.getParentFile().mkdirs();
+
 		try {
-			mapper.writeValue(new File(file), ts);
+			mapper.writeValue(file, ts);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

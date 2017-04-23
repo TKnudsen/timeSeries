@@ -36,7 +36,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	private String name;
 	private String description;
 
-	protected final List<Long> timestamps;
+	protected final List<Long> timeStamps;
 	protected final List<Double> values;
 	protected Double missingValueIndicator;
 
@@ -48,41 +48,41 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	@SuppressWarnings("unused")
 	private TimeSeriesUnivariate() {
 		this.id = RandomTools.getRandomLong();
-		this.timestamps = new ArrayList<>();
+		this.timeStamps = new ArrayList<>();
 		this.values = new ArrayList<>();
 		this.missingValueIndicator = Double.NaN;
 	}
 
-	public TimeSeriesUnivariate(List<Long> timestamps, List<Double> values) {
+	public TimeSeriesUnivariate(List<Long> timeStamps, List<Double> values) {
 		this.id = RandomTools.getRandomLong();
-		this.timestamps = timestamps;
+		this.timeStamps = timeStamps;
 		this.values = values;
 		this.missingValueIndicator = Double.NaN;
 
 		initialize();
 	}
 
-	public TimeSeriesUnivariate(List<Long> timestamps, List<Double> values, Double missingValueIndicator) {
+	public TimeSeriesUnivariate(List<Long> timeStamps, List<Double> values, Double missingValueIndicator) {
 		this.id = RandomTools.getRandomLong();
-		this.timestamps = timestamps;
+		this.timeStamps = timeStamps;
 		this.values = values;
 		this.missingValueIndicator = missingValueIndicator;
 
 		initialize();
 	}
 
-	public TimeSeriesUnivariate(long id, List<Long> timestamps, List<Double> values) {
+	public TimeSeriesUnivariate(long id, List<Long> timeStamps, List<Double> values) {
 		this.id = id;
-		this.timestamps = timestamps;
+		this.timeStamps = timeStamps;
 		this.values = values;
 		this.missingValueIndicator = Double.NaN;
 
 		initialize();
 	}
 
-	public TimeSeriesUnivariate(long id, List<Long> timestamps, List<Double> values, Double missingValueIndicator) {
+	public TimeSeriesUnivariate(long id, List<Long> timeStamps, List<Double> values, Double missingValueIndicator) {
 		this.id = id;
-		this.timestamps = timestamps;
+		this.timeStamps = timeStamps;
 		this.values = values;
 		this.missingValueIndicator = missingValueIndicator;
 
@@ -90,28 +90,28 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	private void initialize() {
-		if (timestamps == null)
+		if (timeStamps == null)
 			throw new IllegalArgumentException("TimeSeriesUnivariate: time stamps null");
 
 		if (values == null)
 			throw new IllegalArgumentException("TimeSeriesUnivariate: values null");
 
-		if (timestamps.size() != values.size())
+		if (timeStamps.size() != values.size())
 			throw new IllegalArgumentException("TimeSeriesUnivariate: input data inconsistent");
 
-		for (int i = 0; i < timestamps.size() - 1; i++)
-			if (timestamps.get(i) >= timestamps.get(i + 1))
+		for (int i = 0; i < timeStamps.size() - 1; i++)
+			if (timeStamps.get(i) >= timeStamps.get(i + 1))
 				throw new IllegalArgumentException("TimeSeriesUnivariate: temporal information needs to be sorted and unique");
 	}
 
 	@Override
 	public int size() {
-		return timestamps.size();
+		return timeStamps.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return timestamps.isEmpty() && values.isEmpty();
+		return timeStamps.isEmpty() && values.isEmpty();
 	}
 
 	@Override
@@ -125,15 +125,15 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 	@Override
 	public long getTimestamp(int index) {
-		if (index < 0 || index >= timestamps.size())
+		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
 
-		return timestamps.get(index);
+		return timeStamps.get(index);
 	}
 
 	@Override
 	public Double getValue(int index) {
-		if (index < 0 || index >= timestamps.size())
+		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
 
 		return values.get(index);
@@ -149,7 +149,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				long lBefore = getTimestamp(index);
 				double vBefore = getValue(index);
 
-				if (timestamps.size() - 1 < index + 1)
+				if (timeStamps.size() - 1 < index + 1)
 					throw new IndexOutOfBoundsException("TimeSeriesUnivariate.getValue: given time stamp outside bouds");
 				long lAfter = getTimestamp(index + 1);
 				double vAfter = getValue(index + 1);
@@ -172,23 +172,23 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 	@Override
 	public long getFirstTimestamp() {
-		if (timestamps.size() == 0)
+		if (timeStamps.size() == 0)
 			throw new NullPointerException("TimeSeriesUnivariate: access to a time stamp that doesn't exist");
 
-		return timestamps.get(0);
+		return timeStamps.get(0);
 	}
 
 	@Override
 	public long getLastTimestamp() {
-		if (timestamps.size() == 0)
+		if (timeStamps.size() == 0)
 			throw new NullPointerException("TimeSeriesUnivariate: access to a time stamp that doesn't exist");
 
-		return timestamps.get(timestamps.size() - 1);
+		return timeStamps.get(timeStamps.size() - 1);
 	}
 
 	@Override
 	public List<Long> getTimestamps() {
-		return Collections.unmodifiableList(timestamps);
+		return Collections.unmodifiableList(timeStamps);
 	}
 
 	@Override
@@ -204,7 +204,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		if (getLastTimestamp() < timeStamp)
 			throw new IllegalArgumentException("Time stamp outside time interval");
 
-		return interpolationSearch(0, timestamps.size() - 1, timeStamp, requireExactMatch);
+		return interpolationSearch(0, timeStamps.size() - 1, timeStamp, requireExactMatch);
 	}
 
 	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
@@ -271,20 +271,20 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	@Override
 	public void insert(long timestamp, Double value) {
 		if (isEmpty() || timestamp > getLastTimestamp()) {
-			timestamps.add(timestamp);
+			timeStamps.add(timestamp);
 			values.add(value);
 		} else if (timestamp < getFirstTimestamp()) {
-			timestamps.add(0, timestamp);
+			timeStamps.add(0, timestamp);
 			values.add(0, value);
 		} else {
 			int index = 0;
-			while (timestamps.get(index) < timestamp)
+			while (timeStamps.get(index) < timestamp)
 				index++;
 
-			if (timestamps.get(index).longValue() == timestamp)
+			if (timeStamps.get(index).longValue() == timestamp)
 				replaceValue(index, value);
 			else {
-				timestamps.add(index, timestamp);
+				timeStamps.add(index, timestamp);
 				values.add(index, value);
 			}
 		}
@@ -293,24 +293,24 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	@Override
 	public void removeTimeValue(long timestamp) {
 		int index = 0;
-		while (timestamps.get(index) < timestamp)
+		while (timeStamps.get(index) < timestamp)
 			index++;
 
-		if (timestamps.get(index).longValue() == timestamp) {
-			timestamps.remove(index);
+		if (timeStamps.get(index).longValue() == timestamp) {
+			timeStamps.remove(index);
 			values.remove(index);
 		}
 	}
 
 	@Override
 	public void removeTimeValue(int index) {
-		timestamps.remove(index);
+		timeStamps.remove(index);
 		values.remove(index);
 	}
 
 	@Override
 	public void replaceValue(int index, Double value) {
-		if (index < 0 || index >= timestamps.size())
+		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
 
 		values.set(index, value);
@@ -320,7 +320,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	public void replaceValue(long timestamp, Double value) throws IllegalArgumentException {
 		int index = findByDate(timestamp, true);
 
-		if (index < 0 || index >= timestamps.size())
+		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: timestamp out of bounds");
 
 		values.set(index, value);
@@ -355,7 +355,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	public String toString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		for (int i = 0; i < this.size(); i++)
-			stringBuffer.append(new Date(timestamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
+			stringBuffer.append(new Date(timeStamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
 
 		return stringBuffer.toString();
 	}
@@ -372,10 +372,10 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				hash = 31 * hash + (int) (l ^ (l >>> 32));
 			}
 
-		if (timestamps == null)
+		if (timeStamps == null)
 			hash = 23 * hash;
 		else
-			for (long l : timestamps)
+			for (long l : timeStamps)
 				hash = 23 * hash + (int) l;
 
 		return hash;
