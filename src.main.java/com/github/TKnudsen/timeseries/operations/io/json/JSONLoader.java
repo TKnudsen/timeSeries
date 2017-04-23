@@ -39,7 +39,35 @@ public class JSONLoader {
 		return null;
 	}
 
+	public static ITimeSeriesUnivariate loadFromString(String json) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
+
+		ITimeSeriesUnivariate readValue;
+		try {
+			readValue = mapper.readValue(json, TimeSeriesUnivariate.class);
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	public static ITimeSeriesUnivariate loadConfigsFromFile(String file) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
+
+		ITimeSeriesUnivariate readValue;
+		try {
+			readValue = mapper.readValue(new File(file), TimeSeriesUnivariate.class);
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static ITimeSeriesUnivariate loadFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
 		ITimeSeriesUnivariate readValue;
