@@ -1,7 +1,10 @@
 package com.github.TKnudsen.timeseries.operations.io.json;
 
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * <p>
@@ -34,5 +37,8 @@ public class ObjectMapperFactory {
 		timeSeriesObjectMapper = new ObjectMapper();
 		timeSeriesObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		timeSeriesObjectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		
+		timeSeriesObjectMapper.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
+		timeSeriesObjectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 	}
 }

@@ -46,7 +46,8 @@ public class JSONWriter {
 
 		// create dirs when necessary
 		File file = new File(fileName);
-		file.getParentFile().mkdirs();
+		if (file.getParentFile() != null)
+			file.getParentFile().mkdirs();
 
 		try {
 			mapper.writeValue(file, ts);
