@@ -6,7 +6,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
@@ -565,5 +568,42 @@ public final class TimeSeriesTools {
 		}
 
 		return subSeqences;
+	}
+
+	/**
+	 * merges a list of time series. builds up on identical timestamps. does not
+	 * check consistencies such as gaps in between series.
+	 * 
+	 * @param timeSeriesList
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate mergeTimeSeries(List<ITimeSeriesUnivariate> timeSeriesList) {
+		SortedMap<Long, List<Double>> rawValues = new TreeMap<>();
+
+		for (ITimeSeriesUnivariate ts : timeSeriesList)
+			if (ts != null)
+				for (Long timeStamp : ts.getTimestamps())
+					rawValues.put(timeStamp, new ArrayList<>());
+
+		for (ITimeSeriesUnivariate ts : timeSeriesList)
+			if (ts != null)
+				for (int i = 0; i < ts.size(); i++) {
+					Long timeStamp = ts.getTimestamp(i);
+					Double value = ts.getValue(i);
+					rawValues.get(timeStamp).add(value);
+				}
+
+		// create new meta time series and re-initialize the painter
+		List<Long> timeStamps = new ArrayList<>();
+		List<Double> means = new ArrayList<>();
+
+		for (Long timeStamp : rawValues.keySet()) {
+			timeStamps.add(timeStamp);
+			means.add(MathFunctions.getMean(rawValues.get(timeStamp)));
+		}
+
+		ITimeSeriesUnivariate tsMean = new TimeSeriesUnivariate(timeStamps, means, Double.NaN);
+
+		return tsMean;
 	}
 }

@@ -1,12 +1,10 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.apache.commons.math3.exception.MathArithmeticException;
 
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
@@ -110,11 +108,12 @@ public class TimeSeriesMultivariateTools {
 		SortedMap<Long, List<Double>> keyValuePairs = new TreeMap<>();
 
 		for (ITimeSeriesUnivariate ts : tsmv)
-			for (Long l : ts.getTimestamps()) {
-				if (keyValuePairs.get(l) == null)
-					keyValuePairs.put(l, new ArrayList<>());
-				keyValuePairs.get(l).add(ts.getValue(l, false));
-			}
+			if (ts != null)
+				for (Long l : ts.getTimestamps()) {
+					if (keyValuePairs.get(l) == null)
+						keyValuePairs.put(l, new ArrayList<>());
+					keyValuePairs.get(l).add(ts.getValue(l, false));
+				}
 
 		List<Long> timeStamps = new ArrayList<>();
 		List<Double> means = new ArrayList<>();
@@ -162,5 +161,25 @@ public class TimeSeriesMultivariateTools {
 		}
 
 		return returnTimeSeries;
+	}
+
+	/**
+	 * creates a subsequence on the basis of a cloned time series.
+	 * 
+	 * @param timeSeriesMultivariate
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static ITimeSeriesMultivariate getSubSequence(ITimeSeriesMultivariate timeSeriesMultivariate, Date start, Date end) {
+		ITimeSeriesMultivariate ret = cloneTimeSeries(timeSeriesMultivariate);
+
+		while (ret.size() != 0 && ret.getFirstTimestamp() < start.getTime())
+			ret.removeTimeValue(0);
+
+		while (ret.size() != 0 && ret.getLastTimestamp() > end.getTime())
+			ret.removeTimeValue(ret.size() - 1);
+
+		return ret;
 	}
 }
