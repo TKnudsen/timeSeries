@@ -38,6 +38,11 @@ public class OutlierRemoverMovingAverageBased implements ITimeSeriesUnivariatePr
 	private Integer elements;
 	private Boolean considerFutureValues;
 	private MovingAverage movingAverage;
+	
+	@SuppressWarnings("unused")
+	private OutlierRemoverMovingAverageBased(){
+		
+	}
 
 	public OutlierRemoverMovingAverageBased(double stdDevRatio, int elements) {
 		this.stdDevRatio = stdDevRatio;
