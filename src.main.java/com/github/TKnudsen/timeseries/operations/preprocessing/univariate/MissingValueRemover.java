@@ -21,11 +21,16 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class MissingValueRemover implements ITimeSeriesUnivariatePreprocessor {
 
 	private double missingValueIndicator;
+
+	@SuppressWarnings("unused")
+	private MissingValueRemover() {
+		this.missingValueIndicator = Double.NaN;
+	}
 
 	public MissingValueRemover(double missingValueIndicator) {
 		this.missingValueIndicator = missingValueIndicator;

@@ -35,7 +35,7 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 	/**
 	 * for serialization purposes
 	 */
-	public MovingAverage() {
+	private MovingAverage() {
 		this.kernel = new LinearIndexWeightingKernel(3);
 		this.considerFutureValues = false;
 	}

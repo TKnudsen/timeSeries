@@ -38,10 +38,11 @@ public class OutlierRemoverMovingAverageBased implements ITimeSeriesUnivariatePr
 	private Integer elements;
 	private Boolean considerFutureValues;
 	private MovingAverage movingAverage;
-	
+
 	@SuppressWarnings("unused")
-	private OutlierRemoverMovingAverageBased(){
-		
+	private OutlierRemoverMovingAverageBased() {
+		this.elements = 3;
+		considerFutureValues = true;
 	}
 
 	public OutlierRemoverMovingAverageBased(double stdDevRatio, int elements) {
@@ -119,11 +120,10 @@ public class OutlierRemoverMovingAverageBased implements ITimeSeriesUnivariatePr
 
 		int sqrt = (int) Math.sqrt(count);
 
-		// TODO add getAlternativeDoubles method
-		List<Integer> alternativestdDev = ParameterSupportTools.getAlternativeIntegers(elements, sqrt);
+		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDevRatio, sqrt);
 		List<Integer> alternativeElements = ParameterSupportTools.getAlternativeIntegers(elements, sqrt);
 
-		for (Integer std : alternativestdDev)
+		for (Double std : alternativeDoubles)
 			for (Integer ele : alternativeElements) {
 				if (std > 0 && ele > 0)
 					alternatives.add(new OutlierRemoverMovingAverageBased(std, ele));
