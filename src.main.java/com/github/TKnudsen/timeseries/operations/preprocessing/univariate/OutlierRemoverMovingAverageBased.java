@@ -120,7 +120,7 @@ public class OutlierRemoverMovingAverageBased implements ITimeSeriesUnivariatePr
 
 		int sqrt = (int) Math.sqrt(count);
 
-		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDevRatio, sqrt);
+		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDevRatio, sqrt + 1);
 		List<Integer> alternativeElements = ParameterSupportTools.getAlternativeIntegers(elements, sqrt);
 
 		for (Double std : alternativeDoubles)
