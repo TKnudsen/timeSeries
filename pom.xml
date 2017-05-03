@@ -25,7 +25,11 @@
 			<groupId>de.javagl</groupId>
 			<artifactId>nd-tuples</artifactId>
 			<version>0.0.1</version>
-			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.javagl</groupId>
+			<artifactId>nd-distance</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 
