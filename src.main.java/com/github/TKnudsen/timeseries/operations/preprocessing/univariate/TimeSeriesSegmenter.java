@@ -66,7 +66,9 @@ public class TimeSeriesSegmenter implements ITimeSeriesUnivariatePreprocessor, I
 
 	@Override
 	public String getDescription() {
-		return "Timeseries Segmenter: segmentation pattern: " + getTimeInterval().toString();
+		if (getTimeInterval() != null)
+			return "Timeseries Segmenter: segmentation pattern: " + getTimeInterval().toString();
+		return "Timeseries Segmenter";
 	}
 
 	public TimeDuration getTimeInterval() {
