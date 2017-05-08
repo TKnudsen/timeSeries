@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
@@ -73,6 +75,59 @@ public class JSONLoader {
 		ITimeSeriesUnivariate readValue;
 		try {
 			readValue = mapper.readValue(new File(file), TimeSeriesUnivariate.class);
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	public static ITimeSeriesMultivariate loadTSMVFromFile(String file) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
+
+		ITimeSeriesMultivariate readValue;
+		try {
+			readValue = mapper.readValue(new File(file), ITimeSeriesMultivariate.class);
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	public static ITimeSeriesMultivariate loadTSMVFromString(String json) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
+
+		ITimeSeriesMultivariate readValue;
+		try {
+			readValue = mapper.readValue(json, ITimeSeriesMultivariate.class);
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public static TimeSeriesMultivariateLabeled loadTSMVLabeledFromFile(String file) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
+
+		TimeSeriesMultivariateLabeled readValue;
+		try {
+			readValue = mapper.readValue(new File(file), TimeSeriesMultivariateLabeled.class);
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	public static TimeSeriesMultivariateLabeled loadTSMVLabeledFromString(String json) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
+
+		TimeSeriesMultivariateLabeled readValue;
+		try {
+			readValue = mapper.readValue(json, TimeSeriesMultivariateLabeled.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();

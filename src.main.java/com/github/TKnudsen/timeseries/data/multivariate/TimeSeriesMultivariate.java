@@ -13,8 +13,7 @@ import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
  * </p>
  * 
  * <p>
- * Description: Models a multivariate time series with Double values. Expects
- * the individual timeSeries to have identical time stamps.
+ * Description: Models a multivariate time series with Double values. Expects the individual timeSeries to have identical time stamps.
  * </p>
  * 
  * <p>
@@ -35,6 +34,13 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	private String name;
 	private String description;
+	
+	@SuppressWarnings("unused")
+	protected TimeSeriesMultivariate() {
+		this.id = RandomTools.getRandomLong();
+		this.timeSeriesUnivariateList = new ArrayList<>();
+
+	}
 
 	public TimeSeriesMultivariate(List<ITimeSeriesUnivariate> timeSeriesUnivariateList) {
 		this.id = RandomTools.getRandomLong();

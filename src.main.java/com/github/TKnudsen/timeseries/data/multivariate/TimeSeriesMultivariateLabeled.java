@@ -32,6 +32,19 @@ public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate implem
 	private SortedMap<Long, String> eventLabels = new TreeMap<>();
 	private Ranking<TimeIntervalLabel<String>> intervalLabels = new Ranking<TimeIntervalLabel<String>>();
 
+//	private TimeSeriesMultivariateLabeled(Ranking<TimeIntervalLabel<String>> intervalLabels) {
+//		super();
+//	}
+//	
+//	private TimeSeriesMultivariateLabeled(SortedMap<Long, String> eventLabels,Ranking<TimeIntervalLabel<String>> intervalLabels) {
+//		super();
+//	}
+	
+	@SuppressWarnings("unused")
+	private TimeSeriesMultivariateLabeled() {
+		super();
+	}
+	
 	public TimeSeriesMultivariateLabeled(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
 		super(timeSeriesUnivariateList, timeSeriesNames);
 	}

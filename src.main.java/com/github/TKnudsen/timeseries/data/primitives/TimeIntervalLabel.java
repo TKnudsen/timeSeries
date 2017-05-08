@@ -22,6 +22,10 @@ public class TimeIntervalLabel<O extends Object> extends TimeInterval implements
 
 	private O label;
 
+	private TimeIntervalLabel() {
+		super();
+	}
+
 	public TimeIntervalLabel(long startTime, long endTime, O label) {
 		super(startTime, endTime);
 		this.label = label;

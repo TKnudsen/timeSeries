@@ -23,6 +23,10 @@ public class TimeInterval {
 	protected Long startTime;
 	protected Long endTime;
 
+	protected TimeInterval() {
+
+	}
+	
 	public TimeInterval(long startTime, long endTime) {
 		this.startTime = startTime;
 		this.endTime = endTime;
