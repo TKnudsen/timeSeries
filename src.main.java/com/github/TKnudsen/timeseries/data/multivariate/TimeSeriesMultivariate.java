@@ -27,14 +27,15 @@ import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
 public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	protected long id;
-	private List<ITimeSeriesUnivariate> timeSeriesUnivariateList;
-	private int dimensionality;
-
-	private List<Double> missingValueIndicators;
-
 	private String name;
 	private String description;
-	
+
+	private List<ITimeSeriesUnivariate> timeSeriesUnivariateList;
+	List<String> attributeNames;
+	private List<Double> missingValueIndicators;
+
+	private int dimensionality;
+
 	@SuppressWarnings("unused")
 	protected TimeSeriesMultivariate() {
 		this.id = RandomTools.getRandomLong();
@@ -114,6 +115,9 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		missingValueIndicators = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			missingValueIndicators.add(timeSeriesUnivariateList.get(i).getMissingValueIndicator());
+
+		// init names
+		getAttributeNames();
 	}
 
 	private ITimeSeriesUnivariate getFirstTimeseriesUnivariate() {
@@ -285,10 +289,14 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public List<String> getAttributeNames() {
-		List<String> attributeNames = new ArrayList<>();
+		if (attributeNames != null)
+			return attributeNames;
+
+		attributeNames = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			attributeNames.add(timeSeriesUnivariateList.get(i).getName());
-		return Collections.unmodifiableList(attributeNames);
+		attributeNames = Collections.unmodifiableList(attributeNames);
+		return attributeNames;
 	}
 
 	@Override
