@@ -15,16 +15,18 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * <p>
- * Copyright: (c) 2016-2017 Jürgen Bernard,
+ * Copyright: (c) 2016-2017 Jï¿½rgen Bernard,
  * https://github.com/TKnudsen/timeSeries
  * </p>
  * 
  * @author Juergen Bernard
  * @version 1.02
  */
-public interface ITimeSeriesSegmenter<T extends ITimeSeries<Number>> {
+public interface ITimeSeriesSegmenter<O, T extends ITimeSeries<O>> {
 
 	public List<T> process(List<T> data);
+	
+	public List<T> process(T data);
 
 	public DataProcessingCategory getPreprocessingCategory();
 }
