@@ -5,17 +5,15 @@ import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.TKnudsen.timeseries.operations.io.json.ObjectMapperFactory;
 import com.github.TKnudsen.timeseries.operations.workflow.univariate.ITimeSeriesUnivariateDataMiningWorkflow;
 import com.github.TKnudsen.timeseries.operations.workflow.univariate.TimeSeriesUnivariateDataMiningWorkflow;
 
 public class JsonWorkflowLoader {
 
 	public static ITimeSeriesUnivariateDataMiningWorkflow loadWorkflowFromString(String jsonString) {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		TimeSeriesUnivariateDataMiningWorkflow readValue;
 		try {
@@ -29,9 +27,7 @@ public class JsonWorkflowLoader {
 	}
 
 	public static ITimeSeriesUnivariateDataMiningWorkflow loadWorkflowFromFile(String file) {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		TimeSeriesUnivariateDataMiningWorkflow readValue;
 		try {
@@ -45,9 +41,7 @@ public class JsonWorkflowLoader {
 	}
 
 	public static List<ITimeSeriesUnivariateDataMiningWorkflow> loadWorkflowListFromFile(String file) {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		List<ITimeSeriesUnivariateDataMiningWorkflow> readValue;
 		try {
@@ -60,5 +54,4 @@ public class JsonWorkflowLoader {
 
 		return null;
 	}
-
 }
