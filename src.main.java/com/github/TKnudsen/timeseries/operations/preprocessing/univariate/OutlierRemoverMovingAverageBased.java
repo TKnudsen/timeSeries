@@ -99,6 +99,9 @@ public class OutlierRemoverMovingAverageBased implements ITimeSeriesUnivariatePr
 		TimeSeriesStatistics statistics = new TimeSeriesStatistics(timeSeries);
 
 		double std = statistics.getStandardDeviation();
+		if (std == 0) // min == max
+			return;
+
 		std *= stdDevRatio;
 
 		for (int i = 0; i < timeSeries.size(); i++) {
