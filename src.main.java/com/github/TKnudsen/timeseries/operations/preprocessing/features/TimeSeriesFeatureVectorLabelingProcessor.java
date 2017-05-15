@@ -9,7 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureV
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesLabelingTools;
 
-public class TimeSeriesFeatureVectorLabelingProcessor implements IFeatureVectorProcessor<Double, NumericalFeatureVector> {
+public class TimeSeriesFeatureVectorLabelingProcessor implements IFeatureVectorProcessor<NumericalFeatureVector> {
 
 	private String classLabelName = "class";
 	private String timeStampAttribute = "StartTime";

@@ -34,7 +34,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 
 	private List<NumericalFeatureVector> featureVectors;
 
-	private List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
+	private List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
 	private IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
@@ -53,7 +53,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	}
 
 	@Override
-	public void addFeatureProcessor(IFeatureVectorProcessor<Double, NumericalFeatureVector> featureProcessor) {
+	public void addFeatureProcessor(IFeatureVectorProcessor<NumericalFeatureVector> featureProcessor) {
 		this.featureVectorProcessors.add(featureProcessor);
 	}
 
@@ -66,7 +66,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 			featureVectors = descriptor.transform(data);
 
 		if (featureVectors != null)
-			for (IFeatureVectorProcessor<Double, NumericalFeatureVector> fvProcessor : featureVectorProcessors)
+			for (IFeatureVectorProcessor<NumericalFeatureVector> fvProcessor : featureVectorProcessors)
 				if (fvProcessor != null)
 					fvProcessor.process(featureVectors);
 
@@ -86,7 +86,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 		return descriptor;
 	}
 
-	public List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> getFeatureVectorProcessors() {
+	public List<IFeatureVectorProcessor<NumericalFeatureVector>> getFeatureVectorProcessors() {
 		return featureVectorProcessors;
 	}
 
