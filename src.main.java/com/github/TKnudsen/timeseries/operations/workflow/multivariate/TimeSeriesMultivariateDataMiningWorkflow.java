@@ -37,7 +37,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	private List<NumericalFeatureVector> featureVectors;
 
 	List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
-	
+
 	IDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
 
 	@Override
@@ -76,7 +76,6 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 		return featureVectors;
 	}
 
-	@Override
 	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
 		return distanceMeasure;
 	}

@@ -48,6 +48,11 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	}
 
 	@Override
+	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
+		return distanceMeasure;
+	}
+
+	@Override
 	public void setDistanceMeasure(IDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
 		this.distanceMeasure = distanceMeasure;
 	}
@@ -71,11 +76,6 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 					fvProcessor.process(featureVectors);
 
 		return featureVectors;
-	}
-
-	@Override
-	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
-		return distanceMeasure;
 	}
 
 	public List<ITimeSeriesUnivariatePreprocessor> getDataProcessors() {
