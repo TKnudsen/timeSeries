@@ -36,7 +36,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 
 	private List<NumericalFeatureVector> featureVectors;
 
-	List<IFeatureVectorProcessor<Double, NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
+	List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
 	
 	IDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
 
@@ -56,7 +56,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	}
 
 	@Override
-	public void addFeatureProcessor(IFeatureVectorProcessor<Double, NumericalFeatureVector> featureProcessor) {
+	public void addFeatureProcessor(IFeatureVectorProcessor<NumericalFeatureVector> featureProcessor) {
 		this.featureVectorProcessors.add(featureProcessor);
 	}
 
@@ -69,7 +69,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 			featureVectors = descriptor.transform(data);
 
 		if (featureVectorProcessors != null && featureVectors != null)
-			for (IFeatureVectorProcessor<Double, NumericalFeatureVector> fvProcessor : featureVectorProcessors)
+			for (IFeatureVectorProcessor<NumericalFeatureVector> fvProcessor : featureVectorProcessors)
 				if (fvProcessor != null)
 					fvProcessor.process(featureVectors);
 
