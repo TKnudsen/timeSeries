@@ -16,7 +16,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
  * </p>
  * 
  * <p>
- * Description: wraps an univariate time series with labeling support.
+ * Description: extends an univariate time series with label information.
  * </p>
  * 
  * <p>
@@ -24,7 +24,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class TimeSeriesUnivariateLabeled extends TimeSeriesUnivariate implements ITemporalLabeling<String> {
 
@@ -93,5 +93,25 @@ public class TimeSeriesUnivariateLabeled extends TimeSeriesUnivariate implements
 
 	public void setIntervalLabels(Ranking<TimeIntervalLabel<String>> intervalLabels) {
 		this.intervalLabels = intervalLabels;
+	}
+
+	@Override
+	public int hashCode() {
+		if (hashCode != -1)
+			return hashCode;
+
+		hashCode = super.hashCode();
+
+		if (eventLabels == null)
+			hashCode = 23 * hashCode;
+		else
+			hashCode = 31 * hashCode + eventLabels.hashCode();
+
+		if (intervalLabels == null)
+			hashCode = 23 * hashCode;
+		else
+			hashCode = 31 * hashCode + intervalLabels.hashCode();
+
+		return hashCode;
 	}
 }

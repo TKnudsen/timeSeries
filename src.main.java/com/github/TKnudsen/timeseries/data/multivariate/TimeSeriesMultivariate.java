@@ -37,7 +37,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	private int dimensionality;
 
-	@SuppressWarnings("unused")
 	protected TimeSeriesMultivariate() {
 		this.id = RandomTools.getRandomLong();
 		this.timeSeriesUnivariateList = new ArrayList<>();
@@ -338,7 +337,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	@Override
 	public int hashCode() {
 		int hash = 23;
-		
+
 		if (getTimeSeriesList() == null)
 			hash = 23 * hash;
 		else

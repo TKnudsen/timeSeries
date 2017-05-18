@@ -9,15 +9,15 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * <p>
- * Description: TimeSeries interface
+ * Description: Interface for numerical univariate time series.
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2016
+ * Copyright: Copyright (c) 2015-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public interface ITimeSeriesUnivariate extends ITimeSeries<Double>, IKeyValueProvider<Object> {
 

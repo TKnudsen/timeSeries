@@ -18,8 +18,9 @@ import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
  * </p>
  * 
  * <p>
- * Description: Models a TimeSeriesUnivarate, a data structure that stores
- * univariate phenomena observed over time.
+ * Description: Models an univariate time series, i.e., data structure that
+ * stores univariate phenomena observed over time, expressed with numerical
+ * values.
  * </p>
  * 
  * <p>
@@ -27,7 +28,7 @@ import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 
 public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
@@ -42,6 +43,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 	protected SortedMap<String, Object> attributes = new TreeMap<String, Object>();
 
+	protected int hashCode;
+
 	/**
 	 * used for JSON, reflection, serialization & stuff
 	 */
@@ -51,6 +54,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		this.timeStamps = new ArrayList<>();
 		this.values = new ArrayList<>();
 		this.missingValueIndicator = Double.NaN;
+
+		initialize();
 	}
 
 	public TimeSeriesUnivariate(List<Long> timeStamps, List<Double> values) {
@@ -102,6 +107,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		for (int i = 0; i < timeStamps.size() - 1; i++)
 			if (timeStamps.get(i) >= timeStamps.get(i + 1))
 				throw new IllegalArgumentException("TimeSeriesUnivariate: temporal information needs to be sorted and unique");
+
+		resetHash();
 	}
 
 	@Override
@@ -288,6 +295,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				values.add(index, value);
 			}
 		}
+
+		resetHash();
 	}
 
 	@Override
@@ -300,12 +309,16 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 			timeStamps.remove(index);
 			values.remove(index);
 		}
+
+		resetHash();
 	}
 
 	@Override
 	public void removeTimeValue(int index) {
 		timeStamps.remove(index);
 		values.remove(index);
+
+		resetHash();
 	}
 
 	@Override
@@ -314,6 +327,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
 
 		values.set(index, value);
+
+		resetHash();
 	}
 
 	@Override
@@ -324,6 +339,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: timestamp out of bounds");
 
 		values.set(index, value);
+
+		resetHash();
 	}
 
 	@Override
@@ -358,47 +375,6 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 			stringBuffer.append(new Date(timeStamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
 
 		return stringBuffer.toString();
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 23;
-
-		if (values == null)
-			hash = 23 * hash;
-		else
-			for (Double value : values) {
-				long l = Double.doubleToLongBits(value);
-				hash = 31 * hash + (int) (l ^ (l >>> 32));
-			}
-
-		if (timeStamps == null)
-			hash = 23 * hash;
-		else
-			for (long l : timeStamps)
-				hash = 23 * hash + (int) l;
-
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-
-		if (!(obj instanceof TimeSeriesUnivariate))
-			return false;
-
-		TimeSeriesUnivariate otherTimeSeries = (TimeSeriesUnivariate) obj;
-
-		if (size() != otherTimeSeries.size())
-			return false;
-
-		for (int i = 0; i < size(); i++)
-			if (getTimestamp(i) != otherTimeSeries.getTimestamp(i) || getValue(i) != otherTimeSeries.getValue(i))
-				return false;
-
-		return true;
 	}
 
 	@Override
@@ -439,5 +415,64 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		if (attributes.get(attribute) != null)
 			return attributes.remove(attribute);
 		return null;
+
+		// no resetHash since attributes are not part of the value-building hash
+		// components
+	}
+
+	protected void resetHash() {
+		hashCode = -1;
+	}
+
+	@Override
+	public int hashCode() {
+		if (hashCode != -1)
+			return hashCode;
+
+		hashCode = 23;
+
+		if (values == null)
+			hashCode = 23 * hashCode;
+		else
+			for (Double value : values) {
+				long l = Double.doubleToLongBits(value);
+				hashCode = 31 * hashCode + (int) (l ^ (l >>> 32));
+			}
+
+		if (timeStamps == null)
+			hashCode = 23 * hashCode;
+		else
+			for (long l : timeStamps)
+				hashCode = 23 * hashCode + (int) l;
+
+		return hashCode;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+
+		if (!(obj instanceof TimeSeriesUnivariate))
+			return false;
+
+		if (hashCode != obj.hashCode())
+			return false;
+
+		// TODO the following lines may be removed since they are already
+		// covered with hashCode
+		TimeSeriesUnivariate otherTimeSeries = (TimeSeriesUnivariate) obj;
+
+		if (size() != otherTimeSeries.size())
+			return false;
+
+		for (int i = 0; i < size(); i++)
+			if (getTimestamp(i) != otherTimeSeries.getTimestamp(i) || getValue(i) != otherTimeSeries.getValue(i))
+				return false;
+
+		// TODO decision needed: do the attributes (not the time-values) need to
+		// be equal?
+
+		return true;
 	}
 }
