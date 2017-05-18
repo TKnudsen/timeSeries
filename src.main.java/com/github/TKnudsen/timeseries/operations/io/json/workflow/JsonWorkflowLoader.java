@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.TKnudsen.timeseries.operations.io.json.ObjectMapperFactory;
+import com.github.TKnudsen.timeseries.operations.workflow.multivariate.ITimeSeriesMultivariateDataMiningWorkflow;
 import com.github.TKnudsen.timeseries.operations.workflow.univariate.ITimeSeriesUnivariateDataMiningWorkflow;
 import com.github.TKnudsen.timeseries.operations.workflow.univariate.TimeSeriesUnivariateDataMiningWorkflow;
 
@@ -47,6 +48,34 @@ public class JsonWorkflowLoader {
 		try {
 			readValue = mapper.readValue(new File(file), new TypeReference<List<TimeSeriesUnivariateDataMiningWorkflow>>() {
 			});
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static ITimeSeriesMultivariateDataMiningWorkflow loadMultivariateWorkflowFromString(String jsonString) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
+
+		ITimeSeriesMultivariateDataMiningWorkflow readValue;
+		try {
+			readValue = mapper.readValue(jsonString, ITimeSeriesMultivariateDataMiningWorkflow.class);
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static ITimeSeriesMultivariateDataMiningWorkflow loadMultivariateWorkflowFromFile(String file) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
+
+		ITimeSeriesMultivariateDataMiningWorkflow readValue;
+		try {
+			readValue = mapper.readValue(new File(file), ITimeSeriesMultivariateDataMiningWorkflow.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
