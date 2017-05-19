@@ -1,7 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.distance.features;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.IFeatureVectorDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.INumericalFeatureVectorDistanceMeasure;
 
 import de.javagl.nd.distance.DistanceFunction;
 import de.javagl.nd.distance.tuples.d.DoubleTupleDistanceFunctions;
@@ -24,7 +24,7 @@ import de.javagl.nd.tuples.d.DoubleTuple;
  * @author Juergen Bernard
  * @version 1.01
  */
-public class DynamicTimeWarping implements IFeatureVectorDistanceMeasure<Double, NumericalFeatureVector> {
+public class DynamicTimeWarping implements INumericalFeatureVectorDistanceMeasure {
 
 	/**
 	 * 
@@ -46,5 +46,10 @@ public class DynamicTimeWarping implements IFeatureVectorDistanceMeasure<Double,
 	@Override
 	public String getDescription() {
 		return "DTW is a cross-bin comparison method for the calculation of distances. It is more dynamic but slower than ED.";
+	}
+
+	@Override
+	public double applyAsDouble(NumericalFeatureVector t, NumericalFeatureVector u) {
+		return getDistance(t, u);
 	}
 }

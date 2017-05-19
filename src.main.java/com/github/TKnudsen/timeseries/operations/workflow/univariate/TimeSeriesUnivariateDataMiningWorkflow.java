@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IIDObjectDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
@@ -35,7 +35,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	private List<NumericalFeatureVector> featureVectors;
 
 	private List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
-	private IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
+	private IIDObjectDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
 	public void addPreProcessor(ITimeSeriesUnivariatePreprocessor processor) {
@@ -48,12 +48,12 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	}
 
 	@Override
-	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
+	public IIDObjectDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
 		return distanceMeasure;
 	}
 
 	@Override
-	public void setDistanceMeasure(IDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
+	public void setDistanceMeasure(IIDObjectDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
 		this.distanceMeasure = distanceMeasure;
 	}
 

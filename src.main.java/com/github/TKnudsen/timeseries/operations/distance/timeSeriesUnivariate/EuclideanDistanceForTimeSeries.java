@@ -56,4 +56,9 @@ public class EuclideanDistanceForTimeSeries implements IDistanceMeasure<ITimeSer
 
 		return Math.sqrt(dist);
 	}
+
+	@Override
+	public double applyAsDouble(ITimeSeriesUnivariate t, ITimeSeriesUnivariate u) {
+		return getDistance(t, u);
+	}
 }
