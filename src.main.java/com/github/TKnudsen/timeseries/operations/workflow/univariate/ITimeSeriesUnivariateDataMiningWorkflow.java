@@ -1,8 +1,8 @@
 package com.github.TKnudsen.timeseries.operations.workflow.univariate;
 
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
 /**

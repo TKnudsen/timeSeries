@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.descriptors.univariate;
+package com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +11,9 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.ITimeSeriesDescriptorInverseFunction;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptuallyImportantPoints;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITimeSeriesDescriptorInverseFunction;
 
 /**
  * <p>

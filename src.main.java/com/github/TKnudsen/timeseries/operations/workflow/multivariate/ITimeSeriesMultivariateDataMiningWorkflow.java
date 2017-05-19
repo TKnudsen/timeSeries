@@ -1,8 +1,8 @@
 package com.github.TKnudsen.timeseries.operations.workflow.multivariate;
 
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.ITimeSeriesMultivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
 /**

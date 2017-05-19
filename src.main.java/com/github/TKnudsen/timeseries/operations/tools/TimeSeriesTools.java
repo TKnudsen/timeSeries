@@ -35,7 +35,7 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.07
+ * @version 1.08
  */
 public final class TimeSeriesTools {
 
@@ -503,12 +503,14 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireExactMatch
-	 *            whether or not the identification of the subsequencec is sort
-	 *            of sophisticated in case of NOT exact matches.
+	 * @param requireStartEndTimestampsExist
+	 *            whether or not the identification of the subsequence is sort
+	 *            of sophisticated in case of NOT exact matches. If not a
+	 *            subsequence is returned with start/end time stamps larger than
+	 *            the defined interval.
 	 * @return
 	 */
-	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end, boolean requireExactMatch) {
+	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end, boolean requireStartEndTimestampsExist) {
 		if (timeSeries == null)
 			return null;
 		if (timeSeries.isEmpty())
@@ -520,11 +522,13 @@ public final class TimeSeriesTools {
 		if (end > timeSeries.getLastTimestamp())
 			return null;
 
-		int indexStart = timeSeries.findByDate(start, requireExactMatch);
+		int indexStart = timeSeries.findByDate(start, requireStartEndTimestampsExist);
 		if (indexStart < 0 && indexStart >= timeSeries.size())
 			return null;
 
-		int indexEnd = timeSeries.findByDate(end, requireExactMatch);
+		int indexEnd = timeSeries.findByDate(end, requireStartEndTimestampsExist);
+		if (timeSeries.getTimestamp(indexEnd) != end && indexEnd < timeSeries.size() - 1)
+			indexEnd++;
 		if (indexEnd < 0 && indexEnd >= timeSeries.size())
 			return null;
 
@@ -541,6 +545,55 @@ public final class TimeSeriesTools {
 
 		ITimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(timestamps, values);
 		return returnTimeSeries;
+	}
+
+	/**
+	 * segments a given time series
+	 * 
+	 * @param timeSeries
+	 * @param start
+	 * @param end
+	 * @param requireStartEndTimestampsExist
+	 *            whether or not the identification of the subsequence is sort
+	 *            of sophisticated in case of NOT exact matches. If not a
+	 *            subsequence is returned with start/end time stamps larger than
+	 *            the defined interval.
+	 * @param cropIfTimeStampsDontExist
+	 *            if no exact match is needed this routine provides the
+	 *            opportunity to crop start and end time stamp by linear
+	 *            interpolation.
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end, boolean requireStartEndTimestampsExist, boolean cropIfTimeStampsDontExist) {
+		ITimeSeriesUnivariate subsequence = getSubsequence(timeSeries, start, end, false);
+
+		if (subsequence == null)
+			return null;
+
+		if (requireStartEndTimestampsExist)
+			return subsequence;
+
+		// crop start time stamp
+		if (subsequence.getFirstTimestamp() != start)
+			if (subsequence.getFirstTimestamp() < start) {
+				Double value = subsequence.getValue(start, true);
+				subsequence.insert(start, value);
+				subsequence.removeTimeValue(subsequence.getFirstTimestamp());
+			} else {
+				throw new IllegalArgumentException("TimeSeriesTools.getSubsequence: unexpected return value. please verify.");
+			}
+
+		// crop end time stamp
+		if (subsequence.getLastTimestamp() != end)
+			if (subsequence.getLastTimestamp() > end) {
+				Double value = subsequence.getValue(end, true);
+				subsequence.insert(end, value);
+				subsequence.removeTimeValue(subsequence.getLastTimestamp());
+			} else {
+				throw new IllegalArgumentException("TimeSeriesTools.getSubsequence: unexpected return value. please verify");
+			}
+
+		return subsequence;
 	}
 
 	/**
@@ -562,7 +615,7 @@ public final class TimeSeriesTools {
 		long duration = calculateEquidistanceInMillis(timeDuration);
 
 		for (long l = timeSeries.getFirstTimestamp(); l <= timeSeries.getLastTimestamp(); l += duration) {
-			ITimeSeriesUnivariate subSeqence = TimeSeriesTools.getSubsequence(timeSeries, l, l + duration, true);
+			ITimeSeriesUnivariate subSeqence = TimeSeriesTools.getSubsequence(timeSeries, l, l + duration, false, true);
 			if (subSeqence != null)
 				subSeqences.add(subSeqence);
 		}

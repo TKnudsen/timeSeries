@@ -6,8 +6,8 @@ import com.github.TKnudsen.ComplexDataObject.data.enums.NormalizationType;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.INumericalFeatureVectorDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.numericalData.INumericalFeatureVectorProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.numericalData.NormalizationRoutineFactory;
-import com.github.TKnudsen.timeseries.operations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 
 /**
  * <p>

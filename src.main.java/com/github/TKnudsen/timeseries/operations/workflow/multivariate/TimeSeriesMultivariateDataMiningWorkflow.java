@@ -8,8 +8,8 @@ import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeas
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.ITimeSeriesMultivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
 
 /**
  * <p>

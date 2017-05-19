@@ -1,7 +1,7 @@
-package com.github.TKnudsen.timeseries.operations.descriptors.univariate;
+package com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate;
 
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.ITimeSeriesDescriptor;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITimeSeriesDescriptor;
 
 /**
  * <p>

@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.descriptors.univariate;
+package com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,9 +13,9 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.descriptors.ITimeSeriesDescriptorInverseFunction;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.TemporalQuantization;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITimeSeriesDescriptorInverseFunction;
 
 /**
  * <p>
