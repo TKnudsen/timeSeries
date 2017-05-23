@@ -2,7 +2,9 @@ package com.github.TKnudsen.timeseries.operations.io.json;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
@@ -82,6 +84,22 @@ public class JSONLoader {
 
 		return null;
 	}
+
+	public static List<ITimeSeriesUnivariate> loadTSListFromFile(String file) {
+		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
+
+		List<ITimeSeriesUnivariate> readValue;
+		try {
+			readValue = mapper.readValue(new File(file), new TypeReference<List<TimeSeriesUnivariate>>() {
+			});
+			return readValue;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	public static ITimeSeriesMultivariate loadTSMVFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
@@ -95,6 +113,7 @@ public class JSONLoader {
 
 		return null;
 	}
+
 	public static ITimeSeriesMultivariate loadTSMVFromString(String json) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
@@ -108,7 +127,7 @@ public class JSONLoader {
 
 		return null;
 	}
-	
+
 	public static TimeSeriesMultivariateLabeled loadTSMVLabeledFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
@@ -122,6 +141,7 @@ public class JSONLoader {
 
 		return null;
 	}
+
 	public static TimeSeriesMultivariateLabeled loadTSMVLabeledFromString(String json) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
