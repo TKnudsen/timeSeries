@@ -2,7 +2,6 @@ package com.github.TKnudsen.timeseries.operations.distance.timeSeriesUnivariate;
 
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
@@ -20,9 +19,9 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public class EuclideanDistanceForTimeSeries implements IDistanceMeasure<ITimeSeriesUnivariate> {
+public class EuclideanDistanceForTimeSeries implements ITimeSeriesUnivariateDistanceMeasure {
 
 	/**
 	 * 
