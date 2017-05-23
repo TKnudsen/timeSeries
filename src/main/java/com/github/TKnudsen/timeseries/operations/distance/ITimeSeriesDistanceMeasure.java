@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.distance.timeSeriesUnivariate;
+package com.github.TKnudsen.timeseries.operations.distance;
 
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IIDObjectDistanceMeasure;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;

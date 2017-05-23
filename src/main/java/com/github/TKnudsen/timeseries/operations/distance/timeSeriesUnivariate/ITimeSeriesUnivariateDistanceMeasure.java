@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.distance.timeSeriesUnivariate;
 
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.distance.ITimeSeriesDistanceMeasure;
 
 /**
  * <p>
