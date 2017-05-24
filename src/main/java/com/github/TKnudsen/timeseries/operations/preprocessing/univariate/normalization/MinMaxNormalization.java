@@ -24,11 +24,14 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 
 	private boolean globalMinMax;
+
+	private double globalMin = Double.NaN;
+	private double globalMax = Double.NaN;
 
 	public MinMaxNormalization() {
 		this.globalMinMax = false;
@@ -38,23 +41,32 @@ public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 		this.globalMinMax = globalMinMax;
 	}
 
+	public MinMaxNormalization(double globalMin, double globalMax) {
+		this.globalMinMax = true;
+		this.globalMin = globalMin;
+		this.globalMax = globalMax;
+	}
+
 	@Override
 	public void process(List<ITimeSeriesUnivariate> data) {
 
 		double globalMin = Double.POSITIVE_INFINITY;
 		double globalMax = Double.NEGATIVE_INFINITY;
-		if (globalMinMax) {
+
+		if (!Double.isNaN(this.globalMin) && !Double.isNaN(this.globalMax)) {
+			globalMin = this.globalMin;
+			globalMax = this.globalMax;
+		} else if (globalMinMax)
 			for (ITimeSeriesUnivariate timeSeries : data) {
 				globalMin = Math.min(globalMin, TimeSeriesTools.getMinValue(timeSeries));
 				globalMax = Math.max(globalMax, TimeSeriesTools.getMaxValue(timeSeries));
 			}
-		}
 
 		for (ITimeSeriesUnivariate timeSeries : data) {
 			double min = TimeSeriesTools.getMinValue(timeSeries);
 			double max = TimeSeriesTools.getMaxValue(timeSeries);
 			for (int i = 0; i < timeSeries.size(); i++)
-				if (globalMinMax)
+				if (globalMinMax) // also true when this.globalmin/max are set
 					timeSeries.replaceValue(i, MathFunctions.linearScale(globalMin, globalMax, timeSeries.getValue(i)));
 				else
 					timeSeries.replaceValue(i, MathFunctions.linearScale(min, max, timeSeries.getValue(i)));
@@ -88,7 +100,13 @@ public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 
 		MinMaxNormalization other = (MinMaxNormalization) o;
 
-		return other.globalMinMax == globalMinMax;
+		if (other.globalMinMax != globalMinMax)
+			return false;
+
+		if (other.globalMin != globalMin)
+			return false;
+
+		return other.globalMax == globalMax;
 	}
 
 }
