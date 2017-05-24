@@ -10,8 +10,20 @@ import com.github.TKnudsen.ComplexDataObject.model.transformations.featureExtrac
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
- * @author Christian Ritter, J�rgen Bernard
- *
+ * <p>
+ * Title: ValueMedianFeatureExtractor
+ * </p>
+ * 
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2017
+ * </p>
+ * 
+ * @author Christian Ritter, Juergen Bernard
+ * @version 1.01
  */
 public class ValueMedianFeatureExtractor implements IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature> {
 

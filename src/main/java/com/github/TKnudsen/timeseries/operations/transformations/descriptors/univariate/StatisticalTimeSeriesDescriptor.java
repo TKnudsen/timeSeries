@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.transformations.featureExtraction;
+package com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,36 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.featureExtraction.IFeatureExtractor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.OscillationsAroundMeanFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.PositionMeanFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.PositionVarianceFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.Value1stQuartileFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.Value2ndQuartileFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.Value3rdQuartileFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.ValueMaxFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.ValueMeanFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.ValueMedianFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.ValueMinFeatureExtractor;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.ValueVarianceFeatureExtractor;
 
 /**
- * @author Christian Ritter
- *
+ * <p>
+ * Title: ITimeSeriesDescriptor
+ * </p>
+ * 
+ * <p>
+ * Description: Creates a Feature Vector from a given ITimeSeriesUnivariate
+ * using a set of IFeatureExtractors
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2017
+ * </p>
+ * 
+ * @author Christian Ritter, Juergen Bernard
+ * @version 1.02
  */
-public class StatisticalTimeSeriesDescriptor
-		implements IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector> {
+public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDescriptor {
 
 	private List<IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature>> featureCreators;
 
@@ -48,8 +71,7 @@ public class StatisticalTimeSeriesDescriptor
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(
-			int arg0) {
+	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int arg0) {
 		return null;
 	}
 

@@ -10,8 +10,20 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
- * @author Christian Ritter
- *
+ * <p>
+ * Title: ValueMinFeatureExtractor
+ * </p>
+ * 
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2017
+ * </p>
+ * 
+ * @author Christian Ritter, Juergen Bernard
+ * @version 1.01
  */
 public class ValueMinFeatureExtractor implements IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature> {
 

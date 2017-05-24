@@ -9,8 +9,20 @@ import com.github.TKnudsen.ComplexDataObject.model.transformations.featureExtrac
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
- * @author Christian Ritter
- *
+ * <p>
+ * Title: PositionVarianceFeatureExtractor
+ * </p>
+ * 
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2017
+ * </p>
+ * 
+ * @author Christian Ritter, Juergen Bernard
+ * @version 1.01
  */
 public class PositionVarianceFeatureExtractor implements IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature> {
 

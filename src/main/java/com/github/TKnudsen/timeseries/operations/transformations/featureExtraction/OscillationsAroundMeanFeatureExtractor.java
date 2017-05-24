@@ -10,11 +10,22 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
- * @author Christian Ritter
- *
+ * <p>
+ * Title: OscillationsAroundMeanFeatureExtractor
+ * </p>
+ * 
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2017
+ * </p>
+ * 
+ * @author Christian Ritter, Juergen Bernard
+ * @version 1.01
  */
-public class OscillationsAroundMeanFeatureExtractor
-		implements IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature> {
+public class OscillationsAroundMeanFeatureExtractor implements IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature> {
 
 	private Double apply(ITimeSeriesUnivariate t) {
 		List<Double> values = t.getValues();
