@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
-import com.github.TKnudsen.ComplexDataObject.model.transformations.featureExtraction.IFeatureExtractor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.univariate.ITimeSeriesUnivariateFeatureExtractor;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * @author Christian Ritter, Juergen Bernard
  * @version 1.01
  */
-public class ValueMeanFeatureExtractor implements IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature> {
+public class ValueMeanFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
 	private Double apply(ITimeSeriesUnivariate t) {
 		return TimeSeriesTools.getMean(t);

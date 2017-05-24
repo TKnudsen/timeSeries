@@ -7,8 +7,8 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
-import com.github.TKnudsen.ComplexDataObject.model.transformations.featureExtraction.IFeatureExtractor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.univariate.ITimeSeriesUnivariateFeatureExtractor;
 
 /**
  * <p>
@@ -26,7 +26,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * @author Christian Ritter, Juergen Bernard
  * @version 1.01
  */
-public class Value3rdQuartileFeatureExtractor implements IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature> {
+public class Value3rdQuartileFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
 	private Double apply(ITimeSeriesUnivariate t) {
 		List<Double> vals = t.getValues();
