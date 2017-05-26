@@ -103,10 +103,23 @@ public class MinMaxNormalization implements ITimeSeriesUnivariatePreprocessor {
 		if (other.globalMinMax != globalMinMax)
 			return false;
 
-		if (other.globalMin != globalMin)
+		if (!Double.isNaN(other.globalMin) && !Double.isNaN(globalMin)) {
+			if (other.globalMin != globalMin)
+				return false;
+		} else if (!Double.isNaN(other.globalMin) && Double.isNaN(globalMin))
+			return false;
+		else if (Double.isNaN(other.globalMin) && !Double.isNaN(globalMin))
 			return false;
 
-		return other.globalMax == globalMax;
+		if (!Double.isNaN(other.globalMax) && !Double.isNaN(globalMax)) {
+			if (other.globalMax != globalMax)
+				return false;
+		} else if (!Double.isNaN(other.globalMax) && Double.isNaN(globalMax))
+			return false;
+		else if (Double.isNaN(other.globalMax) && !Double.isNaN(globalMax))
+			return false;
+
+		return true;
 	}
 
 }
