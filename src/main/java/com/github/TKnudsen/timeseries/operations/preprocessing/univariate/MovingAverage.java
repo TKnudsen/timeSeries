@@ -69,7 +69,8 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 				double values = 0;
 
 				double weights = 0;
-				for (int k = Math.max(0, i - kernel.getInterval().intValue()); k < Math.min(i + kernel.getInterval().intValue() + 1, timeSeries.size()); k++)
+				for (int k = Math.max(0, i - kernel.getInterval().intValue()); k < Math
+						.min(i + kernel.getInterval().intValue() + 1, timeSeries.size()); k++)
 					if (!considerFutureValues && k > i)
 						break;
 					else if (!Double.isNaN(timeSeries.getValue(k))) {
@@ -127,7 +128,8 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 
 		MovingAverage other = (MovingAverage) o;
 
-		return other.kernel.equals(kernel) && other.considerFutureValues == considerFutureValues;
+		return other.kernel.getInterval().equals(kernel.getInterval())
+				&& other.considerFutureValues == considerFutureValues;
 	}
 
 }
