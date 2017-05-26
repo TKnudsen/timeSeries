@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.distance.features;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.INumericalFeatureVectorDistanceMeasure;
 
 import de.javagl.nd.distance.DistanceFunction;
@@ -51,5 +52,14 @@ public class DynamicTimeWarping implements INumericalFeatureVectorDistanceMeasur
 	@Override
 	public double applyAsDouble(NumericalFeatureVector t, NumericalFeatureVector u) {
 		return getDistance(t, u);
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof DynamicTimeWarping))
+			return false;
+		return true;
 	}
 }
