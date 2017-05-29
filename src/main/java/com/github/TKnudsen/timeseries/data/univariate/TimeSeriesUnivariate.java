@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 
 /**
  * <p>
@@ -50,7 +50,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	 */
 	@SuppressWarnings("unused")
 	private TimeSeriesUnivariate() {
-		this.id = RandomTools.getRandomLong();
+		this.id = MathFunctions.randomLong();
 		this.timeStamps = new ArrayList<>();
 		this.values = new ArrayList<>();
 		this.missingValueIndicator = Double.NaN;
@@ -59,7 +59,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	public TimeSeriesUnivariate(List<Long> timeStamps, List<Double> values) {
-		this.id = RandomTools.getRandomLong();
+		this.id = MathFunctions.randomLong();
 		this.timeStamps = timeStamps;
 		this.values = values;
 		this.missingValueIndicator = Double.NaN;
@@ -68,7 +68,7 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	public TimeSeriesUnivariate(List<Long> timeStamps, List<Double> values, Double missingValueIndicator) {
-		this.id = RandomTools.getRandomLong();
+		this.id = MathFunctions.randomLong();
 		this.timeStamps = timeStamps;
 		this.values = values;
 		this.missingValueIndicator = missingValueIndicator;

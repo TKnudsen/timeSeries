@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.tools.RandomTools;
 
 /**
  * <p>
@@ -38,13 +38,13 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	private int dimensionality;
 
 	protected TimeSeriesMultivariate() {
-		this.id = RandomTools.getRandomLong();
+		this.id = MathFunctions.randomLong();
 		this.timeSeriesUnivariateList = new ArrayList<>();
 
 	}
 
 	public TimeSeriesMultivariate(List<ITimeSeriesUnivariate> timeSeriesUnivariateList) {
-		this.id = RandomTools.getRandomLong();
+		this.id = MathFunctions.randomLong();
 		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
 
 		initialize();
@@ -58,7 +58,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	}
 
 	public TimeSeriesMultivariate(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
-		this.id = RandomTools.getRandomLong();
+		this.id = MathFunctions.randomLong();
 		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
 
 		initialize();

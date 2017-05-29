@@ -1,7 +1,6 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
@@ -52,9 +51,6 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 	}
 
 	protected void process(ITimeSeriesUnivariate timeSeries) {
-		Date date = new Date();
-		System.out.println(date + ", " + date.getTime() + ": TemporalQuantization.process()");
-
 		if (timeSeries == null)
 			return;
 
