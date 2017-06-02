@@ -14,9 +14,6 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
-import flanagan.complex.Complex;
-import flanagan.math.FourierTransform;
-
 /**
  * <p>
  * Title: FourierTransformDescriptor
@@ -32,7 +29,6 @@ import flanagan.math.FourierTransform;
  * Published in: Proceedings of the 4th International Conference on Foundations
  * of Data Organization and Algorithms Pages 69-84 * October 13 - 15, 1993
  * 
- * Michael Thomas Flanagan's Java Scientific Library is used to apply the FFT.
  * </p>
  * 
  * <p>
@@ -47,8 +43,16 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	// parameters
 	private int coefficientCount;
 
+	private boolean useRealFeatures = false;
+
+	private boolean useImaginaryFeatures = true;
+
 	// model
-	FourierTransform fft = new FourierTransform();
+	/**
+	 * the array of FFT coefficients. can be used to calculate the inverted
+	 * function.
+	 */
+	Double[][] complex;
 
 	@SuppressWarnings("unused")
 	private FourierTransformDescriptor() {
@@ -56,6 +60,9 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	}
 
 	public FourierTransformDescriptor(int coefficientCount) {
+		if (coefficientCount < 2)
+			throw new IllegalArgumentException("FourierTransformDescriptor: coefficient needs to be at least 2");
+
 		this.coefficientCount = coefficientCount;
 	}
 
@@ -84,20 +91,46 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 		double[] array = DataConversion.toPrimitives(values);
 
 		// apply Fourier Transform
-		fft.setData(array);
-		fft.transform();
-
-		double[] transformedDataAsAlternate = fft.getTransformedDataAsAlternate();
+		complex = calculateFFT(array);
 
 		List<NumericalFeature> features = new ArrayList<>();
-		for (int i = 0; i < coefficientCount; i++) {
-			features.add(new NumericalFeature("FT coefficient " + (i + 1) + " (real)", transformedDataAsAlternate[i * 2]));
-			features.add(new NumericalFeature("FT coefficient " + (i + 1) + " (imaginary)", transformedDataAsAlternate[i * 2 + 1]));
+		for (int i = 0; i < Math.min(coefficientCount, complex.length); i++) {
+			if (useRealFeatures)
+				features.add(new NumericalFeature("FT coefficient " + (i + 1) + " (real)", complex[i][0]));
+			if (useImaginaryFeatures)
+				features.add(new NumericalFeature("FT coefficient " + (i + 1) + " (imaginary)", complex[i][1]));
 		}
 
 		NumericalFeatureVector fv = new NumericalFeatureVector(features);
 
 		return Arrays.asList(fv);
+	}
+
+	/**
+	 * calculates the Fourier Coefficients from a given signal. Per design, it
+	 * is assumed that the signal is equidistant.
+	 * 
+	 * @param signal
+	 * @return
+	 */
+	private Double[][] calculateFFT(double[] signal) {
+		if (signal == null)
+			return null;
+
+		complex = new Double[coefficientCount][2];
+		for (int s = 0; s < Math.min(coefficientCount, signal.length); s++) {
+			double real = 0;
+			double imaginary = 0;
+			for (int i = 0; i < signal.length; i++) {
+				double e = -2 * Math.PI * s * i / (signal.length - 1);
+				real += signal[i] * Math.cos(e);
+				imaginary += signal[i] * Math.sin(e);
+			}
+
+			complex[s] = new Double[] { real / Math.sqrt(signal.length - 1), imaginary / Math.sqrt(signal.length - 1) };
+		}
+
+		return complex;
 	}
 
 	@Override
@@ -114,22 +147,23 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	}
 
 	/**
-	 * Inverts the descriptor operation. synthesizes a TimeSeries from the FT
-	 * coefficients.
+	 * Inverts the descriptor operation. synthesizes a TimeSeries from the FFT
+	 * coefficients. Uses only the imaginary parts.
 	 * 
 	 * @param quantization
 	 * @param size
 	 * @return
 	 */
 	public ITimeSeriesUnivariate invertFT(long quantization, int size) {
-		Complex[] complex = fft.getTransformedDataAsComplex();
+		if (complex == null)
+			return null;
 
 		double[] synthesizedSeries = new double[size];
 		for (int i = 0; i < size; i++) {
-			for (int f = 0; f < coefficientCount; f++) {
+			for (int f = 0; f < Math.min(coefficientCount, complex.length); f++) {
 				double exponent = 2 * Math.PI * f * i / (size - 1.0);
-				synthesizedSeries[i] += complex[f].getImag() * Math.cos(exponent);
-				synthesizedSeries[i] -= complex[f].getReal() * Math.sin(exponent);
+				synthesizedSeries[i] += complex[f][0] * Math.cos(exponent);
+				synthesizedSeries[i] -= complex[f][1] * Math.sin(exponent);
 			}
 			synthesizedSeries[i] = synthesizedSeries[i] / Math.sqrt((double) (size - 1.0));
 		}
@@ -158,7 +192,7 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 
 	@Override
 	public String getDescription() {
-		return "Flanagan's Fourier Transform applied on Time Series Data";
+		return "Flanagan's Fast Fourier Transform applied on Time Series Data";
 	}
 
 	public int getCoefficientCount() {
@@ -167,5 +201,21 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 
 	public void setCoefficientCount(int coefficientCount) {
 		this.coefficientCount = coefficientCount;
+	}
+
+	public boolean isUseRealFeatures() {
+		return useRealFeatures;
+	}
+
+	public void setUseRealFeatures(boolean useRealFeatures) {
+		this.useRealFeatures = useRealFeatures;
+	}
+
+	public boolean isUseImaginaryFeatures() {
+		return useImaginaryFeatures;
+	}
+
+	public void setUseImaginaryFeatures(boolean useImaginaryFeatures) {
+		this.useImaginaryFeatures = useImaginaryFeatures;
 	}
 }
