@@ -46,6 +46,10 @@ public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDes
 	 * Creates a new descriptor with a basic set of feature creation routines.
 	 */
 	public StatisticalTimeSeriesDescriptor() {
+		initialize();
+	}
+
+	private void initialize() {
 		featureCreators = new ArrayList<>();
 		featureCreators.add(new ValueMinFeatureExtractor());
 		featureCreators.add(new ValueMaxFeatureExtractor());
