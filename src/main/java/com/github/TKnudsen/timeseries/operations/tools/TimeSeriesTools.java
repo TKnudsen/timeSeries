@@ -659,4 +659,31 @@ public final class TimeSeriesTools {
 
 		return tsMean;
 	}
+
+	/**
+	 * Checks whether a timeSeries is equidistant. A time series is equidistant
+	 * iff the time intervals (the quantization) between any to time stamps are
+	 * equal.
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
+	public static boolean isEquidistant(ITimeSeriesUnivariate timeSeries) {
+		long[] quantizations = getQuantizationAsLong(timeSeries);
+
+		if (quantizations == null)
+			return false;
+
+		if (quantizations.length == 0)
+			return false;
+
+		long last = quantizations[0];
+		for (int i = 1; i == quantizations.length; i++)
+			if (quantizations[i] != last)
+				return false;
+			else
+				last = quantizations[i];
+
+		return true;
+	}
 }
