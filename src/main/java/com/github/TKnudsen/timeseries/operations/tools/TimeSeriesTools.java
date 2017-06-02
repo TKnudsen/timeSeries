@@ -330,12 +330,12 @@ public final class TimeSeriesTools {
 		return new TimeSeriesUnivariate(timeStamps, values, missingValueIndicator);
 	}
 
-	public static long[] getQuantizationAsLong(ITimeSeriesUnivariate ts) {
-		long[] quantisation = new long[ts.size() - 1];
-		for (int i = 0; i < quantisation.length; i++) {
-			quantisation[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
+	public static long[] getQuantizationsAsLong(ITimeSeriesUnivariate ts) {
+		long[] quantization = new long[ts.size() - 1];
+		for (int i = 0; i < quantization.length; i++) {
+			quantization[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
 		}
-		return quantisation;
+		return quantization;
 	}
 
 	public static double[] getQuantizationAsDouble(ITimeSeriesUnivariate ts) {
@@ -669,7 +669,7 @@ public final class TimeSeriesTools {
 	 * @return
 	 */
 	public static boolean isEquidistant(ITimeSeriesUnivariate timeSeries) {
-		long[] quantizations = getQuantizationAsLong(timeSeries);
+		long[] quantizations = getQuantizationsAsLong(timeSeries);
 
 		if (quantizations == null)
 			return false;

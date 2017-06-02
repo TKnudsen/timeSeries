@@ -23,8 +23,8 @@ import flanagan.math.FourierTransform;
  * </p>
  * 
  * <p>
- * Description: Time Series Descriptor based on the Fourier transform. As far as
- * I know, the Fourier transform was first applied on time series in the
+ * Description: Time Series Descriptor based on the Fast Fourier Transform
+ * (FFT). As far as I know, the FFT was first applied on time series in the
  * following publication:
  * 
  * Authors: Rakesh Agrawal, Christos Faloutsos, Arun N. Swami
@@ -32,8 +32,7 @@ import flanagan.math.FourierTransform;
  * Published in: Proceedings of the 4th International Conference on Foundations
  * of Data Organization and Algorithms Pages 69-84 * October 13 - 15, 1993
  * 
- * Michael Thomas Flanagan's Java Scientific Library is used to apply the
- * Fourier Transform.
+ * Michael Thomas Flanagan's Java Scientific Library is used to apply the FFT.
  * </p>
  * 
  * <p>
@@ -41,7 +40,7 @@ import flanagan.math.FourierTransform;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescriptor {
 
@@ -50,6 +49,11 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 
 	// model
 	FourierTransform fft = new FourierTransform();
+
+	@SuppressWarnings("unused")
+	private FourierTransformDescriptor() {
+		this.coefficientCount = 3;
+	}
 
 	public FourierTransformDescriptor(int coefficientCount) {
 		this.coefficientCount = coefficientCount;
@@ -67,16 +71,15 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	}
 
 	@Override
-	public List<NumericalFeatureVector> transform(ITimeSeriesUnivariate input) {
-		if (input == null)
+	public List<NumericalFeatureVector> transform(ITimeSeriesUnivariate timeSeries) {
+		if (timeSeries == null)
 			return null;
 
 		// check equidistancy
-		if (!TimeSeriesTools.isEquidistant(input))
+		if (!TimeSeriesTools.isEquidistant(timeSeries))
 			throw new IllegalArgumentException(getName() + " requires an equidistant time series.");
 
 		// convert value domain
-		ITimeSeriesUnivariate timeSeries = TimeSeriesTools.cloneTimeSeries(input);
 		List<Double> values = timeSeries.getValues();
 		double[] array = DataConversion.toPrimitives(values);
 
@@ -156,5 +159,13 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	@Override
 	public String getDescription() {
 		return "Flanagan's Fourier Transform applied on Time Series Data";
+	}
+
+	public int getCoefficientCount() {
+		return coefficientCount;
+	}
+
+	public void setCoefficientCount(int coefficientCount) {
+		this.coefficientCount = coefficientCount;
 	}
 }
