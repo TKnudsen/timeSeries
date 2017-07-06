@@ -34,7 +34,7 @@ public class OutlierRemover implements ITimeSeriesUnivariatePreprocessor {
 
 	@SuppressWarnings("unused")
 	private OutlierRemover() {
-		this.stdDevRatio = 2.96;
+		this(2.96);
 	}
 
 	public OutlierRemover(double stdDevRatio) {

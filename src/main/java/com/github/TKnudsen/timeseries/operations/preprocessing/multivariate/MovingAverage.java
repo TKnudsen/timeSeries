@@ -1,12 +1,10 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
@@ -28,45 +26,23 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * @author Juergen Bernard
  * @version 1.01
  */
-public class MovingAverage implements ITimeSeriesMultivariatePreprocessor {
+public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	private IIntegerWeightingKernel kernel;
 	private boolean considerFutureValues = false;
 
-	com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverage movingAverageUnivariate;
-
 	public MovingAverage(int kernelInterval, boolean considerFutureValues) {
-		this.kernel = new LinearIndexWeightingKernel(kernelInterval);
-		this.considerFutureValues = considerFutureValues;
-
-		this.movingAverageUnivariate = new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverage(kernel, considerFutureValues);
+		this(new LinearIndexWeightingKernel(kernelInterval), considerFutureValues);
 	}
 
 	public MovingAverage(IIntegerWeightingKernel kernel, boolean considerFutureValues) {
 		this.kernel = kernel;
 		this.considerFutureValues = considerFutureValues;
-
-		this.movingAverageUnivariate = new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverage(kernel, considerFutureValues);
 	}
 
 	@Override
-	public void process(List<ITimeSeriesMultivariate> data) {
-		if (data == null)
-			return;
-
-		for (ITimeSeriesMultivariate timeSeriesMultivariate : data) {
-			if (timeSeriesMultivariate == null)
-				continue;
-
-			List<String> attributeNames = timeSeriesMultivariate.getAttributeNames();
-			for (String attribute : attributeNames)
-				movingAverageUnivariate.process(new ArrayList<>(Arrays.asList(timeSeriesMultivariate.getTimeSeries(attribute))));
-		}
-	}
-
-	@Override
-	public DataProcessingCategory getPreprocessingCategory() {
-		return DataProcessingCategory.DATA_CLEANING;
+	protected void initializeUnivariateTimeSeriesProcessor() {
+		this.setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverage(kernel, considerFutureValues));
 	}
 
 	@Override
@@ -86,6 +62,8 @@ public class MovingAverage implements ITimeSeriesMultivariatePreprocessor {
 
 	public void setKernelInterval(int kernelInterval) {
 		this.kernel.setInterval(kernelInterval);
+
+		initializeUnivariateTimeSeriesProcessor();
 	}
 
 	public boolean isConsiderFutureValues() {
@@ -94,5 +72,8 @@ public class MovingAverage implements ITimeSeriesMultivariatePreprocessor {
 
 	public void setConsiderFutureValues(boolean considerFutureValues) {
 		this.considerFutureValues = considerFutureValues;
+
+		initializeUnivariateTimeSeriesProcessor();
 	}
+
 }

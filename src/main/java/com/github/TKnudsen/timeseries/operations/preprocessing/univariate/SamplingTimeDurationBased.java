@@ -33,11 +33,11 @@ public class SamplingTimeDurationBased implements ITimeSeriesUnivariatePreproces
 
 	@SuppressWarnings("unused")
 	private SamplingTimeDurationBased() {
-		timeDurationKernel = new TimeDuration(TimeQuantization.SECONDS, 3);
+		this(TimeQuantization.SECONDS, 3L);
 	}
 
 	public SamplingTimeDurationBased(TimeQuantization timeQuantization, long count) {
-		timeDurationKernel = new TimeDuration(timeQuantization, count);
+		this(new TimeDuration(timeQuantization, count));
 	}
 
 	public SamplingTimeDurationBased(TimeDuration timeDurationKernel) {
