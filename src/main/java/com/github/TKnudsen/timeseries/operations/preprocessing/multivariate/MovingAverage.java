@@ -36,6 +36,9 @@ public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor
 	}
 
 	public MovingAverage(IIntegerWeightingKernel kernel, boolean considerFutureValues) {
+		if (kernel == null)
+			throw new NullPointerException("MovingAverage: kernel was null");
+
 		this.kernel = kernel;
 		this.considerFutureValues = considerFutureValues;
 	}

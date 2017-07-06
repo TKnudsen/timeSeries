@@ -37,16 +37,17 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 	 */
 	@SuppressWarnings("unused")
 	private MovingAverage() {
-		this.kernel = new LinearIndexWeightingKernel(3);
-		this.considerFutureValues = false;
+		this(3, false);
 	}
 
 	public MovingAverage(int kernelInterval, boolean considerFutureValues) {
-		this.kernel = new LinearIndexWeightingKernel(kernelInterval);
-		this.considerFutureValues = considerFutureValues;
+		this(new LinearIndexWeightingKernel(kernelInterval), considerFutureValues);
 	}
 
 	public MovingAverage(IIntegerWeightingKernel kernel, boolean considerFutureValues) {
+		if (kernel == null)
+			throw new NullPointerException("MovingAverage: kernel was null");
+
 		this.kernel = kernel;
 		this.considerFutureValues = considerFutureValues;
 	}

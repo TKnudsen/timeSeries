@@ -30,10 +30,6 @@ public abstract class DimensionBasedTimeSeriesMultivariateProcessor implements I
 
 	private ITimeSeriesUnivariatePreprocessor univariateTimeSeriesProcessor;
 
-	public DimensionBasedTimeSeriesMultivariateProcessor() {
-		initializeUnivariateTimeSeriesProcessor();
-	}
-
 	protected abstract void initializeUnivariateTimeSeriesProcessor();
 
 	@Override

@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.data.dataGeneration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
@@ -82,5 +83,50 @@ public class TimeSeriesGenerator {
 		}
 
 		return new TimeSeriesMultivariate(timeSeriesUnivariateList, timeSeriesNames);
+	}
+
+	public static ITimeSeriesMultivariate createRandomTSMV(int dim, int timeStamps) {
+		List<ITimeSeriesUnivariate> timeSeriesUnivariateList = new ArrayList<>();
+		List<Long> timeStampsList;
+		List<Double> values;
+
+		for (int i = 0; i < dim; i++) {
+			timeStampsList = new ArrayList<>();
+			values = new ArrayList<>();
+			Random rand = new Random();
+			int r = rand.nextInt(10) + 1;
+			for (int j = 0; j < timeStamps; j++) {
+				double e = rand.nextDouble();
+				timeStampsList.add((long) j);
+				values.add(Math.sin(r * j * e));
+			}
+
+			TimeSeriesUnivariate ts = new TimeSeriesUnivariate(timeStampsList, values);
+			timeSeriesUnivariateList.add(ts);
+		}
+
+		return new TimeSeriesMultivariate(timeSeriesUnivariateList);
+	}
+
+	public static ITimeSeriesMultivariate createSineTSMV(int dim, int timeStamps) {
+		List<ITimeSeriesUnivariate> timeSeriesUnivariateList = new ArrayList<>();
+		List<Long> timeStampsList;
+		List<Double> values;
+
+		for (int i = 0; i < dim; i++) {
+			timeStampsList = new ArrayList<>();
+			values = new ArrayList<>();
+			Random rand = new Random();
+			int r = rand.nextInt(10);
+			for (int j = 0; j < timeStamps; j++) {
+				timeStampsList.add((long) j);
+				values.add(Math.sin(r * j));
+			}
+
+			TimeSeriesUnivariate ts = new TimeSeriesUnivariate(timeStampsList, values);
+			timeSeriesUnivariateList.add(ts);
+		}
+
+		return new TimeSeriesMultivariate(timeSeriesUnivariateList);
 	}
 }
