@@ -1,6 +1,6 @@
 package com.github.TKnudsen.timeseries.operations.transformations.descriptors;
 
-import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.INumericFeatureVectorDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
