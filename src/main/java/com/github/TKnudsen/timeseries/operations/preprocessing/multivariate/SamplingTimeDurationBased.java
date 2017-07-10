@@ -1,13 +1,13 @@
-package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
+package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
+import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
-import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
  * <p>
@@ -26,9 +26,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * @author Juergen Bernard
  * @version 1.01
  */
-public class SamplingTimeDurationBased extends com.github.TKnudsen.timeseries.operations.preprocessing.SamplingTimeDurationBased<ITimeSeriesUnivariate> {
-
-	private TimeDuration timeDurationKernel;
+public class SamplingTimeDurationBased extends com.github.TKnudsen.timeseries.operations.preprocessing.SamplingTimeDurationBased<ITimeSeriesMultivariate> {
 
 	@SuppressWarnings("unused")
 	private SamplingTimeDurationBased() {
@@ -44,8 +42,8 @@ public class SamplingTimeDurationBased extends com.github.TKnudsen.timeseries.op
 	}
 
 	@Override
-	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
-		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
+	public List<IDataProcessor<ITimeSeriesMultivariate>> getAlternativeParameterizations(int count) {
+		List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
 
 		long typeFactor = timeDurationKernel.getTypeFactor();
 
@@ -57,5 +55,4 @@ public class SamplingTimeDurationBased extends com.github.TKnudsen.timeseries.op
 
 		return processors;
 	}
-
 }
