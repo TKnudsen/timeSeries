@@ -10,7 +10,7 @@ import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
@@ -154,9 +154,9 @@ public class TimeSeriesMultivariateTools {
 			returnTimeSeries.setDescription(null);
 
 		if (timeSeries instanceof ITemporalLabeling<?>) {
-			ITemporalLabeling<?> returnTimeSeriesLabeled = new TimeSeriesMultivariateLabeled(returnTimeSeries);
-			returnTimeSeriesLabeled.setEventLabels(TimeSeriesLabelingTools.cloneEventLabels(((TimeSeriesMultivariateLabeled) timeSeries).getEventLabels()));
-			returnTimeSeriesLabeled.setIntervalLabels(TimeSeriesLabelingTools.cloneIntervalLabels(((TimeSeriesMultivariateLabeled) timeSeries).getIntervalLabels()));
+			ITemporalLabeling<?> returnTimeSeriesLabeled = new TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations(returnTimeSeries);
+			returnTimeSeriesLabeled.setEventLabels(TimeSeriesLabelingTools.cloneEventLabels(((TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations) timeSeries).getEventLabels()));
+			returnTimeSeriesLabeled.setIntervalLabels(TimeSeriesLabelingTools.cloneIntervalLabels(((TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations) timeSeries).getIntervalLabels()));
 			return (ITimeSeriesMultivariate) returnTimeSeriesLabeled;
 		}
 

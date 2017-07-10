@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
@@ -128,12 +128,12 @@ public class JSONLoader {
 		return null;
 	}
 
-	public static TimeSeriesMultivariateLabeled loadTSMVLabeledFromFile(String file) {
+	public static TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations loadTSMVLabeledFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
-		TimeSeriesMultivariateLabeled readValue;
+		TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations readValue;
 		try {
-			readValue = mapper.readValue(new File(file), TimeSeriesMultivariateLabeled.class);
+			readValue = mapper.readValue(new File(file), TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -142,12 +142,12 @@ public class JSONLoader {
 		return null;
 	}
 
-	public static TimeSeriesMultivariateLabeled loadTSMVLabeledFromString(String json) {
+	public static TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations loadTSMVLabeledFromString(String json) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
-		TimeSeriesMultivariateLabeled readValue;
+		TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations readValue;
 		try {
-			readValue = mapper.readValue(json, TimeSeriesMultivariateLabeled.class);
+			readValue = mapper.readValue(json, TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();

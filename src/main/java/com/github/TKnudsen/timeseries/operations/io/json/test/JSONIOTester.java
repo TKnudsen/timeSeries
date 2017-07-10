@@ -5,7 +5,7 @@ import java.util.Date;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
@@ -61,7 +61,7 @@ public class JSONIOTester {
 		Date endDateMV = DateTools.createDate(2016, 4, 3, 3, 1, 0, 0);
 		TimeDuration quantizationMV = new TimeDuration(TimeQuantization.MINUTES, 10);
 		ITimeSeries timeSeriesMV = TimeSeriesGenerator.generateSyntheticTimeSeriesMultivariate(startDateMV.getTime(), endDateMV.getTime(),10, quantizationMV, true);
-		TimeSeriesMultivariateLabeled TSML = new TimeSeriesMultivariateLabeled((ITimeSeriesMultivariate) timeSeriesMV);
+		TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations TSML = new TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations((ITimeSeriesMultivariate) timeSeriesMV);
 		
 		TSML.addEventLabel(0, "TestEvent");
 		TSML.addTimeIntervalLabel(new TimeInterval(0, 5),"TestTimeInterval");
@@ -79,9 +79,9 @@ public class JSONIOTester {
 		System.out.println(createMV);
 		
 		// load
-		TimeSeriesMultivariateLabeled loadConfigsFromStringMV = JSONLoader.loadTSMVLabeledFromString(createMV);
+		TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations loadConfigsFromStringMV = JSONLoader.loadTSMVLabeledFromString(createMV);
 		System.out.println(loadConfigsFromStringMV);
-		TimeSeriesMultivariateLabeled loadConfigsFromFileMV = JSONLoader.loadTSMVLabeledFromFile(fileMV);
+		TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations loadConfigsFromFileMV = JSONLoader.loadTSMVLabeledFromFile(fileMV);
 		System.out.println(loadConfigsFromFileMV);
 		
 		System.out.println(loadConfigsFromStringMV.getAttributeName(0));
