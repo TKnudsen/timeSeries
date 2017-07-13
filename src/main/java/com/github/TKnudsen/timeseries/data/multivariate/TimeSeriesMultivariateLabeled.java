@@ -42,11 +42,11 @@ public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate {
 	}
 
 	private void initializeLabels(List<String> labelInformation) {
-		if (labels == null)
+		if (labelInformation == null)
 			throw new NullPointerException();
 
 		List<Long> timeStamps = getTimestamps();
-		if (timeStamps.size() != labels.size())
+		if (timeStamps.size() != labelInformation.size())
 			throw new IllegalArgumentException("timeSeriesMultivariateLabeled: label count != time stamp count");
 
 		labels = new TimeSeriesUnivariateSymbolic(new ArrayList<>(timeStamps), labelInformation);
