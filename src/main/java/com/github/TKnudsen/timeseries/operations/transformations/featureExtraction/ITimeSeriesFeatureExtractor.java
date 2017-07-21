@@ -20,6 +20,6 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * @author Juergen Bernard
  * @version 1.01
  */
-public interface ITimeSeriesFeatureExtractor<TS extends ITimeSeries<Double>> extends IFeatureExtractor<TS, NumericalFeature> {
+public interface ITimeSeriesFeatureExtractor<TS extends ITimeSeries<?>> extends IFeatureExtractor<TS, NumericalFeature> {
 
 }
