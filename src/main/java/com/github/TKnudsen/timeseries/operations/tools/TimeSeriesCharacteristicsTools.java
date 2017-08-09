@@ -14,7 +14,7 @@ public class TimeSeriesCharacteristicsTools {
 			return true;
 		long d = Math.abs(timeseries.getTimestamp(0) - timeseries.getTimestamp(1));
 		for (int i = 1; i < timeseries.size() - 1; i++) {
-			if (d != Math.abs(timeseries.getTimestamp(i) - timeseries.getTimestamp(i = 1)))
+			if (d != Math.abs(timeseries.getTimestamp(i) - timeseries.getTimestamp(i - 1)))
 				return false;
 		}
 		return true;
