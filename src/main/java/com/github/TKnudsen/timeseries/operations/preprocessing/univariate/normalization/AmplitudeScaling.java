@@ -14,16 +14,22 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * Title: AmplitudeScaling
  * </p>
  * 
+ * *
  * <p>
- * Description:
+ * Description: Normalization routine that subtracts the time series's mean
+ * value; afterwards the time series is divided by the (original) std.
+ * 
+ * The routine is one of the classical normalization approaches used in many of
+ * Eamonn Keogh's works, including his tutorial "Introduction to Time Series
+ * Mining".
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2010-2017
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class AmplitudeScaling implements ITimeSeriesUnivariatePreprocessor {
 
