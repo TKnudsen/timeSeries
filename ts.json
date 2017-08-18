@@ -1,0 +1,107 @@
+[ "com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled", {
+  "id" : -532263115156778929,
+  "name" : null,
+  "description" : null,
+  "timeSeriesUnivariateList" : [ "java.util.ArrayList", [ [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : -8066498752811119206,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.4548309585482917, 0.39487350402342336, 0.3326608432268777, 0.292328922582234, 0.3110395760435437, 0.3849375905602308 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : 572038928
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : -7440680654497290067,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.48051566253051203, 0.562620063222068, 0.6278468167949018, 0.6285822512246554, 0.5442154939338023, 0.5914688608421059 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : -1389829613
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : 7575636093166200270,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.5456800817434804, 0.6109754665430362, 0.6884094279042179, 0.6494078505964017, 0.6898111082054653, 0.7343702190461666 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : 1482249710
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : 1950299776231141925,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.5433989936841296, 0.49579461337317543, 0.4063448841720717, 0.3596019640218484, 0.32953019600989886, 0.34879302680225255 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : -1611852321
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : 435105459347559278,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.47124737574406894, 0.49451250225918164, 0.5942308409471535, 0.629773721527671, 0.54350035434165, 0.6434375669262543 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : 1699895788
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : -3829317356874551212,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.578488709087618, 0.5764685169823368, 0.5277316569976293, 0.5621964311868697, 0.5543806330412775, 0.5192060164741277 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : -1133282835
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : 8510847067959608649,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.5127753151903879, 0.5815791596879539, 0.669631833892864, 0.6448095798116228, 0.6437001339819325, 0.5650137524065193 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : 497055607
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : -5295943152375589371,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.49209269292602487, 0.4813799807422642, 0.5679314421667451, 0.5584756376739396, 0.4968580893678679, 0.5699963357283503 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : 160429394
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : 8004239666480706714,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.40566378924921753, 0.44565269726743206, 0.541484095867269, 0.48488701531095324, 0.4920835097941404, 0.5693498612198375 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : 179053934
+  } ], [ "com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate", {
+    "id" : 4670556271018977103,
+    "name" : null,
+    "description" : null,
+    "timeStamps" : [ "java.util.ArrayList", [ 1462233660000, 1462234260000, 1462234860000, 1462235460000, 1462236060000, 1462236660000, 1462237260000 ] ],
+    "values" : [ "java.util.ArrayList", [ 0.5, 0.4486117916128668, 0.5177572721859499, 0.5487386351094942, 0.5397126314397941, 0.447346479410089, 0.5311936631526694 ] ],
+    "missingValueIndicator" : "NaN",
+    "attributes" : [ "java.util.TreeMap", { } ],
+    "hashCode" : 1019126815
+  } ] ] ],
+  "attributeNames" : [ "java.util.ArrayList", [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ] ],
+  "missingValueIndicators" : [ "java.util.ArrayList", [ "NaN", "NaN", "NaN", "NaN", "NaN", "NaN", "NaN", "NaN", "NaN", "NaN" ] ],
+  "dimensionality" : 10,
+  "eventLabels" : [ "java.util.TreeMap", {
+    "0" : "TestEvent"
+  } ],
+  "intervalLabels" : [ "com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking", [ [ "com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel", {
+    "startTime" : 0,
+    "endTime" : 5,
+    "label" : "TestTimeInterval"
+  } ] ] ]
+} ]
