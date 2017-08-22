@@ -67,4 +67,15 @@ public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate {
 	public void setLabelsTimeSeries(ITimeSeriesUnivariateSymbolic labels) {
 		this.labels = labels;
 	}
+	@Override
+	public void removeTimeValue(long timestamp) {
+		super.removeTimeValue(timestamp);
+		labels.removeTimeValue(timestamp);
+	}
+
+	@Override
+	public void removeTimeValue(int index) {
+		super.removeTimeValue(index);
+		labels.removeTimeValue(index);
+	}
 }
