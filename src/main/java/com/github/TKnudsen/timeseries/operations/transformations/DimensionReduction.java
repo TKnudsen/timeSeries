@@ -14,9 +14,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
- * Applies PCA Dimension Reduction to a (list of) time series. To initially
- * build the PCA model a list of time series is required. Every subsequent call
- * to either {@link DimensionReduction#transform(ITimeSeriesMultivariate)} or
+ * Applies PCA Dimension Reduction to a (list of) time series. To initially build the PCA model a list of time series is required. Every subsequent call to either {@link DimensionReduction#transform(ITimeSeriesMultivariate)} or
  * {@link DimensionReduction#transform(List)} uses this existing model.
  * 
  * @author Christian Ritter
@@ -102,7 +100,8 @@ public class DimensionReduction implements IDataTransformation<ITimeSeriesMultiv
 			}
 		}
 		if (pca == null) {
-			pca = new PrincipalComponentAnalysis(normalize, minimumRemainingVariance, outputDimensionality);
+			pca = new PrincipalComponentAnalysis(fvs, normalize, minimumRemainingVariance, outputDimensionality);
+			pca.calculateDimensionalityReduction();
 		}
 		List<NumericalFeatureVector> reducedFVs = pca.transform(fvs);
 		List<ITimeSeriesMultivariate> res = new ArrayList<>();
