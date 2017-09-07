@@ -24,7 +24,6 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * @author Juergen Bernard
  * @version 1.02
  */
-
 public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	protected long id;

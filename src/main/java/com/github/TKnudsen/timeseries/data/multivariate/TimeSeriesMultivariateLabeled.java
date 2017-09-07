@@ -3,13 +3,31 @@ package com.github.TKnudsen.timeseries.data.multivariate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.timeseries.data.symbolic.univariate.ITimeSeriesUnivariateSymbolic;
-import com.github.TKnudsen.timeseries.data.symbolic.univariate.TimeSeriesUnivariateSymbolic;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.symbolic.ISymbolicTimeSeries;
+import com.github.TKnudsen.timeseries.data.univariate.symbolic.SymbolicTimeSeries;
 
+/**
+ * <p>
+ * Title: TimeSeriesMultivariateLabeled
+ * </p>
+ * 
+ * <p>
+ * Description: Extends a TimeSeriesMultivariate with a data model for labels.
+ * Implementation is based on a symbolic univariate time series for the label
+ * information.
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2016-2017
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.02
+ */
 public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate {
 
-	private ITimeSeriesUnivariateSymbolic labels;
+	private ISymbolicTimeSeries labels;
 
 	public TimeSeriesMultivariateLabeled(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> labels) {
 		super(timeSeriesUnivariateList);
@@ -49,7 +67,7 @@ public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate {
 		if (timeStamps.size() != labelInformation.size())
 			throw new IllegalArgumentException("timeSeriesMultivariateLabeled: label count != time stamp count");
 
-		labels = new TimeSeriesUnivariateSymbolic(new ArrayList<>(timeStamps), labelInformation);
+		labels = new SymbolicTimeSeries(new ArrayList<>(timeStamps), labelInformation);
 	}
 
 	public List<String> getLabels() {
@@ -60,13 +78,14 @@ public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate {
 		initializeLabels(labels);
 	}
 
-	public ITimeSeriesUnivariateSymbolic getLabelsTimeSeries() {
+	public ISymbolicTimeSeries getLabelsTimeSeries() {
 		return labels;
 	}
 
-	public void setLabelsTimeSeries(ITimeSeriesUnivariateSymbolic labels) {
+	public void setLabelsTimeSeries(ISymbolicTimeSeries labels) {
 		this.labels = labels;
 	}
+
 	@Override
 	public void removeTimeValue(long timestamp) {
 		super.removeTimeValue(timestamp);

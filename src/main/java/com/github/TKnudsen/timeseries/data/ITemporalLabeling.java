@@ -21,7 +21,8 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @deprecated labeling behavior too complex. needs refinement.
+ * @version 1.04
  */
 public interface ITemporalLabeling<O extends Object> {
 

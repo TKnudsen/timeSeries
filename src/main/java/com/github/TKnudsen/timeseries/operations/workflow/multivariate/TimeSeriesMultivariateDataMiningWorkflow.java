@@ -30,14 +30,31 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.mul
  */
 public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMultivariateDataMiningWorkflow {
 
+	/**
+	 * Routines to be applied on the input multivariate time series.
+	 * Preprocessing, etc.
+	 */
 	List<ITimeSeriesMultivariatePreprocessor> dataProcessors = new ArrayList<>();
 
+	/**
+	 * Transformation of the multivariate time series into the feature space
+	 */
 	ITimeSeriesMultivariateDescriptor descriptor = null;
 
+	/**
+	 * Feature vector representation of the multivariate time series. Output of
+	 * the descriptor.
+	 */
 	private List<NumericalFeatureVector> featureVectors;
 
+	/**
+	 * Routines to be applied on the feature vectors. Normalizations, etc.
+	 */
 	List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
 
+	/**
+	 * Distance measure for the resulting feature vectors.
+	 */
 	IIDObjectDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
 
 	@Override

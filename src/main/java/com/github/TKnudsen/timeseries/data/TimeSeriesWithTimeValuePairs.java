@@ -12,8 +12,26 @@ import java.util.TreeMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.IKeyValueProvider;
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+import com.github.TKnudsen.timeseries.data.primitives.TimeValuePairTools;
 
-public abstract class TimeSeries<T> implements ITimeSeries<T>, IKeyValueProvider<Object> {
+/**
+ * <p>
+ * Title: TimeSeriesWithTimeValuePairs
+ * </p>
+ * 
+ * <p>
+ * Description: Abstract time series class for data structured w.r.t. time
+ * (time-value pairs).
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2015-2017
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.01
+ */
+public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>, IKeyValueProvider<Object> {
 
 	protected final long id;
 	protected String name;
@@ -31,23 +49,27 @@ public abstract class TimeSeries<T> implements ITimeSeries<T>, IKeyValueProvider
 	 * used for JSON, reflection, serialization & stuff
 	 */
 	@SuppressWarnings("unused")
-	private TimeSeries() {
+	private TimeSeriesWithTimeValuePairs() {
 		this(MathFunctions.randomLong(), new ArrayList<Long>(), new ArrayList<T>(), null);
 	}
 
-	public TimeSeries(List<Long> timeStamps, List<T> values) {
+	public TimeSeriesWithTimeValuePairs(List<Long> timeStamps, List<T> values) {
 		this(MathFunctions.randomLong(), timeStamps, values, null);
 	}
 
-	public TimeSeries(List<Long> timeStamps, List<T> values, T missingValueIndicator) {
+	public TimeSeriesWithTimeValuePairs(List<ITimeValuePair<T>> values) {
+		this(MathFunctions.randomLong(), TimeValuePairTools.getTimeStamps(values), TimeValuePairTools.getValues(values), null);
+	}
+
+	public TimeSeriesWithTimeValuePairs(List<Long> timeStamps, List<T> values, T missingValueIndicator) {
 		this(MathFunctions.randomLong(), timeStamps, values, missingValueIndicator);
 	}
 
-	public TimeSeries(long id, List<Long> timeStamps, List<T> values) {
+	public TimeSeriesWithTimeValuePairs(long id, List<Long> timeStamps, List<T> values) {
 		this(id, timeStamps, values, null);
 	}
 
-	public TimeSeries(long id, List<Long> timeStamps, List<T> values, T missingValueIndicator) {
+	public TimeSeriesWithTimeValuePairs(long id, List<Long> timeStamps, List<T> values, T missingValueIndicator) {
 		this.id = id;
 		this.timeStamps = timeStamps;
 		this.values = values;

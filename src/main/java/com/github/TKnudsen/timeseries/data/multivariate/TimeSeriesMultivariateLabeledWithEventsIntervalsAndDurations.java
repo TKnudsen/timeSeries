@@ -25,7 +25,8 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @deprecated labeling behavior too complex. needs refinement.
+ * @version 1.03
  */
 public class TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations extends TimeSeriesMultivariate implements ITemporalLabeling<String> {
 
