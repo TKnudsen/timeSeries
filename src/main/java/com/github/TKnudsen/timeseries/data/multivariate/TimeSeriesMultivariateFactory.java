@@ -164,7 +164,6 @@ public class TimeSeriesMultivariateFactory {
 
 		ITimeSeriesMultivariate ret = new TimeSeriesMultivariate(id, timeSeriesList, labels);
 		return ret;
-
 	}
 
 	/**
