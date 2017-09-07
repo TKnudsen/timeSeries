@@ -13,7 +13,7 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Description:
+ * Description: 
  * </p>
  * 
  * <p>
@@ -31,7 +31,7 @@ public class TimeSeriesMultivariateFactory {
 	 * @param missingValueIndicator
 	 * @return
 	 */
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs, double missingValueIndicator) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs, double missingValueIndicator) {
 		List<List<Double>> values = new ArrayList<List<Double>>();
 		List<Long> timestamps = new ArrayList<Long>();
 
@@ -47,7 +47,7 @@ public class TimeSeriesMultivariateFactory {
 			values.add(vals);
 		}
 
-		return newTimeSeriesMultivatiate(timestamps, values, missingValueIndicator);
+		return createTimeSeriesMultivatiate(timestamps, values, missingValueIndicator);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class TimeSeriesMultivariateFactory {
 	 * @param labels
 	 * @return
 	 */
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs, double missingValueIndicator, List<String> attributes) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs, double missingValueIndicator, List<String> attributes) {
 		List<List<Double>> values = new ArrayList<List<Double>>();
 		List<Long> timestamps = new ArrayList<Long>();
 
@@ -73,7 +73,7 @@ public class TimeSeriesMultivariateFactory {
 			values.add(vals);
 		}
 
-		return newTimeSeriesMultivatiate(timestamps, values, missingValueIndicator, attributes);
+		return createTimeSeriesMultivatiate(timestamps, values, missingValueIndicator, attributes);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class TimeSeriesMultivariateFactory {
 	 * @param descriptions
 	 * @return
 	 */
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs, double missingValueIndicator, List<String> attributes, List<String> descriptions, List<String> labels) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs, double missingValueIndicator, List<String> attributes, List<String> descriptions, List<String> labels) {
 		List<List<Double>> values = new ArrayList<List<Double>>();
 		List<Long> timestamps = new ArrayList<Long>();
 
@@ -100,7 +100,7 @@ public class TimeSeriesMultivariateFactory {
 			values.add(vals);
 		}
 
-		return newTimeSeriesMultivatiate(timestamps, values, missingValueIndicator, attributes, descriptions, labels);
+		return createTimeSeriesMultivatiate(timestamps, values, missingValueIndicator, attributes, descriptions, labels);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class TimeSeriesMultivariateFactory {
 	 * @param missingValueIndicator
 	 * @return
 	 */
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator) {
 
 		List<ITimeSeriesUnivariate> timeSeriesList = new ArrayList<ITimeSeriesUnivariate>();
 		List<String> labels = new ArrayList<>();
@@ -126,7 +126,7 @@ public class TimeSeriesMultivariateFactory {
 		return ret;
 	}
 
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> attributes) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> attributes) {
 		List<ITimeSeriesUnivariate> timeSeriesList = new ArrayList<ITimeSeriesUnivariate>();
 
 		for (int i = 0; i < values.size(); i++) {
@@ -141,7 +141,7 @@ public class TimeSeriesMultivariateFactory {
 
 	}
 
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> attributes, List<String> descriptions, List<String> labels) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> attributes, List<String> descriptions, List<String> labels) {
 		List<ITimeSeriesUnivariate> timeSeriesList = new ArrayList<ITimeSeriesUnivariate>();
 
 		for (int i = 0; i < values.size(); i++) {
@@ -155,7 +155,7 @@ public class TimeSeriesMultivariateFactory {
 		return ret;
 	}
 
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> labels, long id) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> labels, long id) {
 		List<ITimeSeriesUnivariate> timeSeriesList = new ArrayList<ITimeSeriesUnivariate>();
 
 		for (int i = 0; i < values.size(); i++) {
@@ -175,7 +175,7 @@ public class TimeSeriesMultivariateFactory {
 	 * @param missingValueIndicator
 	 * @return
 	 */
-	public static ITimeSeriesMultivariate newTimeSeriesMultivatiateLabeled(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> labels) {
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiateLabeled(List<Long> timestamps, List<List<Double>> values, double missingValueIndicator, List<String> labels) {
 
 		List<ITimeSeriesUnivariate> timeSeriesList = new ArrayList<ITimeSeriesUnivariate>();
 		List<String> attributeNames = new ArrayList<>();
