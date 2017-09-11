@@ -56,7 +56,7 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 
 	@SuppressWarnings("unused")
 	private FourierTransformDescriptor() {
-		this.coefficientCount = 3;
+		this(3);
 	}
 
 	public FourierTransformDescriptor(int coefficientCount) {
