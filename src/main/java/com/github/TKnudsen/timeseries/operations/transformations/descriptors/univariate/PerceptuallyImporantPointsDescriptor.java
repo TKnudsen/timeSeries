@@ -38,11 +38,12 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
 public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
 
 	private int pipCount;
-	private PerceptuallyImportantPoints perceptuallyImportantPointsAlgorithm;
+	protected PerceptuallyImportantPoints perceptuallyImportantPointsAlgorithm;
 
 	/**
 	 * for serialization purposes
 	 */
+	@SuppressWarnings("unused")
 	private PerceptuallyImporantPointsDescriptor() {
 		this.pipCount = 5;
 
@@ -65,21 +66,8 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 
 		ITimeSeriesUnivariate clone = TimeSeriesTools.cloneTimeSeries(timeSeries);
 		perceptuallyImportantPointsAlgorithm.process(Arrays.asList(clone));
-		List<Double> values = clone.getValues();
 
-		List<NumericalFeature> features = new ArrayList<>();
-		for (int i = 0; i < values.size(); i++)
-			features.add(new NumericalFeature("Dim " + i, values.get(i)));
-
-		NumericalFeatureVector featureVector = new NumericalFeatureVector(features);
-		featureVector.setMaster(timeSeries);
-		featureVector.add("Descriptor", getName());
-		if (timeSeries.getName() != null)
-			featureVector.setName(timeSeries.getName());
-		featureVector.add("FirstTimestamp", timeSeries.getFirstTimestamp());
-		featureVector.add("LastTimestamp", timeSeries.getLastTimestamp());
-
-		featureVectors.add(featureVector);
+		featureVectors.add(createFeatureVector(clone, timeSeries));
 		return featureVectors;
 	}
 
@@ -91,6 +79,32 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 			featureVectors.addAll(transform(timeSeries));
 
 		return featureVectors;
+	}
+
+	/**
+	 * The transformation from time series to features. Separated from the
+	 * eariler time series processing for inheritance reasons.
+	 * 
+	 * @param processedTimeSeries
+	 * @param originalTimeSeries
+	 * @return
+	 */
+	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries, ITimeSeriesUnivariate originalTimeSeries) {
+		List<Double> values = processedTimeSeries.getValues();
+
+		List<NumericalFeature> features = new ArrayList<>();
+		for (int i = 0; i < values.size(); i++)
+			features.add(new NumericalFeature("Dim " + i, values.get(i)));
+
+		NumericalFeatureVector featureVector = new NumericalFeatureVector(features);
+		featureVector.setMaster(originalTimeSeries);
+		featureVector.add("Descriptor", getName());
+		if (originalTimeSeries.getName() != null)
+			featureVector.setName(originalTimeSeries.getName());
+		featureVector.add("FirstTimestamp", originalTimeSeries.getFirstTimestamp());
+		featureVector.add("LastTimestamp", originalTimeSeries.getLastTimestamp());
+
+		return featureVector;
 	}
 
 	@Override
