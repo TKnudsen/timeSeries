@@ -67,7 +67,8 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
+	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(
+			int count) {
 		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(coefficientCount, count);
 
 		List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> descriptors = new ArrayList<>();
@@ -217,5 +218,24 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 
 	public void setUseImaginaryFeatures(boolean useImaginaryFeatures) {
 		this.useImaginaryFeatures = useImaginaryFeatures;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof FourierTransformDescriptor))
+			return false;
+
+		FourierTransformDescriptor other = (FourierTransformDescriptor) o;
+
+		if (coefficientCount != other.coefficientCount)
+			return false;
+		if (useRealFeatures != other.useRealFeatures)
+			return false;
+		if (useImaginaryFeatures != other.useImaginaryFeatures)
+			return false;
+
+		return true;
 	}
 }
