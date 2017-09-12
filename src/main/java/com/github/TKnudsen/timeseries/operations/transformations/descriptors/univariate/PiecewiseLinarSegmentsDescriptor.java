@@ -40,6 +40,14 @@ public class PiecewiseLinarSegmentsDescriptor extends PerceptuallyImporantPoints
 
 	private Long temporalReference = new TimeDuration(TimeQuantization.DAYS, 1).getDuration();
 
+	/**
+	 * for serialization purposes
+	 */
+	@SuppressWarnings("unused")
+	private PiecewiseLinarSegmentsDescriptor() {
+		super();
+	}
+
 	public PiecewiseLinarSegmentsDescriptor(int numberOfSegments) {
 		super(numberOfSegments + 1);
 	}
@@ -53,7 +61,8 @@ public class PiecewiseLinarSegmentsDescriptor extends PerceptuallyImporantPoints
 	 * @return
 	 */
 	@Override
-	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries, ITimeSeriesUnivariate originalTimeSeries) {
+	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries,
+			ITimeSeriesUnivariate originalTimeSeries) {
 		List<Long> timeStamps = processedTimeSeries.getTimestamps();
 		List<Double> values = processedTimeSeries.getValues();
 
@@ -132,5 +141,16 @@ public class PiecewiseLinarSegmentsDescriptor extends PerceptuallyImporantPoints
 	@Override
 	public String getDescription() {
 		return "PiecewiseLinarSegmentsDescriptor, number of segments = " + (getPipCount() - 1);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof PiecewiseLinarSegmentsDescriptor))
+			return false;
+
+		PiecewiseLinarSegmentsDescriptor other = (PiecewiseLinarSegmentsDescriptor) o;
+		return other.pipCount == pipCount;
 	}
 }

@@ -37,14 +37,14 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  */
 public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
 
-	private int pipCount;
+	protected int pipCount;
 	protected PerceptuallyImportantPoints perceptuallyImportantPointsAlgorithm;
 
 	/**
 	 * for serialization purposes
 	 */
 	@SuppressWarnings("unused")
-	private PerceptuallyImporantPointsDescriptor() {
+	protected PerceptuallyImporantPointsDescriptor() {
 		this.pipCount = 5;
 
 		initialize();
