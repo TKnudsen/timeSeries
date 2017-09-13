@@ -147,6 +147,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public List<Double> getValue(int index) {
+		// TODO the current implementation can be slow for complex cases.
+
 		List<Double> values = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			values.add(timeSeriesUnivariateList.get(i).getValue(index));
