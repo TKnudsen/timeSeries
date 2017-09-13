@@ -44,7 +44,7 @@ public class EquidistanceProvider implements IDataTransformation<ITimeSeriesUniv
 		List<Long> timeStamps = new ArrayList<>();
 		List<Double> values = new ArrayList<>();
 		long timeDuaration = equidistance.getDuration();
-		long currentTimeStamp = 0;
+		long currentTimeStamp = input.getFirstTimestamp();
 
 		while (input.getLastTimestamp() > currentTimeStamp) {
 			timeStamps.add(currentTimeStamp);
