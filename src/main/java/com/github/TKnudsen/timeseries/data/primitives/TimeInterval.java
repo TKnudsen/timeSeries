@@ -2,6 +2,8 @@ package com.github.TKnudsen.timeseries.data.primitives;
 
 import java.util.Date;
 
+import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
+
 /**
  * <p>
  * Title: TimeInterval
@@ -18,18 +20,26 @@ import java.util.Date;
  * @author Juergen Bernard
  * @version 1.02
  */
-public class TimeInterval {
+public class TimeInterval implements ISelfDescription{
 
 	protected Long startTime;
 	protected Long endTime;
+	protected String name;
+	protected String description;
 
 	protected TimeInterval() {
 
 	}
 	
 	public TimeInterval(long startTime, long endTime) {
+		this(startTime, endTime, "", "");
+	}
+	
+	public TimeInterval(long startTime, long endTime, String name, String description) {
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.name = name;
+		this.description = description;
 	}
 
 	public boolean containsTime(long time) {
@@ -66,5 +76,15 @@ public class TimeInterval {
 	@Override
 	public String toString() {
 		return "TimeInterval: [" + new Date(startTime) + "-" + new Date(endTime) + "]";
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
 	}
 }
