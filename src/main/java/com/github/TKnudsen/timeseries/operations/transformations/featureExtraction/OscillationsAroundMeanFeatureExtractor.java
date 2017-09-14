@@ -27,6 +27,8 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
  */
 public class OscillationsAroundMeanFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
+	private DataTransformationCategory category = DataTransformationCategory.FEATURE_EXTRACTION;
+
 	private Double apply(ITimeSeriesUnivariate t) {
 		List<Double> values = t.getValues();
 		double mean = TimeSeriesTools.getMean(t);
@@ -62,7 +64,7 @@ public class OscillationsAroundMeanFeatureExtractor implements ITimeSeriesUnivar
 
 	@Override
 	public DataTransformationCategory getDataTransformationCategory() {
-		return DataTransformationCategory.FEATURE_EXTRACTION;
+		return category;
 	}
 
 }

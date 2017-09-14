@@ -41,6 +41,7 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
 public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDescriptor {
 
 	private List<IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature>> featureCreators;
+	private DataTransformationCategory category = DataTransformationCategory.DESCRIPTOR;
 
 	/**
 	 * Creates a new descriptor with a basic set of feature creation routines.
@@ -75,13 +76,14 @@ public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDes
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int arg0) {
+	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(
+			int arg0) {
 		return null;
 	}
 
 	@Override
 	public DataTransformationCategory getDataTransformationCategory() {
-		return DataTransformationCategory.DESCRIPTOR;
+		return category;
 	}
 
 	@Override
@@ -104,6 +106,18 @@ public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDes
 			res.addAll(transform(ts));
 		}
 		return res;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof StatisticalTimeSeriesDescriptor))
+			return false;
+
+		// TODO equals over all featureCreators
+		StatisticalTimeSeriesDescriptor other = (StatisticalTimeSeriesDescriptor) o;
+		return other.category == category;
 	}
 
 }

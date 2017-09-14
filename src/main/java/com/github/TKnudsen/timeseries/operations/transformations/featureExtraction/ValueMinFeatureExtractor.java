@@ -27,6 +27,8 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
  */
 public class ValueMinFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
+	private DataTransformationCategory category = DataTransformationCategory.FEATURE_EXTRACTION;
+	
 	private Double apply(ITimeSeriesUnivariate t) {
 		return TimeSeriesTools.getMinValue(t);
 	}
@@ -49,6 +51,6 @@ public class ValueMinFeatureExtractor implements ITimeSeriesUnivariateFeatureExt
 
 	@Override
 	public DataTransformationCategory getDataTransformationCategory() {
-		return DataTransformationCategory.FEATURE_EXTRACTION;
+		return category;
 	}
 }

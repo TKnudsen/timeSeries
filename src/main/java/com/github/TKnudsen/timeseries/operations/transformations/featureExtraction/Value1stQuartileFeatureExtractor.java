@@ -28,6 +28,8 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
  */
 public class Value1stQuartileFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
+	private DataTransformationCategory category = DataTransformationCategory.FEATURE_EXTRACTION;
+
 	private Double apply(ITimeSeriesUnivariate t) {
 		List<Double> vals = t.getValues();
 		double[] da = new double[vals.size()];
@@ -56,6 +58,6 @@ public class Value1stQuartileFeatureExtractor implements ITimeSeriesUnivariateFe
 
 	@Override
 	public DataTransformationCategory getDataTransformationCategory() {
-		return DataTransformationCategory.FEATURE_EXTRACTION;
+		return category;
 	}
 }

@@ -27,6 +27,8 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
  */
 public class ValueMeanFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
+	private DataTransformationCategory category = DataTransformationCategory.FEATURE_EXTRACTION;
+
 	private Double apply(ITimeSeriesUnivariate t) {
 		return TimeSeriesTools.getMean(t);
 	}
@@ -49,6 +51,6 @@ public class ValueMeanFeatureExtractor implements ITimeSeriesUnivariateFeatureEx
 
 	@Override
 	public DataTransformationCategory getDataTransformationCategory() {
-		return DataTransformationCategory.FEATURE_EXTRACTION;
+		return category;
 	}
 }

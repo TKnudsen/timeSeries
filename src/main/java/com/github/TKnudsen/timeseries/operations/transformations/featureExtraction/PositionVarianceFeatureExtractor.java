@@ -26,6 +26,8 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
  */
 public class PositionVarianceFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
+	private DataTransformationCategory category = DataTransformationCategory.FEATURE_EXTRACTION;
+
 	private Double apply(ITimeSeriesUnivariate t) {
 		double mean = new PositionMeanFeatureExtractor().apply(t);
 		List<Double> vals = t.getValues();
@@ -55,6 +57,6 @@ public class PositionVarianceFeatureExtractor implements ITimeSeriesUnivariateFe
 
 	@Override
 	public DataTransformationCategory getDataTransformationCategory() {
-		return DataTransformationCategory.FEATURE_EXTRACTION;
+		return category;
 	}
 }
