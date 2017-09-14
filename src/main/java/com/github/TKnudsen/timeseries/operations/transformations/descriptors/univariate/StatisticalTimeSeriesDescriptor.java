@@ -76,8 +76,7 @@ public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDes
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(
-			int arg0) {
+	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int arg0) {
 		return null;
 	}
 
@@ -112,11 +111,13 @@ public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDes
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
+
 		if (!(o instanceof StatisticalTimeSeriesDescriptor))
 			return false;
 
 		// TODO equals over all featureCreators
 		StatisticalTimeSeriesDescriptor other = (StatisticalTimeSeriesDescriptor) o;
+
 		return other.category == category;
 	}
 

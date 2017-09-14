@@ -28,7 +28,7 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
  */
 public class Value2ndQuartileFeatureExtractor implements ITimeSeriesUnivariateFeatureExtractor {
 
-	private DataTransformationCategory category = DataTransformationCategory.FEATURE_EXTRACTION;
+	private final DataTransformationCategory category = DataTransformationCategory.FEATURE_EXTRACTION;
 
 	private Double apply(ITimeSeriesUnivariate t) {
 		List<Double> vals = t.getValues();

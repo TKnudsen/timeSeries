@@ -67,8 +67,7 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(
-			int count) {
+	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
 		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(coefficientCount, count);
 
 		List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> descriptors = new ArrayList<>();
@@ -118,6 +117,7 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 		if (signal == null)
 			return null;
 
+		// TODO needs validation
 		complex = new Double[coefficientCount][2];
 		for (int s = 0; s < Math.min(coefficientCount, signal.length); s++) {
 			double real = 0;

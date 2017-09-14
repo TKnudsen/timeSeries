@@ -18,8 +18,9 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * 
  * <p>
  * Description: Piecewise Linear Segments Descriptor implementation combining
- * Keoghs Piecewise Linear Segments representatino with the Perceptually
- * Important Points algorithm.
+ * the notion of Keoghs Piecewise Linear Approximation representation with the
+ * Perceptually Important Points algorithm (used for the calculation of
+ * segments).
  * 
  * EJ Keogh, MJ Pazzani: An enhanced representation of time series which allows
  * fast and accurate classification, clustering and relevance feedback, KDD,
@@ -61,8 +62,7 @@ public class PiecewiseLinarSegmentsDescriptor extends PerceptuallyImporantPoints
 	 * @return
 	 */
 	@Override
-	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries,
-			ITimeSeriesUnivariate originalTimeSeries) {
+	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries, ITimeSeriesUnivariate originalTimeSeries) {
 		List<Long> timeStamps = processedTimeSeries.getTimestamps();
 		List<Double> values = processedTimeSeries.getValues();
 
