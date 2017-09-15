@@ -8,6 +8,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesMultivariateTools;
 
 /**
  * <p>
@@ -40,13 +41,10 @@ public abstract class DimensionBasedTimeSeriesMultivariateProcessor implements I
 		if (data == null)
 			return;
 
-		for (ITimeSeriesMultivariate timeSeriesMultivariate : data) {
-			if (timeSeriesMultivariate == null)
-				continue;
+		List<List<ITimeSeriesUnivariate>> univariateTimeSeriesLists = TimeSeriesMultivariateTools.getUnivariateTimeSeriesLists(data);
 
-			for (ITimeSeriesUnivariate timeSeriesUnivariate : timeSeriesMultivariate.getTimeSeriesList())
-				univariateTimeSeriesProcessor.process(new ArrayList<>(Arrays.asList(timeSeriesUnivariate)));
-		}
+		for (List<ITimeSeriesUnivariate> timeSeriesUnivariateList : univariateTimeSeriesLists)
+			univariateTimeSeriesProcessor.process(timeSeriesUnivariateList);
 	}
 
 	@Override

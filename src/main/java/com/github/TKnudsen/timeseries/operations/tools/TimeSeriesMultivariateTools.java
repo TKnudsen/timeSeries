@@ -182,4 +182,35 @@ public class TimeSeriesMultivariateTools {
 
 		return ret;
 	}
+
+	/**
+	 * retrieves lists of univariate time series, i.e., one list per dimension.
+	 * assumes that multivariateTimeSeriesList contains equally indexed time
+	 * series.
+	 * 
+	 * @param multivariateTimeSeriesList
+	 * @return list of lists. outer list is the number of dimensions of the
+	 *         MVTS.
+	 */
+	public static List<List<ITimeSeriesUnivariate>> getUnivariateTimeSeriesLists(List<ITimeSeriesMultivariate> multivariateTimeSeriesList) {
+
+		List<List<ITimeSeriesUnivariate>> univariateTimeSeriesLists = new ArrayList<>();
+		for (int j = 0; j < multivariateTimeSeriesList.size(); j++) {
+
+			ITimeSeriesMultivariate timeSeriesMultivariate = multivariateTimeSeriesList.get(j);
+			if (timeSeriesMultivariate == null)
+				continue;
+
+			for (int i = 0; i < timeSeriesMultivariate.getDimensionality(); i++) {
+				ITimeSeriesUnivariate timeSeriesUnivariate = timeSeriesMultivariate.getTimeSeries(i);
+
+				if (univariateTimeSeriesLists.size() <= i)
+					univariateTimeSeriesLists.add(new ArrayList<>());
+
+				univariateTimeSeriesLists.get(i).add(timeSeriesUnivariate);
+			}
+		}
+
+		return univariateTimeSeriesLists;
+	}
 }
