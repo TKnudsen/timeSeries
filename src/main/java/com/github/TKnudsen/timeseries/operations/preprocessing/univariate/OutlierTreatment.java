@@ -11,12 +11,18 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
 
 /**
  * <p>
- * Title: OutlierRemover
+ * Title: OutlierTreatment
  * </p>
  * 
+ * *
  * <p>
- * Description: Removes values that higher/lower than a given multiple of the
- * standard deviation in a global sense of the value domain.
+ * Description: Removes the value domain for values higher/lower than a given
+ * multiple of the standard deviation. The value domains of every individual
+ * IUnivariateTimeSeries are used to calculate the std. NAN is set instead of
+ * the values. Replaces with NAN. The temporal domain is untouched.
+ * 
+ * Disclaimer: uses a global std and not local. Implementation is not really
+ * sophisticated.
  * </p>
  * 
  * <p>
@@ -24,20 +30,20 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 
-public class OutlierRemover implements ITimeSeriesUnivariatePreprocessor {
+public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 
 	// standard deviation ratio
 	double stdDevRatio;
 
 	@SuppressWarnings("unused")
-	private OutlierRemover() {
+	private OutlierTreatment() {
 		this(2.96);
 	}
 
-	public OutlierRemover(double stdDevRatio) {
+	public OutlierTreatment(double stdDevRatio) {
 		this.stdDevRatio = stdDevRatio;
 	}
 
@@ -78,7 +84,7 @@ public class OutlierRemover implements ITimeSeriesUnivariatePreprocessor {
 
 		for (Double std : alternativeDoubles) {
 			if (std > 0)
-				alternatives.add(new OutlierRemover(std));
+				alternatives.add(new OutlierTreatment(std));
 			if (alternatives.size() == count)
 				return alternatives;
 		}

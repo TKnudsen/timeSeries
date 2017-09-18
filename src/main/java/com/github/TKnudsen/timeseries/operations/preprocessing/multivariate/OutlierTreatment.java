@@ -9,13 +9,17 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
 /**
  * <p>
- * Title: OutlierRemover
+ * Title: OutlierTreatment
  * </p>
  * 
  * <p>
- * Description: Removes values that higher/lower than a given multiple of the
- * standard deviation. The value domains of every individual
- * IUnivariateTimeSeries are used to calculate the std.
+ * Description: Checks the value domain for values higher/lower than a given
+ * multiple of the standard deviation. The value domains of every individual
+ * IUnivariateTimeSeries are used to calculate the std. NAN is set instead of
+ * the values.
+ * 
+ * Disclaimer: uses a global std and not local. Implementation is not really
+ * sophisticated.
  * </p>
  * 
  * <p>
@@ -23,18 +27,18 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public class OutlierRemover extends DimensionBasedTimeSeriesMultivariateProcessor {
+public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	double std;
 
 	@SuppressWarnings("unused")
-	private OutlierRemover() {
+	private OutlierTreatment() {
 		this(2.96);
 	}
 
-	public OutlierRemover(double std) {
+	public OutlierTreatment(double std) {
 		this.std = std;
 	}
 
@@ -46,7 +50,7 @@ public class OutlierRemover extends DimensionBasedTimeSeriesMultivariateProcesso
 
 		for (Double std : alternativeDoubles) {
 			if (std > 0)
-				alternatives.add(new OutlierRemover(std));
+				alternatives.add(new OutlierTreatment(std));
 			if (alternatives.size() == count)
 				return alternatives;
 		}
@@ -56,6 +60,6 @@ public class OutlierRemover extends DimensionBasedTimeSeriesMultivariateProcesso
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierRemover(std));
+		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(std));
 	}
 }
