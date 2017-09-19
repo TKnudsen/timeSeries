@@ -14,7 +14,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * </p>
  * 
  * <p>
- * Description: Cleanses outliers of a time series using a moving average model as reference for local outlier detection.
+ * Description: Replaces values that are farer away from the calculated moving average than a given standard deviation ratio. Replaces with a given value (standard is NaN). The temporal domain is untouched.
  * </p>
  * 
  * <p>
@@ -22,7 +22,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class OutlierRemoverMovingAverageBased extends DimensionBasedTimeSeriesMultivariateProcessor {
 

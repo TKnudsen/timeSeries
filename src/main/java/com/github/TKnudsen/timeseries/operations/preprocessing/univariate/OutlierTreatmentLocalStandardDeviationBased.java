@@ -16,7 +16,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Description:
+ * Description: Replaces the value domain for values higher/lower than a given multiple of the local standard deviation. Replaces with a given value (standard is NaN). The temporal domain is untouched.
  * </p>
  * 
  * @author Christian Ritter

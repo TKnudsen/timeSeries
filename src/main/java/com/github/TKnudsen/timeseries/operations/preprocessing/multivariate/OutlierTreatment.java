@@ -13,7 +13,8 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * <p>
- * Description: Checks the value domain for values higher/lower than a given multiple of the standard deviation. The value domains of every individual IUnivariateTimeSeries are used to calculate the std. NAN is set instead of the values.
+ * Description: Replaces the value domain for values higher/lower than a given multiple of the standard deviation. The value domains of every individual IUnivariateTimeSeries are used to calculate the std. NAN is set instead of the values. Replaces
+ * with a given value (standard is NaN). The temporal domain is untouched.
  * 
  * Disclaimer: uses a global std and not local. Implementation is not really sophisticated.
  * </p>
@@ -23,7 +24,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProcessor {
 

@@ -13,7 +13,8 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * <p>
- * Description:
+ * Description: Replaces the value domain for values higher/lower than a given multiple of the local standard deviation. The value domains of every individual IUnivariateTimeSeries are used to calculate the std. Replaces with a given value (standard
+ * is NaN). The temporal domain is untouched.
  * </p>
  * 
  * @author Christian Ritter

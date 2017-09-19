@@ -17,7 +17,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Description: Replaces values that are farer away from the calculated moving average than a given standard deviation ratio. Replaces with NAN. The temporal domain is untouched.
+ * Description: Replaces values that are farer away from the calculated moving average than a given standard deviation ratio. Replaces with a given value (standard is NaN). The temporal domain is untouched.
  * </p>
  * 
  * <p>
@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 
 public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariatePreprocessor {
@@ -39,7 +39,7 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 	// moving average options
 	private int elements;
 	private boolean considerFutureValues;
-	
+
 	private MovingAverage movingAverage;
 
 	public OutlierTreatmentMovingAverageBased() {
@@ -66,7 +66,7 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage) {
 		this(stdDeviationRatio, movingAverage, Double.NaN);
 	}
-	
+
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage, double outlierValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.movingAverage = movingAverage;
