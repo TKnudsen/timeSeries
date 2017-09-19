@@ -16,13 +16,10 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
  * 
  * *
  * <p>
- * Description: Removes the value domain for values higher/lower than a given
- * multiple of the standard deviation. The value domains of every individual
- * IUnivariateTimeSeries are used to calculate the std. NAN is set instead of
- * the values. Replaces with NAN. The temporal domain is untouched.
+ * Description: Removes the value domain for values higher/lower than a given multiple of the standard deviation. The value domains of every individual IUnivariateTimeSeries are used to calculate the std. NAN is set instead of the values. Replaces
+ * with NAN. The temporal domain is untouched.
  * 
- * Disclaimer: uses a global std and not local. Implementation is not really
- * sophisticated.
+ * Disclaimer: uses a global std and not local. Implementation is not really sophisticated.
  * </p>
  * 
  * <p>
@@ -36,15 +33,22 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
 public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 
 	// standard deviation ratio
-	double stdDevRatio;
+	double stdDeviationRatio;
 
-	@SuppressWarnings("unused")
-	private OutlierTreatment() {
+	// the value that is assigned to an outlier
+	double outlierValue;
+
+	public OutlierTreatment() {
 		this(2.96);
 	}
 
-	public OutlierTreatment(double stdDevRatio) {
-		this.stdDevRatio = stdDevRatio;
+	public OutlierTreatment(double stdDeviationRatio) {
+		this(stdDeviationRatio, Double.NaN);
+	}
+
+	public OutlierTreatment(double stdDeviationRatio, double outlierValue) {
+		this.stdDeviationRatio = stdDeviationRatio;
+		this.outlierValue = outlierValue;
 	}
 
 	@Override
@@ -62,11 +66,11 @@ public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 
 		double means = statistics.getMean();
 		double std = statistics.getStandardDeviation();
-		std *= stdDevRatio;
+		std *= stdDeviationRatio;
 
 		for (int i = 0; i < timeSeries.size(); i++) {
 			if (Math.abs(timeSeries.getValue(i) - means) > std) {
-				timeSeries.removeTimeValue(i--);
+				timeSeries.replaceValue(i, outlierValue);
 			}
 		}
 	}
@@ -80,7 +84,7 @@ public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 	public List<IDataProcessor<ITimeSeriesUnivariate>> getAlternativeParameterizations(int count) {
 		List<IDataProcessor<ITimeSeriesUnivariate>> alternatives = new ArrayList<>();
 
-		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDevRatio, count);
+		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDeviationRatio, count);
 
 		for (Double std : alternativeDoubles) {
 			if (std > 0)

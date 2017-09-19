@@ -17,9 +17,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Description: Replaces values that are farer away from the calculated moving
- * average than a given standard deviation ratio. Replaces with NAN. The
- * temporal domain is untouched.
+ * Description: Replaces values that are farer away from the calculated moving average than a given standard deviation ratio. Replaces with NAN. The temporal domain is untouched.
  * </p>
  * 
  * <p>
@@ -33,50 +31,53 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariatePreprocessor {
 
 	// standard deviation ratio
-	double stdDevRatio;
+	double stdDeviationRatio;
+
+	// the value that is assigned to an outlier
+	double outlierValue;
 
 	// moving average options
-	private Integer elements;
-	private Boolean considerFutureValues;
+	private int elements;
+	private boolean considerFutureValues;
+	
 	private MovingAverage movingAverage;
 
-	@SuppressWarnings("unused")
-	private OutlierTreatmentMovingAverageBased() {
-		this.elements = 3;
-		considerFutureValues = true;
+	public OutlierTreatmentMovingAverageBased() {
+		this(2.96, 3, true, Double.NaN);
 	}
 
-	public OutlierTreatmentMovingAverageBased(double stdDevRatio, int elements) {
-		this.stdDevRatio = stdDevRatio;
-		this.elements = new Integer(elements);
-
-		initialize();
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements) {
+		this(stdDeviationRatio, elements, true, Double.NaN);
 	}
 
-	public OutlierTreatmentMovingAverageBased(double stdDevRatio, int elements, boolean considerFutureValues) {
-		this.stdDevRatio = stdDevRatio;
-		this.elements = new Integer(elements);
-		this.considerFutureValues = new Boolean(considerFutureValues);
-
-		initialize();
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues) {
+		this(stdDeviationRatio, elements, considerFutureValues, Double.NaN);
 	}
 
-	public OutlierTreatmentMovingAverageBased(double stdDevRatio, MovingAverage movingAverage) {
-		this.stdDevRatio = stdDevRatio;
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, double outlierValue) {
+		this.stdDeviationRatio = stdDeviationRatio;
+		this.elements = elements;
+		this.considerFutureValues = considerFutureValues;
+		this.outlierValue = outlierValue;
+
+		initializeMovingAverage();
+	}
+
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage) {
+		this(stdDeviationRatio, movingAverage, Double.NaN);
+	}
+	
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage, double outlierValue) {
+		this.stdDeviationRatio = stdDeviationRatio;
 		this.movingAverage = movingAverage;
-
-		initialize();
+		this.outlierValue = outlierValue;
 	}
 
-	private void initialize() {
-		if (movingAverage != null)
-			return;
+	private void initializeMovingAverage() {
+		if (elements <= 0)
+			throw new IllegalArgumentException("OutlierTreatmentMovingAverage: Kernel width has to be larger than 0.");
 
-		if (elements != null)
-			if (considerFutureValues != null && !considerFutureValues)
-				movingAverage = new MovingAverage(elements.intValue(), considerFutureValues);
-			else
-				movingAverage = new MovingAverage(elements, true);
+		movingAverage = new MovingAverage(elements, considerFutureValues);
 
 		if (movingAverage == null)
 			throw new IllegalArgumentException();
@@ -103,12 +104,11 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 		if (std == 0) // min == max
 			return;
 
-		std *= stdDevRatio;
+		std *= stdDeviationRatio;
 
 		for (int i = 0; i < timeSeries.size(); i++) {
 			if (Math.abs(timeSeries.getValue(i) - clone.getValue(i)) > std) {
-				timeSeries.removeTimeValue(i);
-				clone.removeTimeValue(i--);
+				timeSeries.replaceValue(i, outlierValue);
 			}
 		}
 	}
@@ -124,7 +124,7 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 
 		int sqrt = (int) Math.sqrt(count);
 
-		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDevRatio, sqrt + 1);
+		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDeviationRatio, sqrt + 1);
 		List<Integer> alternativeElements = ParameterSupportTools.getAlternativeIntegers(elements, sqrt);
 
 		for (Double std : alternativeDoubles)

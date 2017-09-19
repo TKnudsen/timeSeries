@@ -13,13 +13,9 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * <p>
- * Description: Checks the value domain for values higher/lower than a given
- * multiple of the standard deviation. The value domains of every individual
- * IUnivariateTimeSeries are used to calculate the std. NAN is set instead of
- * the values.
+ * Description: Checks the value domain for values higher/lower than a given multiple of the standard deviation. The value domains of every individual IUnivariateTimeSeries are used to calculate the std. NAN is set instead of the values.
  * 
- * Disclaimer: uses a global std and not local. Implementation is not really
- * sophisticated.
+ * Disclaimer: uses a global std and not local. Implementation is not really sophisticated.
  * </p>
  * 
  * <p>
@@ -31,22 +27,30 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  */
 public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProcessor {
 
-	double std;
+	// standard deviation ratio
+	double stdDeviationRatio;
 
-	@SuppressWarnings("unused")
-	private OutlierTreatment() {
+	// the value that is assigned to an outlier
+	double outlierValue;
+
+	public OutlierTreatment() {
 		this(2.96);
 	}
 
-	public OutlierTreatment(double std) {
-		this.std = std;
+	public OutlierTreatment(double stdDeviationRatio) {
+		this(stdDeviationRatio, Double.NaN);
+	}
+
+	public OutlierTreatment(double stdDeviationRatio, double outlierValue) {
+		this.stdDeviationRatio = stdDeviationRatio;
+		this.outlierValue = outlierValue;
 	}
 
 	@Override
 	public List<IDataProcessor<ITimeSeriesMultivariate>> getAlternativeParameterizations(int count) {
 		List<IDataProcessor<ITimeSeriesMultivariate>> alternatives = new ArrayList<>();
 
-		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(std, count);
+		List<Double> alternativeDoubles = ParameterSupportTools.getAlternativeDoubles(stdDeviationRatio, count);
 
 		for (Double std : alternativeDoubles) {
 			if (std > 0)
@@ -60,6 +64,6 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(std));
+		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(stdDeviationRatio, outlierValue));
 	}
 }
