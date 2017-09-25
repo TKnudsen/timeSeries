@@ -34,6 +34,10 @@ public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariatePro
 	 */
 	private TimeDuration timeDuration;
 
+	public TimeDuration getTimeDuration() {
+		return timeDuration;
+	}
+
 	@SuppressWarnings("unused")
 	private LinearInterpolation() {
 		this(TimeQuantization.SECONDS, 3L);
