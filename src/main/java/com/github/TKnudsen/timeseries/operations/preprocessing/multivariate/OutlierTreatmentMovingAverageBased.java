@@ -89,4 +89,22 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 		else
 			setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(stdDeviationRatio, movingAverage, outlierValue));
 	}
+
+	public double getStdDeviationRatio() {
+		return stdDeviationRatio;
+	}
+
+	public double getOutlierValue() {
+		return outlierValue;
+	}
+
+	public int getElements() {
+		return elements;
+	}
+
+	public boolean isConsiderFutureValues() {
+		return considerFutureValues;
+	}
+	
+	
 }
