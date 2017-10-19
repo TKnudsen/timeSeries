@@ -14,7 +14,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * </p>
  * 
  * <p>
- * Description: Replaces values that are farer away from the calculated moving average than a given standard deviation ratio. Replaces with a given value (standard is NaN). The temporal domain is untouched.
+ * Description: Replaces values that are farer away from the calculated moving
+ * average than a given standard deviation ratio. Replaces with a given value
+ * (standard is NaN). The temporal domain is untouched.
  * </p>
  * 
  * <p>
@@ -50,11 +52,11 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 		this(stdDeviationRatio, elements, considerFutureValues, Double.NaN);
 	}
 
-	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, double outlierValue) {
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, double outlierReplacementValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.elements = elements;
 		this.considerFutureValues = considerFutureValues;
-		this.outlierValue = outlierValue;
+		this.outlierValue = outlierReplacementValue;
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage) {
@@ -88,5 +90,21 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 			setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(stdDeviationRatio, elements, considerFutureValues, outlierValue));
 		else
 			setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(stdDeviationRatio, movingAverage, outlierValue));
+	}
+
+	public double getStdDeviationRatio() {
+		return stdDeviationRatio;
+	}
+
+	public double getOutlierValue() {
+		return outlierValue;
+	}
+
+	public int getElements() {
+		return elements;
+	}
+
+	public boolean isConsiderFutureValues() {
+		return considerFutureValues;
 	}
 }
