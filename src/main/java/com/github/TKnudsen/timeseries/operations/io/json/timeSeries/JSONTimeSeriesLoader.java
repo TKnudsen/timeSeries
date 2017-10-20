@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.io.json;
+package com.github.TKnudsen.timeseries.operations.io.json.timeSeries;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +10,11 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.io.json.ObjectMapperFactory;
 
 /**
  * <p>
- * Title: JSONLoader
+ * Title: JSONTimeSeriesLoader
  * </p>
  * 
  * <p>
@@ -25,30 +26,16 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public class JSONLoader {
-
-	public static ITimeSeriesUnivariate loadConfigsFromString(String json) {
-		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
-
-		ITimeSeriesUnivariate readValue;
-		try {
-			readValue = mapper.readValue(json, TimeSeriesUnivariate.class);
-			return readValue;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
+public class JSONTimeSeriesLoader {
 
 	public static ITimeSeriesUnivariate loadFromString(String json) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
 		ITimeSeriesUnivariate readValue;
 		try {
-			readValue = mapper.readValue(json, TimeSeriesUnivariate.class);
+			readValue = mapper.readValue(json, ITimeSeriesUnivariate.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -62,7 +49,7 @@ public class JSONLoader {
 
 		ITimeSeriesUnivariate readValue;
 		try {
-			readValue = mapper.readValue(new File(file), TimeSeriesUnivariate.class);
+			readValue = mapper.readValue(new File(file), ITimeSeriesUnivariate.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
