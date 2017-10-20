@@ -66,5 +66,9 @@ public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariatePro
 
 		return processors;
 	}
+	
+	public TimeDuration getTimeDuration() {
+		return timeDuration;
+	}
 
 }

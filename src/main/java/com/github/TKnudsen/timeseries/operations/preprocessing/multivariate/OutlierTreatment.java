@@ -67,4 +67,12 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 	protected void initializeUnivariateTimeSeriesProcessor() {
 		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(stdDeviationRatio, outlierValue));
 	}
+	
+	public double getStdDeviationRatio() {
+		return stdDeviationRatio;
+	}
+
+	public double getOutlierValue() {
+		return outlierValue;
+	}
 }
