@@ -209,7 +209,7 @@ public class TimeSeriesMultivariateFactory {
 
 		ITimeSeriesMultivariate labeledTimeSeries = createTimeSeriesMultivatiateLabeled(timestamps, values, missingValueIndicator, labelsForTimeStamps);
 
-		for (int i = 0; i < labeledTimeSeries.size(); i++) {
+		for (int i = 0; i < labeledTimeSeries.getDimensionality(); i++) {
 			ITimeSeriesUnivariate timeSeriesUnivariate = labeledTimeSeries.getTimeSeries(i);
 			timeSeriesUnivariate.setName(timeSeriesNames.get(i));
 			timeSeriesUnivariate.setDescription(descriptions.get(i));
