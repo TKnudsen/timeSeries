@@ -23,58 +23,56 @@ import com.github.TKnudsen.timeseries.data.univariate.symbolic.SymbolicTimeSerie
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate {
 
 	private ISymbolicTimeSeries labels;
 
-	public TimeSeriesMultivariateLabeled(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> labels) {
+	public TimeSeriesMultivariateLabeled(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> labelsForTimeStamps) {
 		super(timeSeriesUnivariateList);
 
-		initializeLabels(labels);
+		initializeLabels(labelsForTimeStamps);
 	}
 
-	public TimeSeriesMultivariateLabeled(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> labels) {
+	public TimeSeriesMultivariateLabeled(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> labelsForTimeStamps) {
 		super(id, timeSeriesUnivariateList);
 
-		initializeLabels(labels);
+		initializeLabels(labelsForTimeStamps);
 	}
 
-	public TimeSeriesMultivariateLabeled(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames, List<String> labels) {
+	public TimeSeriesMultivariateLabeled(List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames, List<String> labelsForTimeStamps) {
 		super(timeSeriesUnivariateList, timeSeriesNames);
 
-		initializeLabels(labels);
+		initializeLabels(labelsForTimeStamps);
 	}
 
-	public TimeSeriesMultivariateLabeled(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames, List<String> labels) {
+	public TimeSeriesMultivariateLabeled(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames, List<String> labelsForTimeStamps) {
 		super(id, timeSeriesUnivariateList, timeSeriesNames);
 
-		initializeLabels(labels);
+		initializeLabels(labelsForTimeStamps);
 	}
 
-	public TimeSeriesMultivariateLabeled(ITimeSeriesMultivariate timeSeriesMultivariate, List<String> labels) {
-		this(timeSeriesMultivariate.getID(), timeSeriesMultivariate.getTimeSeriesList(), labels);
-
-		initializeLabels(labels);
+	public TimeSeriesMultivariateLabeled(ITimeSeriesMultivariate timeSeriesMultivariate, List<String> labelsForTimeStamps) {
+		this(timeSeriesMultivariate.getID(), timeSeriesMultivariate.getTimeSeriesList(), labelsForTimeStamps);
 	}
 
-	private void initializeLabels(List<String> labelInformation) {
-		if (labelInformation == null)
+	private void initializeLabels(List<String> labelsForTimeStamps) {
+		if (labelsForTimeStamps == null)
 			throw new NullPointerException();
 
 		List<Long> timeStamps = getTimestamps();
-		if (timeStamps.size() != labelInformation.size())
+		if (timeStamps.size() != labelsForTimeStamps.size())
 			throw new IllegalArgumentException("timeSeriesMultivariateLabeled: label count != time stamp count");
 
-		labels = new SymbolicTimeSeries(new ArrayList<>(timeStamps), labelInformation);
+		labels = new SymbolicTimeSeries(new ArrayList<>(timeStamps), labelsForTimeStamps);
 	}
 
-	public List<String> getLabels() {
+	public List<String> getLabelsForTimeStamps() {
 		return labels.getValues();
 	}
 
-	public void setLabels(List<String> labels) {
+	public void setLabelsForTimeStamps(List<String> labels) {
 		initializeLabels(labels);
 	}
 
