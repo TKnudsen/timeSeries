@@ -14,10 +14,8 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * 
  * <p>
  * Description: Replaces the value domain for values higher/lower than a given
- * multiple of the standard deviation. The value domains of every individual
- * IUnivariateTimeSeries are used to calculate the std. NAN is set instead of
- * the values. Replaces with a given value (standard is NaN). The temporal
- * domain is untouched.
+ * multiple of the standard deviation. Replaces with the minimum maximum value
+ * that is still allowed. The temporal domain is untouched.
  * 
  * Disclaimer: uses a global std and not local. Implementation is not really
  * sophisticated.
@@ -35,20 +33,12 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 	// standard deviation ratio
 	double stdDeviationRatio;
 
-	// the value that is assigned to an outlier
-	Double outlierValue = null;
-
 	public OutlierTreatment() {
-		this(2.96, null);
+		this(2.96);
 	}
 
 	public OutlierTreatment(double stdDeviationRatio) {
-		this(stdDeviationRatio, null);
-	}
-
-	public OutlierTreatment(double stdDeviationRatio, Double outlierValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
-		this.outlierValue = outlierValue;
 	}
 
 	@Override
@@ -69,14 +59,10 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(stdDeviationRatio, outlierValue));
+		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(stdDeviationRatio));
 	}
 
 	public double getStdDeviationRatio() {
 		return stdDeviationRatio;
-	}
-
-	public double getOutlierValue() {
-		return outlierValue;
 	}
 }

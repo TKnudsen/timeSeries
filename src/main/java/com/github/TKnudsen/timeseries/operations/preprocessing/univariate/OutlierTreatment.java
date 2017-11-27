@@ -17,9 +17,8 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
  * *
  * <p>
  * Description: Replaces the value domain for values higher/lower than a given
- * multiple of the standard deviation. Replaces with the minimum maximum allowed
- * value (+-std), or a pre-defined outlier values (e.g. Double.NaN). The
- * temporal domain is untouched.
+ * multiple of the standard deviation. Replaces with the minimum maximum value
+ * that is still allowed. The temporal domain is untouched.
  * 
  * Disclaimer: uses a global std and not local. Implementation is not really
  * sophisticated.
@@ -30,7 +29,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 
 public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
@@ -38,20 +37,12 @@ public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 	// standard deviation ratio
 	double stdDeviationRatio;
 
-	// the value that is assigned to an outlier
-	Double outlierValue;
-
 	public OutlierTreatment() {
-		this(2.96, null);
+		this(2.96);
 	}
 
 	public OutlierTreatment(double stdDeviationRatio) {
-		this(stdDeviationRatio, null);
-	}
-
-	public OutlierTreatment(double stdDeviationRatio, Double outlierValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
-		this.outlierValue = outlierValue;
 	}
 
 	@Override
@@ -73,13 +64,10 @@ public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 
 		for (int i = 0; i < timeSeries.size(); i++) {
 			if (Math.abs(timeSeries.getValue(i) - means) > std) {
-				if (outlierValue == null) {
-					if ((timeSeries.getValue(i) - means) > std)
-						timeSeries.replaceValue(i, means + std);
-					else
-						timeSeries.replaceValue(i, means - std);
-				} else
-					timeSeries.replaceValue(i, outlierValue);
+				if ((timeSeries.getValue(i) - means) > std)
+					timeSeries.replaceValue(i, means + std);
+				else
+					timeSeries.replaceValue(i, means - std);
 			}
 		}
 	}

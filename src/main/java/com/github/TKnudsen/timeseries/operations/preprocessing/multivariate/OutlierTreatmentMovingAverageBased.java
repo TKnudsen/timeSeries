@@ -16,8 +16,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * <p>
  * Description: Replaces values that are farer away from the calculated moving
  * average than a given standard deviation ratio. Replaces with the minimum
- * maximum allowed value (+-std), or a pre-defined outlier values (e.g.
- * Double.NaN). The temporal domain is untouched.
+ * maximum value that is still allowed. The temporal domain is untouched.
  * </p>
  * 
  * <p>
@@ -25,15 +24,12 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	// standard deviation ratio
 	double stdDeviationRatio;
-
-	// the value that is assigned to an outlier
-	Double outlierValue;
 
 	// moving average options
 	private int elements;
@@ -42,27 +38,22 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 	private MovingAverage movingAverage;
 
 	public OutlierTreatmentMovingAverageBased() {
-		this(2.96, 3, true, null);
+		this(2.96, 3, true);
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements) {
-		this(stdDeviationRatio, elements, true, null);
+		this(stdDeviationRatio, elements, true);
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues) {
-		this(stdDeviationRatio, elements, considerFutureValues, null);
+		this.stdDeviationRatio = stdDeviationRatio;
+		this.elements = elements;
+		this.considerFutureValues = considerFutureValues;
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.movingAverage = movingAverage;
-	}
-
-	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, Double outlierReplacementValue) {
-		this.stdDeviationRatio = stdDeviationRatio;
-		this.elements = elements;
-		this.considerFutureValues = considerFutureValues;
-		this.outlierValue = outlierReplacementValue;
 	}
 
 	@Override
@@ -88,17 +79,13 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
 		if (movingAverage == null)
-			setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(stdDeviationRatio, elements, considerFutureValues, outlierValue));
+			setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(stdDeviationRatio, elements, considerFutureValues));
 		else
-			setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(stdDeviationRatio, movingAverage, outlierValue));
+			setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(stdDeviationRatio, movingAverage));
 	}
 
 	public double getStdDeviationRatio() {
 		return stdDeviationRatio;
-	}
-
-	public double getOutlierValue() {
-		return outlierValue;
 	}
 
 	public int getElements() {
