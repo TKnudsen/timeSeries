@@ -21,11 +21,13 @@ package com.github.TKnudsen.timeseries.data.primitives;
 public class TimeDuration implements Cloneable {
 
 	private TimeQuantization type;
+	
 	private long typeFactor;
 
 	/**
 	 * for serialization and stuff
 	 */
+	@SuppressWarnings("unused")
 	private TimeDuration() {
 		this.type = TimeQuantization.MILLISECONDS;
 		this.typeFactor = 1000;

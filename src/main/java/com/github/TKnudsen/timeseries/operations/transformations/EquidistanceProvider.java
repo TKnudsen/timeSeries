@@ -29,6 +29,7 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 public class EquidistanceProvider implements IDataTransformation<ITimeSeriesUnivariate, ITimeSeriesUnivariate> {
 
 	private TimeDuration equidistance;
+	
 	private ValueAscertainType type;
 
 	public EquidistanceProvider(TimeDuration equidistance, ValueAscertainType type) {

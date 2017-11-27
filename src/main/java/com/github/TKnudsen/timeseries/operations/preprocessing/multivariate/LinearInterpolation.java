@@ -16,7 +16,9 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
  * 
  * <p>
  * Description: Linear interpolation preprocessing routine for multivariate time
- * series. A kernel function handles the range parameter.
+ * series. If a local observed quantization in the time series exceeds the range
+ * of the given time interval, new timestamps are added (by means on
+ * interpolation).
  * </p>
  * 
  * <p>
@@ -24,7 +26,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariateProcessor {
 
@@ -66,7 +68,7 @@ public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariatePro
 
 		return processors;
 	}
-	
+
 	public TimeDuration getTimeDuration() {
 		return timeDuration;
 	}

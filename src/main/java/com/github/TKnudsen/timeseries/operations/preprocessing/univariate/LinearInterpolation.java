@@ -16,9 +16,9 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Description: interpolates a time series with a given quantization. This
- * quantization is also the threshold whether or not between two time stamps
- * shall be interplotated or not.
+ * Description: interpolates a time series with a given quantization. If a local
+ * observed quantization in the time series exceeds the range of the given time
+ * interval, new timestamps are added (by means on interpolation).
  * </p>
  * 
  * <p>
@@ -26,7 +26,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class LinearInterpolation implements ITimeSeriesUnivariatePreprocessor {
 
