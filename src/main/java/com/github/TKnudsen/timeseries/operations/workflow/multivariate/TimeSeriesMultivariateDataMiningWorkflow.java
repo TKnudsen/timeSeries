@@ -62,6 +62,13 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 		dataProcessors.add(processor);
 	}
 
+	public void addPreProcessor(ITimeSeriesMultivariatePreprocessor processor, boolean firstPosition) {
+		if (firstPosition)
+			dataProcessors.add(0, processor);
+		else
+			addPreProcessor(processor);
+	}
+
 	@Override
 	public void setDescriptor(ITimeSeriesMultivariateDescriptor descriptor) {
 		this.descriptor = descriptor;
