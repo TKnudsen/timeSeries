@@ -15,8 +15,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * 
  * <p>
  * Description: Replaces values that are farer away from the calculated moving
- * average than a given standard deviation ratio. Replaces with a given value
- * (standard is NaN). The temporal domain is untouched.
+ * average than a given standard deviation ratio. Replaces with the minimum
+ * maximum allowed value (+-std), or a pre-defined outlier values (e.g.
+ * Double.NaN). The temporal domain is untouched.
  * </p>
  * 
  * <p>
@@ -24,7 +25,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeriesMultivariateProcessor {
 
@@ -32,7 +33,7 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 	double stdDeviationRatio;
 
 	// the value that is assigned to an outlier
-	double outlierValue;
+	Double outlierValue;
 
 	// moving average options
 	private int elements;
@@ -41,27 +42,27 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 	private MovingAverage movingAverage;
 
 	public OutlierTreatmentMovingAverageBased() {
-		this(2.96, 3, true, Double.NaN);
+		this(2.96, 3, true, null);
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements) {
-		this(stdDeviationRatio, elements, true, Double.NaN);
+		this(stdDeviationRatio, elements, true, null);
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues) {
-		this(stdDeviationRatio, elements, considerFutureValues, Double.NaN);
-	}
-
-	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, double outlierReplacementValue) {
-		this.stdDeviationRatio = stdDeviationRatio;
-		this.elements = elements;
-		this.considerFutureValues = considerFutureValues;
-		this.outlierValue = outlierReplacementValue;
+		this(stdDeviationRatio, elements, considerFutureValues, null);
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.movingAverage = movingAverage;
+	}
+
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, Double outlierReplacementValue) {
+		this.stdDeviationRatio = stdDeviationRatio;
+		this.elements = elements;
+		this.considerFutureValues = considerFutureValues;
+		this.outlierValue = outlierReplacementValue;
 	}
 
 	@Override

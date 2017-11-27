@@ -17,7 +17,10 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Description: Replaces values that are farer away from the calculated moving average than a given standard deviation ratio. Replaces with a given value (standard is NaN). The temporal domain is untouched.
+ * Description: Replaces values that are farer away from the calculated moving
+ * average than a given standard deviation ratio. Replaces with the minimum
+ * maximum allowed value (+-std), or a pre-defined outlier values (e.g.
+ * Double.NaN). The temporal domain is untouched.
  * </p>
  * 
  * <p>
@@ -25,7 +28,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 
 public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariatePreprocessor {
@@ -34,7 +37,7 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 	double stdDeviationRatio;
 
 	// the value that is assigned to an outlier
-	double outlierValue;
+	Double outlierValue;
 
 	// moving average options
 	private int elements;
@@ -43,18 +46,18 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 	private MovingAverage movingAverage;
 
 	public OutlierTreatmentMovingAverageBased() {
-		this(2.96, 3, true, Double.NaN);
+		this(2.96, 3, true, null);
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements) {
-		this(stdDeviationRatio, elements, true, Double.NaN);
+		this(stdDeviationRatio, elements, true, null);
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues) {
-		this(stdDeviationRatio, elements, considerFutureValues, Double.NaN);
+		this(stdDeviationRatio, elements, considerFutureValues, null);
 	}
 
-	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, double outlierValue) {
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, int elements, boolean considerFutureValues, Double outlierValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.elements = elements;
 		this.considerFutureValues = considerFutureValues;
@@ -64,10 +67,10 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 	}
 
 	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage) {
-		this(stdDeviationRatio, movingAverage, Double.NaN);
+		this(stdDeviationRatio, movingAverage, null);
 	}
 
-	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage, double outlierValue) {
+	public OutlierTreatmentMovingAverageBased(double stdDeviationRatio, MovingAverage movingAverage, Double outlierValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.movingAverage = movingAverage;
 		this.outlierValue = outlierValue;
@@ -108,7 +111,13 @@ public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariate
 
 		for (int i = 0; i < timeSeries.size(); i++) {
 			if (Math.abs(timeSeries.getValue(i) - clone.getValue(i)) > std) {
-				timeSeries.replaceValue(i, outlierValue);
+				if (outlierValue == null) {
+					if ((timeSeries.getValue(i) - clone.getValue(i)) > std)
+						timeSeries.replaceValue(i, clone.getValue(i) + std);
+					else
+						timeSeries.replaceValue(i, clone.getValue(i) - std);
+				} else
+					timeSeries.replaceValue(i, outlierValue);
 			}
 		}
 	}

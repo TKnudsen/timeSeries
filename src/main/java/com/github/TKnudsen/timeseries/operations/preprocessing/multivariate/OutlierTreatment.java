@@ -13,10 +13,14 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * <p>
- * Description: Replaces the value domain for values higher/lower than a given multiple of the standard deviation. The value domains of every individual IUnivariateTimeSeries are used to calculate the std. NAN is set instead of the values. Replaces
- * with a given value (standard is NaN). The temporal domain is untouched.
+ * Description: Replaces the value domain for values higher/lower than a given
+ * multiple of the standard deviation. The value domains of every individual
+ * IUnivariateTimeSeries are used to calculate the std. NAN is set instead of
+ * the values. Replaces with a given value (standard is NaN). The temporal
+ * domain is untouched.
  * 
- * Disclaimer: uses a global std and not local. Implementation is not really sophisticated.
+ * Disclaimer: uses a global std and not local. Implementation is not really
+ * sophisticated.
  * </p>
  * 
  * <p>
@@ -32,17 +36,17 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 	double stdDeviationRatio;
 
 	// the value that is assigned to an outlier
-	double outlierValue;
+	Double outlierValue = null;
 
 	public OutlierTreatment() {
-		this(2.96);
+		this(2.96, null);
 	}
 
 	public OutlierTreatment(double stdDeviationRatio) {
-		this(stdDeviationRatio, Double.NaN);
+		this(stdDeviationRatio, null);
 	}
 
-	public OutlierTreatment(double stdDeviationRatio, double outlierValue) {
+	public OutlierTreatment(double stdDeviationRatio, Double outlierValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.outlierValue = outlierValue;
 	}
@@ -67,7 +71,7 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 	protected void initializeUnivariateTimeSeriesProcessor() {
 		setUnivariateTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(stdDeviationRatio, outlierValue));
 	}
-	
+
 	public double getStdDeviationRatio() {
 		return stdDeviationRatio;
 	}

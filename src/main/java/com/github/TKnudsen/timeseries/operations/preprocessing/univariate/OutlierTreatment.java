@@ -16,9 +16,13 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
  * 
  * *
  * <p>
- * Description: Replaces the value domain for values higher/lower than a given multiple of the standard deviation. Replaces with a given value (standard is NaN). The temporal domain is untouched.
+ * Description: Replaces the value domain for values higher/lower than a given
+ * multiple of the standard deviation. Replaces with the minimum maximum allowed
+ * value (+-std), or a pre-defined outlier values (e.g. Double.NaN). The
+ * temporal domain is untouched.
  * 
- * Disclaimer: uses a global std and not local. Implementation is not really sophisticated.
+ * Disclaimer: uses a global std and not local. Implementation is not really
+ * sophisticated.
  * </p>
  * 
  * <p>
@@ -26,7 +30,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 
 public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
@@ -35,17 +39,17 @@ public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 	double stdDeviationRatio;
 
 	// the value that is assigned to an outlier
-	double outlierValue;
+	Double outlierValue;
 
 	public OutlierTreatment() {
-		this(2.96);
+		this(2.96, null);
 	}
 
 	public OutlierTreatment(double stdDeviationRatio) {
-		this(stdDeviationRatio, Double.NaN);
+		this(stdDeviationRatio, null);
 	}
 
-	public OutlierTreatment(double stdDeviationRatio, double outlierValue) {
+	public OutlierTreatment(double stdDeviationRatio, Double outlierValue) {
 		this.stdDeviationRatio = stdDeviationRatio;
 		this.outlierValue = outlierValue;
 	}
@@ -69,7 +73,13 @@ public class OutlierTreatment implements ITimeSeriesUnivariatePreprocessor {
 
 		for (int i = 0; i < timeSeries.size(); i++) {
 			if (Math.abs(timeSeries.getValue(i) - means) > std) {
-				timeSeries.replaceValue(i, outlierValue);
+				if (outlierValue == null) {
+					if ((timeSeries.getValue(i) - means) > std)
+						timeSeries.replaceValue(i, means + std);
+					else
+						timeSeries.replaceValue(i, means - std);
+				} else
+					timeSeries.replaceValue(i, outlierValue);
 			}
 		}
 	}
