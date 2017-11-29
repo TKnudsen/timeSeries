@@ -17,7 +17,7 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public interface ITimeSeriesUnivariate extends ITimeSeries<Double>, IKeyValueProvider<Object> {
 
