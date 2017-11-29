@@ -52,6 +52,9 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	 * @param vector
 	 */
 	public TimeSeriesStatistics(ITimeSeriesUnivariate timeSeries) {
+		if (timeSeries == null)
+			throw new NullPointerException("TimeSeriesStatistics: time series was null.");
+
 		List<Double> values = timeSeries.getValues();
 		for (int i = 0; i < values.size(); i++)
 			if (!Double.isNaN(values.get(i)))
