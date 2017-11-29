@@ -30,7 +30,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2012-2016
+ * Copyright: Copyright (c) 2012-2017
  * </p>
  * 
  * @author Juergen Bernard
@@ -43,6 +43,7 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	private static final long serialVersionUID = 4808087357785247611L;
 
 	private double median = Double.NaN;
+	private double mean = Double.NaN;
 	private int count = -1;
 
 	/**
@@ -59,6 +60,7 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 
 	private void resetValues() {
 		this.median = Double.NaN;
+		this.mean = Double.NaN;
 		this.count = -1;
 	}
 
@@ -66,6 +68,12 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	public void addValue(double v) {
 		resetValues();
 		super.addValue(v);
+	}
+
+	public double getMean() {
+		if (Double.isNaN(mean))
+			mean = super.getMean();
+		return mean;
 	}
 
 	public double getMedian() {
