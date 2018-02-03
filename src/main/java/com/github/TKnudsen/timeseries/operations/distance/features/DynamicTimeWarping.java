@@ -3,9 +3,8 @@ package com.github.TKnudsen.timeseries.operations.distance.features;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.INumericalFeatureVectorDistanceMeasure;
 
-import de.javagl.nd.distance.DistanceFunction;
-import de.javagl.nd.distance.tuples.d.DoubleTupleDistanceFunctions;
-import de.javagl.nd.tuples.d.DoubleTuple;
+import net.sf.javaml.core.DenseInstance;
+import net.sf.javaml.core.Instance;
 
 /**
  * <p>
@@ -18,11 +17,11 @@ import de.javagl.nd.tuples.d.DoubleTuple;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class DynamicTimeWarping implements INumericalFeatureVectorDistanceMeasure {
 
@@ -31,11 +30,20 @@ public class DynamicTimeWarping implements INumericalFeatureVectorDistanceMeasur
 	 */
 	private static final long serialVersionUID = -6065943390224705989L;
 
-	DistanceFunction<DoubleTuple> dtw = DoubleTupleDistanceFunctions.dynamicTimeWarping();
+	net.sf.javaml.distance.fastdtw.FastDTW dtw;
+
+	// DistanceFunction<DoubleTuple> dtw =
+	// DoubleTupleDistanceFunctions.dynamicTimeWarping();
+
+	public DynamicTimeWarping(int kernel) {
+		this.dtw = new net.sf.javaml.distance.fastdtw.FastDTW(kernel);
+	}
 
 	@Override
 	public double getDistance(NumericalFeatureVector o1, NumericalFeatureVector o2) {
-		return dtw.distance(o1, o2);
+		Instance instance = new DenseInstance(o1.getVector());
+		Instance instance2 = new DenseInstance(o2.getVector());
+		return dtw.measure(instance, instance2);
 	}
 
 	@Override
@@ -52,7 +60,7 @@ public class DynamicTimeWarping implements INumericalFeatureVectorDistanceMeasur
 	public double applyAsDouble(NumericalFeatureVector t, NumericalFeatureVector u) {
 		return getDistance(t, u);
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)

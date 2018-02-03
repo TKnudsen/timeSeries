@@ -41,6 +41,11 @@
 			<version>3.7</version>
 		</dependency>
 		<dependency>
+			<groupId>net.sf.javaml</groupId>
+			<artifactId>javaml</artifactId>
+			<version>0.1.7</version>
+		</dependency>
+		<dependency>
 			<groupId>de.javagl</groupId>
 			<artifactId>nd-tuples</artifactId>
 			<version>0.0.1</version>
