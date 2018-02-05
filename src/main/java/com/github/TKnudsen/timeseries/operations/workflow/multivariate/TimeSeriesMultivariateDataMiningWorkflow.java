@@ -6,7 +6,7 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
-import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.ITimeSeriesMultivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
@@ -26,7 +26,7 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.mul
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMultivariateDataMiningWorkflow {
 
@@ -50,7 +50,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	/**
 	 * Routines to be applied on the feature vectors. Normalizations, etc.
 	 */
-	List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
+	List<IDataProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
 
 	/**
 	 * Distance measure for the resulting feature vectors.
@@ -85,7 +85,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	}
 
 	@Override
-	public void addFeatureProcessor(IFeatureVectorProcessor<NumericalFeatureVector> featureProcessor) {
+	public void addFeatureProcessor(IDataProcessor<NumericalFeatureVector> featureProcessor) {
 		this.featureVectorProcessors.add(featureProcessor);
 	}
 
@@ -98,7 +98,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 			featureVectors = descriptor.transform(data);
 
 		if (featureVectorProcessors != null && featureVectors != null)
-			for (IFeatureVectorProcessor<NumericalFeatureVector> fvProcessor : featureVectorProcessors)
+			for (IDataProcessor<NumericalFeatureVector> fvProcessor : featureVectorProcessors)
 				if (fvProcessor != null)
 					fvProcessor.process(featureVectors);
 

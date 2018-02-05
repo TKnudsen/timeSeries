@@ -4,12 +4,29 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.IDObject;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
-import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesLabelingTools;
 
-public class TimeSeriesFeatureVectorLabelingProcessor implements IFeatureVectorProcessor<NumericalFeatureVector> {
+/**
+ * <p>
+ * Title: TimeSeriesFeatureVectorLabelingProcessor
+ * </p>
+ *
+ * <p>
+ * Description:
+ * </p>
+ *
+ * <p>
+ * Copyright: Copyright (c) 2016-2018
+ * </p>
+ *
+ * @author Juergen Bernard
+ * @version 1.02
+ * 
+ */
+public class TimeSeriesFeatureVectorLabelingProcessor implements IDataProcessor<NumericalFeatureVector> {
 
 	private String classLabelName = "class";
 	private String timeStampAttribute = "StartTime";

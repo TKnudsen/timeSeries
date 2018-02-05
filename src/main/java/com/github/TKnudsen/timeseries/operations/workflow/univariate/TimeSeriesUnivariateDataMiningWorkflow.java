@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
-import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.uni
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.06
+ * @version 1.07
  */
 public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
 
@@ -34,7 +34,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 
 	private List<NumericalFeatureVector> featureVectors;
 
-	private List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
+	private List<IDataProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
 	private IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
@@ -58,7 +58,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	}
 
 	@Override
-	public void addFeatureProcessor(IFeatureVectorProcessor<NumericalFeatureVector> featureProcessor) {
+	public void addFeatureProcessor(IDataProcessor<NumericalFeatureVector> featureProcessor) {
 		this.featureVectorProcessors.add(featureProcessor);
 	}
 
@@ -71,7 +71,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 			featureVectors = descriptor.transform(data);
 
 		if (featureVectors != null)
-			for (IFeatureVectorProcessor<NumericalFeatureVector> fvProcessor : featureVectorProcessors)
+			for (IDataProcessor<NumericalFeatureVector> fvProcessor : featureVectorProcessors)
 				if (fvProcessor != null)
 					fvProcessor.process(featureVectors);
 
@@ -86,7 +86,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 		return descriptor;
 	}
 
-	public List<IFeatureVectorProcessor<NumericalFeatureVector>> getFeatureVectorProcessors() {
+	public List<IDataProcessor<NumericalFeatureVector>> getFeatureVectorProcessors() {
 		return featureVectorProcessors;
 	}
 
