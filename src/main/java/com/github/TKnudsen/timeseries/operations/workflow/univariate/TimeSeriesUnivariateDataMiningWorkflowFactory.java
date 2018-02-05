@@ -3,7 +3,8 @@ package com.github.TKnudsen.timeseries.operations.workflow.univariate;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.enums.NormalizationType;
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.INumericalFeatureVectorDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.numericalData.INumericalFeatureVectorProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.numericalData.NormalizationRoutineFactory;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
@@ -27,8 +28,9 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.uni
  */
 public class TimeSeriesUnivariateDataMiningWorkflowFactory {
 
-	public static TimeSeriesUnivariateDataMiningWorkflow createWorkflow(List<ITimeSeriesUnivariatePreprocessor> preprocessingRoutines, ITimeSeriesUnivariateDescriptor descriptor, NormalizationType normalizationType,
-			INumericalFeatureVectorDistanceMeasure distanceMeasure) {
+	public static TimeSeriesUnivariateDataMiningWorkflow createWorkflow(
+			List<ITimeSeriesUnivariatePreprocessor> preprocessingRoutines, ITimeSeriesUnivariateDescriptor descriptor,
+			NormalizationType normalizationType, IDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
 
 		TimeSeriesUnivariateDataMiningWorkflow workflow = new TimeSeriesUnivariateDataMiningWorkflow();
 
@@ -37,7 +39,8 @@ public class TimeSeriesUnivariateDataMiningWorkflowFactory {
 
 		workflow.setDescriptor(descriptor);
 
-		INumericalFeatureVectorProcessor normalizationRoutine = NormalizationRoutineFactory.createNormalizationRoutine(normalizationType);
+		INumericalFeatureVectorProcessor normalizationRoutine = NormalizationRoutineFactory
+				.createNormalizationRoutine(normalizationType);
 		workflow.addFeatureProcessor(normalizationRoutine);
 
 		workflow.setDistanceMeasure(distanceMeasure);

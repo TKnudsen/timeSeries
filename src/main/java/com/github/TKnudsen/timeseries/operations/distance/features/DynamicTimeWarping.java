@@ -1,7 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.distance.features;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.INumericalFeatureVectorDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 
 import de.javagl.nd.distance.DistanceFunction;
 import de.javagl.nd.distance.tuples.d.DoubleTupleDistanceFunctions;
@@ -22,9 +22,9 @@ import de.javagl.nd.tuples.d.DoubleTuple;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public class DynamicTimeWarping implements INumericalFeatureVectorDistanceMeasure {
+public class DynamicTimeWarping implements IDistanceMeasure<NumericalFeatureVector> {
 
 	/**
 	 * 

@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.operations.distance.timeSeriesUnivariate;
 
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
@@ -15,13 +16,13 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public class EuclideanDistanceForTimeSeries implements ITimeSeriesUnivariateDistanceMeasure {
+public class EuclideanDistanceForTimeSeries implements IDistanceMeasure<ITimeSeriesUnivariate> {
 
 	/**
 	 * 
@@ -44,7 +45,8 @@ public class EuclideanDistanceForTimeSeries implements ITimeSeriesUnivariateDist
 			return Double.NaN;
 
 		if (o1.size() != o2.size())
-			throw new IllegalArgumentException(getName() + ": distance calculateion between two time series of different length not possible.");
+			throw new IllegalArgumentException(
+					getName() + ": distance calculateion between two time series of different length not possible.");
 
 		List<Double> values1 = o1.getValues();
 		List<Double> values2 = o2.getValues();
