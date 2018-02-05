@@ -22,5 +22,5 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  * @author Juergen Bernard
  * @version 1.02
  */
-public interface ITimeSeriesDataMiningWorkflow<TS extends ITimeSeries<?>, PP extends ITimeSeriesPreprocessor<? super TS>, DESC extends ITimeSeriesDescriptor<? super TS>> extends IDataMiningWorkflow<TS, Double, NumericalFeatureVector, PP, DESC> {
+public interface ITimeSeriesDataMiningWorkflow<TS extends ITimeSeries<?>, DESC extends ITimeSeriesDescriptor<? super TS>> extends IDataMiningWorkflow<TS, Double, NumericalFeatureVector, DESC> {
 }

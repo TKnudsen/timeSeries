@@ -8,7 +8,6 @@ import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeas
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.ITimeSeriesMultivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
 
 /**
@@ -34,7 +33,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	 * Routines to be applied on the input multivariate time series. Preprocessing,
 	 * etc.
 	 */
-	List<ITimeSeriesMultivariatePreprocessor> dataProcessors = new ArrayList<>();
+	List<IDataProcessor<ITimeSeriesMultivariate>> dataProcessors = new ArrayList<>();
 
 	/**
 	 * Transformation of the multivariate time series into the feature space
@@ -58,11 +57,11 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	IDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
 
 	@Override
-	public void addPreProcessor(ITimeSeriesMultivariatePreprocessor processor) {
-		dataProcessors.add(processor);
+	public void addPreProcessor(IDataProcessor<ITimeSeriesMultivariate> preProcessor) {
+		dataProcessors.add(preProcessor);
 	}
 
-	public void addPreProcessor(ITimeSeriesMultivariatePreprocessor processor, boolean firstPosition) {
+	public void addPreProcessor(IDataProcessor<ITimeSeriesMultivariate> processor, boolean firstPosition) {
 		if (firstPosition)
 			dataProcessors.add(0, processor);
 		else
@@ -91,7 +90,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 
 	@Override
 	public List<NumericalFeatureVector> apply(List<ITimeSeriesMultivariate> data) {
-		for (ITimeSeriesMultivariatePreprocessor p : dataProcessors)
+		for (IDataProcessor<ITimeSeriesMultivariate> p : dataProcessors)
 			p.process(data);
 
 		if (descriptor != null)

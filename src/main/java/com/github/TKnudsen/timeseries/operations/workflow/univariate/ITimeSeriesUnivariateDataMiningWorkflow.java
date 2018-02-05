@@ -15,12 +15,13 @@ import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningW
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
-public interface ITimeSeriesUnivariateDataMiningWorkflow extends ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariatePreprocessor, ITimeSeriesUnivariateDescriptor> {
+public interface ITimeSeriesUnivariateDataMiningWorkflow
+		extends ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariateDescriptor> {
 
 }

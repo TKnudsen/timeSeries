@@ -1,7 +1,6 @@
 package com.github.TKnudsen.timeseries.operations.workflow.multivariate;
 
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.ITimeSeriesMultivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
@@ -15,12 +14,13 @@ import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningW
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public interface ITimeSeriesMultivariateDataMiningWorkflow extends ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, ITimeSeriesMultivariatePreprocessor, ITimeSeriesMultivariateDescriptor> {
+public interface ITimeSeriesMultivariateDataMiningWorkflow
+		extends ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, ITimeSeriesMultivariateDescriptor> {
 
 }

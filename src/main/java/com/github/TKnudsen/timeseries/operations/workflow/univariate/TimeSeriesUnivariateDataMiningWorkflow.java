@@ -7,7 +7,6 @@ import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.Numeric
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 
 /**
@@ -29,7 +28,7 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.uni
  */
 public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
 
-	private List<ITimeSeriesUnivariatePreprocessor> dataProcessors = new ArrayList<>();
+	private List<IDataProcessor<ITimeSeriesUnivariate>> dataProcessors = new ArrayList<>();
 	private ITimeSeriesUnivariateDescriptor descriptor = null;
 
 	private List<NumericalFeatureVector> featureVectors;
@@ -38,8 +37,8 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	private IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
-	public void addPreProcessor(ITimeSeriesUnivariatePreprocessor processor) {
-		dataProcessors.add(processor);
+	public void addPreProcessor(IDataProcessor<ITimeSeriesUnivariate> preProcessor) {
+		dataProcessors.add(preProcessor);
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 
 	@Override
 	public List<NumericalFeatureVector> apply(List<ITimeSeriesUnivariate> data) {
-		for (ITimeSeriesUnivariatePreprocessor p : dataProcessors)
+		for (IDataProcessor<ITimeSeriesUnivariate> p : dataProcessors)
 			p.process(data);
 
 		if (descriptor != null)
@@ -78,7 +77,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 		return featureVectors;
 	}
 
-	public List<ITimeSeriesUnivariatePreprocessor> getDataProcessors() {
+	public List<IDataProcessor<ITimeSeriesUnivariate>> getDataProcessors() {
 		return dataProcessors;
 	}
 
@@ -103,5 +102,4 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 				&& other.featureVectorProcessors.equals(featureVectorProcessors)
 				&& other.distanceMeasure.equals(distanceMeasure);
 	}
-
 }
