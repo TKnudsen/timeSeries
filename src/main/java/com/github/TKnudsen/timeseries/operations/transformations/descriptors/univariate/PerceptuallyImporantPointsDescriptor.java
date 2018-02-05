@@ -29,13 +29,14 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
-public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
+public class PerceptuallyImporantPointsDescriptor
+		implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
 
 	protected int pipCount;
 	protected PerceptuallyImportantPoints perceptuallyImportantPointsAlgorithm;
@@ -82,14 +83,15 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 	}
 
 	/**
-	 * The transformation from time series to features. Separated from the
-	 * eariler time series processing for inheritance reasons.
+	 * The transformation from time series to features. Separated from the eariler
+	 * time series processing for inheritance reasons.
 	 * 
 	 * @param processedTimeSeries
 	 * @param originalTimeSeries
 	 * @return
 	 */
-	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries, ITimeSeriesUnivariate originalTimeSeries) {
+	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries,
+			ITimeSeriesUnivariate originalTimeSeries) {
 		List<Double> values = processedTimeSeries.getValues();
 
 		List<NumericalFeature> features = new ArrayList<>();
@@ -114,7 +116,8 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 
 	@Override
 	public String getDescription() {
-		return "PerceptuallyImporantPointsDescriptor, pipCount = " + pipCount + ", calculates the perceptually most important points of a given time series and transforms these values to a NumericalFeatureVector.";
+		return "PerceptuallyImporantPointsDescriptor, pipCount = " + pipCount
+				+ ", calculates the perceptually most important points of a given time series and transforms these values to a NumericalFeatureVector.";
 	}
 
 	public int getPipCount() {
@@ -126,13 +129,14 @@ public class PerceptuallyImporantPointsDescriptor implements ITimeSeriesUnivaria
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
+	public List<IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
 		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(pipCount, count);
 
-		List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> processors = new ArrayList<>();
+		List<IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>> processors = new ArrayList<>();
 		for (Integer i : integers)
 			// TODO improve data model in the interfaces!
-			processors.add((IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>) new PerceptuallyImportantPoints(i));
+			processors.add(
+					(IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>) new PerceptuallyImportantPoints(i));
 
 		return processors;
 	}

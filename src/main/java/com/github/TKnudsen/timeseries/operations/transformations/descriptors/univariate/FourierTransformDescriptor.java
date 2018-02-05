@@ -32,11 +32,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescriptor {
 
@@ -67,10 +67,10 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
+	public List<IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
 		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(coefficientCount, count);
 
-		List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> descriptors = new ArrayList<>();
+		List<IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>> descriptors = new ArrayList<>();
 		for (Integer i : integers)
 			descriptors.add(new FourierTransformDescriptor(i));
 
@@ -107,8 +107,8 @@ public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescript
 	}
 
 	/**
-	 * calculates the Fourier Coefficients from a given signal. Per design, it
-	 * is assumed that the signal is equidistant.
+	 * calculates the Fourier Coefficients from a given signal. Per design, it is
+	 * assumed that the signal is equidistant.
 	 * 
 	 * @param signal
 	 * @return

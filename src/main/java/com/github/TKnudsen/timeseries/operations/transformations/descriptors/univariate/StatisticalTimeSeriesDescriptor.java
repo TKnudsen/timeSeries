@@ -76,7 +76,7 @@ public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDes
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int arg0) {
+	public List<IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>> getAlternativeParameterizations(int arg0) {
 		return null;
 	}
 

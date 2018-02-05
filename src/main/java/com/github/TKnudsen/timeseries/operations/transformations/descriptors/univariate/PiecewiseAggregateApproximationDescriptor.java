@@ -36,13 +36,14 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
+public class PiecewiseAggregateApproximationDescriptor
+		implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
 
 	private TimeDuration quantization;
 
@@ -111,7 +112,8 @@ public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUni
 		return featureVectors;
 	}
 
-	private Long getTemporalValidity(ITimeSeriesUnivariate timeSeries, int currentIndex, Long quantizationStart, Long quantizationEnd) {
+	private Long getTemporalValidity(ITimeSeriesUnivariate timeSeries, int currentIndex, Long quantizationStart,
+			Long quantizationEnd) {
 		Long duration = 0L;
 		Long t = timeSeries.getTimestamp(currentIndex);
 
@@ -141,7 +143,8 @@ public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUni
 
 	@Override
 	public String getDescription() {
-		return getName() + ", calculates piecewise aggregates of a given time series and transforms these values to a NumericalFeatureVector.";
+		return getName()
+				+ ", calculates piecewise aggregates of a given time series and transforms these values to a NumericalFeatureVector.";
 	}
 
 	public TimeDuration getQuantization() {
@@ -153,10 +156,10 @@ public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUni
 	}
 
 	@Override
-	public List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
+	public List<IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>> getAlternativeParameterizations(int count) {
 		List<Long> longs = ParameterSupportTools.getAlternativeLongs(quantization.getDuration(), count);
 
-		List<IDescriptor<ITimeSeriesUnivariate, Double, NumericalFeatureVector>> processors = new ArrayList<>();
+		List<IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector>> processors = new ArrayList<>();
 		for (Long l : longs)
 			processors.add(new PiecewiseAggregateApproximationDescriptor(new TimeDuration(quantization.getType(), l)));
 
@@ -165,10 +168,10 @@ public class PiecewiseAggregateApproximationDescriptor implements ITimeSeriesUni
 
 	@Override
 	/**
-	 * inverts a NumericalFeatureVector w.r.t. the PAA aggregation theme.
-	 * Problem: averages of every Feature represent a duration, not a concrete
-	 * time stamp (Gartenzaunproblem). Time series must be created by
-	 * extra/interpolation between adjacent feature values.
+	 * inverts a NumericalFeatureVector w.r.t. the PAA aggregation theme. Problem:
+	 * averages of every Feature represent a duration, not a concrete time stamp
+	 * (Gartenzaunproblem). Time series must be created by extra/interpolation
+	 * between adjacent feature values.
 	 * 
 	 */
 	public ITimeSeriesUnivariate invertFunction(NumericalFeatureVector featureVector) {
