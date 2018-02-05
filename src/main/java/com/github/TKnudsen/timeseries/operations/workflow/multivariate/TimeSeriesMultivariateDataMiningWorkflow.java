@@ -9,6 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
+import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
 /**
  * <p>
@@ -25,9 +26,10 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.mul
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
-public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMultivariateDataMiningWorkflow {
+public class TimeSeriesMultivariateDataMiningWorkflow
+		implements ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, ITimeSeriesMultivariateDescriptor> {
 
 	/**
 	 * Routines to be applied on the input multivariate time series. Preprocessing,

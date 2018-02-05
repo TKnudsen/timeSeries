@@ -6,14 +6,19 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.io.json.ObjectMapperFactory;
-import com.github.TKnudsen.timeseries.operations.workflow.multivariate.ITimeSeriesMultivariateDataMiningWorkflow;
-import com.github.TKnudsen.timeseries.operations.workflow.univariate.ITimeSeriesUnivariateDataMiningWorkflow;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
+import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
+import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
+import com.github.TKnudsen.timeseries.operations.workflow.multivariate.TimeSeriesMultivariateDataMiningWorkflow;
 import com.github.TKnudsen.timeseries.operations.workflow.univariate.TimeSeriesUnivariateDataMiningWorkflow;
 
 public class JsonWorkflowLoader {
 
-	public static ITimeSeriesUnivariateDataMiningWorkflow loadWorkflowFromString(String jsonString) {
+	public static ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariateDescriptor> loadWorkflowFromString(
+			String jsonString) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		TimeSeriesUnivariateDataMiningWorkflow readValue;
@@ -27,7 +32,8 @@ public class JsonWorkflowLoader {
 		return null;
 	}
 
-	public static ITimeSeriesUnivariateDataMiningWorkflow loadWorkflowFromFile(String file) {
+	public static ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariateDescriptor> loadWorkflowFromFile(
+			String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		TimeSeriesUnivariateDataMiningWorkflow readValue;
@@ -41,13 +47,15 @@ public class JsonWorkflowLoader {
 		return null;
 	}
 
-	public static List<ITimeSeriesUnivariateDataMiningWorkflow> loadWorkflowListFromFile(String file) {
+	public static List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariateDescriptor>> loadWorkflowListFromFile(
+			String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
-		List<ITimeSeriesUnivariateDataMiningWorkflow> readValue;
+		List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariateDescriptor>> readValue;
 		try {
-			readValue = mapper.readValue(new File(file), new TypeReference<List<TimeSeriesUnivariateDataMiningWorkflow>>() {
-			});
+			readValue = mapper.readValue(new File(file),
+					new TypeReference<List<TimeSeriesUnivariateDataMiningWorkflow>>() {
+					});
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -56,12 +64,13 @@ public class JsonWorkflowLoader {
 		return null;
 	}
 
-	public static ITimeSeriesMultivariateDataMiningWorkflow loadMultivariateWorkflowFromString(String jsonString) {
+	public static ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, ITimeSeriesMultivariateDescriptor> loadMultivariateWorkflowFromString(
+			String jsonString) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
-		ITimeSeriesMultivariateDataMiningWorkflow readValue;
+		TimeSeriesMultivariateDataMiningWorkflow readValue;
 		try {
-			readValue = mapper.readValue(jsonString, ITimeSeriesMultivariateDataMiningWorkflow.class);
+			readValue = mapper.readValue(jsonString, TimeSeriesMultivariateDataMiningWorkflow.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,12 +79,13 @@ public class JsonWorkflowLoader {
 		return null;
 	}
 
-	public static ITimeSeriesMultivariateDataMiningWorkflow loadMultivariateWorkflowFromFile(String file) {
+	public static ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, ITimeSeriesMultivariateDescriptor> loadMultivariateWorkflowFromFile(
+			String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
-		ITimeSeriesMultivariateDataMiningWorkflow readValue;
+		TimeSeriesMultivariateDataMiningWorkflow readValue;
 		try {
-			readValue = mapper.readValue(new File(file), ITimeSeriesMultivariateDataMiningWorkflow.class);
+			readValue = mapper.readValue(new File(file), TimeSeriesMultivariateDataMiningWorkflow.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -8,6 +8,7 @@ import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeas
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
+import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
 /**
  * <p>
@@ -24,9 +25,10 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.uni
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.07
+ * @version 1.08
  */
-public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
+public class TimeSeriesUnivariateDataMiningWorkflow
+		implements ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariateDescriptor> {
 
 	private List<IDataProcessor<ITimeSeriesUnivariate>> dataProcessors = new ArrayList<>();
 	private ITimeSeriesUnivariateDescriptor descriptor = null;
