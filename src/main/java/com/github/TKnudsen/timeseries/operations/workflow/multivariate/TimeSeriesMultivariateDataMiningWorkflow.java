@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IIDObjectDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
@@ -22,17 +22,17 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.mul
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMultivariateDataMiningWorkflow {
 
 	/**
-	 * Routines to be applied on the input multivariate time series.
-	 * Preprocessing, etc.
+	 * Routines to be applied on the input multivariate time series. Preprocessing,
+	 * etc.
 	 */
 	List<ITimeSeriesMultivariatePreprocessor> dataProcessors = new ArrayList<>();
 
@@ -42,8 +42,8 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	ITimeSeriesMultivariateDescriptor descriptor = null;
 
 	/**
-	 * Feature vector representation of the multivariate time series. Output of
-	 * the descriptor.
+	 * Feature vector representation of the multivariate time series. Output of the
+	 * descriptor.
 	 */
 	private List<NumericalFeatureVector> featureVectors;
 
@@ -55,7 +55,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	/**
 	 * Distance measure for the resulting feature vectors.
 	 */
-	IIDObjectDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
+	IDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
 
 	@Override
 	public void addPreProcessor(ITimeSeriesMultivariatePreprocessor processor) {
@@ -75,12 +75,12 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements ITimeSeriesMult
 	}
 
 	@Override
-	public IIDObjectDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
+	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
 		return distanceMeasure;
 	}
 
 	@Override
-	public void setDistanceMeasure(IIDObjectDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
+	public void setDistanceMeasure(IDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
 		this.distanceMeasure = distanceMeasure;
 	}
 

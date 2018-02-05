@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IIDObjectDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.IFeatureVectorProcessor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
@@ -21,11 +21,11 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.uni
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
 public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivariateDataMiningWorkflow {
 
@@ -35,7 +35,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	private List<NumericalFeatureVector> featureVectors;
 
 	private List<IFeatureVectorProcessor<NumericalFeatureVector>> featureVectorProcessors = new ArrayList<>();
-	private IIDObjectDistanceMeasure<NumericalFeatureVector> distanceMeasure;
+	private IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
 	public void addPreProcessor(ITimeSeriesUnivariatePreprocessor processor) {
@@ -48,12 +48,12 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 	}
 
 	@Override
-	public IIDObjectDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
+	public IDistanceMeasure<NumericalFeatureVector> getDistanceMeasure() {
 		return distanceMeasure;
 	}
 
 	@Override
-	public void setDistanceMeasure(IIDObjectDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
+	public void setDistanceMeasure(IDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
 		this.distanceMeasure = distanceMeasure;
 	}
 
@@ -99,7 +99,9 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesUnivar
 
 		TimeSeriesUnivariateDataMiningWorkflow other = (TimeSeriesUnivariateDataMiningWorkflow) o;
 
-		return other.dataProcessors.equals(dataProcessors) && other.descriptor.equals(descriptor) && other.featureVectorProcessors.equals(featureVectorProcessors) && other.distanceMeasure.equals(distanceMeasure);
+		return other.dataProcessors.equals(dataProcessors) && other.descriptor.equals(descriptor)
+				&& other.featureVectorProcessors.equals(featureVectorProcessors)
+				&& other.distanceMeasure.equals(distanceMeasure);
 	}
 
 }

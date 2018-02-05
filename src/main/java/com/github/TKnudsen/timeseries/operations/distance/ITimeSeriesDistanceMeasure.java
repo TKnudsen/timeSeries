@@ -1,6 +1,6 @@
 package com.github.TKnudsen.timeseries.operations.distance;
 
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IIDObjectDistanceMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
@@ -13,12 +13,12 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public interface ITimeSeriesDistanceMeasure<TS extends ITimeSeries<?>> extends IIDObjectDistanceMeasure<TS> {
+public interface ITimeSeriesDistanceMeasure<TS extends ITimeSeries<?>> extends IDistanceMeasure<TS> {
 
 }
