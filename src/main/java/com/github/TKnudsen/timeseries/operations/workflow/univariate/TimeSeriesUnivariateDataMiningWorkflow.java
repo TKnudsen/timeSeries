@@ -6,8 +6,8 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.ITimeSeriesUnivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
 /**
@@ -25,13 +25,13 @@ import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningW
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.08
+ * @version 1.09
  */
-public class TimeSeriesUnivariateDataMiningWorkflow
-		implements ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, ITimeSeriesUnivariateDescriptor> {
+public class TimeSeriesUnivariateDataMiningWorkflow implements
+		ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, INumericFeatureVectorDescriptor<ITimeSeriesUnivariate>> {
 
 	private List<IDataProcessor<ITimeSeriesUnivariate>> dataProcessors = new ArrayList<>();
-	private ITimeSeriesUnivariateDescriptor descriptor = null;
+	private INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> descriptor = null;
 
 	private List<NumericalFeatureVector> featureVectors;
 
@@ -44,7 +44,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow
 	}
 
 	@Override
-	public void setDescriptor(ITimeSeriesUnivariateDescriptor descriptor) {
+	public void setDescriptor(INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> descriptor) {
 		this.descriptor = descriptor;
 	}
 
@@ -83,7 +83,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow
 		return dataProcessors;
 	}
 
-	public ITimeSeriesUnivariateDescriptor getDescriptor() {
+	public INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> getDescriptor() {
 		return descriptor;
 	}
 

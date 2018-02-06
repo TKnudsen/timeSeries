@@ -9,6 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.Numeric
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
@@ -40,10 +41,10 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class PiecewiseAggregateApproximationDescriptor
-		implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
+		implements INumericFeatureVectorDescriptor<ITimeSeriesUnivariate>, ITimeSeriesDescriptorInverseFunction {
 
 	private TimeDuration quantization;
 

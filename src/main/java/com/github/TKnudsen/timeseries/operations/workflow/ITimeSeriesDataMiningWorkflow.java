@@ -1,10 +1,9 @@
 package com.github.TKnudsen.timeseries.operations.workflow;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.ComplexDataObject.model.workflow.IDataMiningWorkflow;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
-import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessor;
-import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITimeSeriesDescriptor;
 
 /**
  * <p>
@@ -16,11 +15,12 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public interface ITimeSeriesDataMiningWorkflow<TS extends ITimeSeries<?>, DESC extends ITimeSeriesDescriptor<? super TS>> extends IDataMiningWorkflow<TS, Double, NumericalFeatureVector, DESC> {
+public interface ITimeSeriesDataMiningWorkflow<TS extends ITimeSeries<?>, DESC extends INumericFeatureVectorDescriptor<? super TS>>
+		extends IDataMiningWorkflow<TS, Double, NumericalFeatureVector, DESC> {
 }

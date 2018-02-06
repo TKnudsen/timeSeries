@@ -9,6 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.Numeric
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptuallyImportantPoints;
@@ -33,10 +34,10 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
 public class PerceptuallyImporantPointsDescriptor
-		implements ITimeSeriesUnivariateDescriptor, ITimeSeriesDescriptorInverseFunction {
+		implements INumericFeatureVectorDescriptor<ITimeSeriesUnivariate>, ITimeSeriesDescriptorInverseFunction {
 
 	protected int pipCount;
 	protected PerceptuallyImportantPoints perceptuallyImportantPointsAlgorithm;

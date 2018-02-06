@@ -10,6 +10,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTo
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
 import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -36,9 +37,9 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class FourierTransformDescriptor implements ITimeSeriesUnivariateDescriptor {
+public class FourierTransformDescriptor implements INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> {
 
 	// parameters
 	private int coefficientCount;

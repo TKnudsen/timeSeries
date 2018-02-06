@@ -7,6 +7,7 @@ import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.Numeric
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.featureExtraction.IFeatureExtractor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.OscillationsAroundMeanFeatureExtractor;
@@ -32,13 +33,13 @@ import com.github.TKnudsen.timeseries.operations.transformations.featureExtracti
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Christian Ritter, Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public class StatisticalTimeSeriesDescriptor implements ITimeSeriesUnivariateDescriptor {
+public class StatisticalTimeSeriesDescriptor implements INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> {
 
 	private List<IFeatureExtractor<ITimeSeriesUnivariate, NumericalFeature>> featureCreators;
 	private DataTransformationCategory category = DataTransformationCategory.DESCRIPTOR;

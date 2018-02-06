@@ -7,8 +7,8 @@ import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.Numeric
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate.ITimeSeriesMultivariateDescriptor;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
 /**
@@ -26,10 +26,10 @@ import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningW
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
-public class TimeSeriesMultivariateDataMiningWorkflow
-		implements ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, ITimeSeriesMultivariateDescriptor> {
+public class TimeSeriesMultivariateDataMiningWorkflow implements
+		ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, INumericFeatureVectorDescriptor<ITimeSeriesMultivariate>> {
 
 	/**
 	 * Routines to be applied on the input multivariate time series. Preprocessing,
@@ -40,7 +40,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow
 	/**
 	 * Transformation of the multivariate time series into the feature space
 	 */
-	ITimeSeriesMultivariateDescriptor descriptor = null;
+	INumericFeatureVectorDescriptor<ITimeSeriesMultivariate> descriptor = null;
 
 	/**
 	 * Feature vector representation of the multivariate time series. Output of the
@@ -71,7 +71,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow
 	}
 
 	@Override
-	public void setDescriptor(ITimeSeriesMultivariateDescriptor descriptor) {
+	public void setDescriptor(INumericFeatureVectorDescriptor<ITimeSeriesMultivariate> descriptor) {
 		this.descriptor = descriptor;
 	}
 
