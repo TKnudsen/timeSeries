@@ -6,16 +6,30 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.io.json.ObjectMapperFactory;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
+/**
+ * <p>
+ * Title: JsonWorkflowWriter
+ * </p>
+ * 
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * <p>
+ * Copyright: Copyright (c) 2017-2018
+ * </p>
+ * 
+ * @author Juergen Bernard
+ * @version 1.03
+ */
 public class JsonWorkflowWriter {
 
-	public static String writeWorkflowToString(
-			ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, INumericFeatureVectorDescriptor<ITimeSeriesUnivariate>> wf) {
+	public static String writeWorkflowToString(ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate> wf) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		String writeValueAsString;
@@ -28,9 +42,7 @@ public class JsonWorkflowWriter {
 		return null;
 	}
 
-	public static void writeWorkflowToFile(
-			ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, INumericFeatureVectorDescriptor<ITimeSeriesUnivariate>> wf,
-			String file) {
+	public static void writeWorkflowToFile(ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate> wf, String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 		try {
 			mapper.writeValue(new File(file), wf);
@@ -41,8 +53,7 @@ public class JsonWorkflowWriter {
 		return;
 	}
 
-	public static String writeMultivariateWorkflowToString(
-			ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, INumericFeatureVectorDescriptor<ITimeSeriesMultivariate>> wf) {
+	public static String writeMultivariateWorkflowToString(ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate> wf) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		String writeValueAsString;
@@ -55,8 +66,7 @@ public class JsonWorkflowWriter {
 		return null;
 	}
 
-	public static void writeMultivariateWorkflowToFile(
-			ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, INumericFeatureVectorDescriptor<ITimeSeriesMultivariate>> wf,
+	public static void writeMultivariateWorkflowToFile(ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate> wf,
 			String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 		try {
@@ -68,8 +78,7 @@ public class JsonWorkflowWriter {
 		return;
 	}
 
-	public static void writeWorkflowListToFile(
-			List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, INumericFeatureVectorDescriptor<ITimeSeriesUnivariate>>> wfs,
+	public static void writeWorkflowListToFile(List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate>> wfs,
 			String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 

@@ -7,7 +7,7 @@ import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.Numeric
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.featureVector.EuclideanDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
@@ -28,8 +28,8 @@ import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningW
  * @author Juergen Bernard
  * @version 1.06
  */
-public class TimeSeriesMultivariateDataMiningWorkflow implements
-		ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate, INumericFeatureVectorDescriptor<ITimeSeriesMultivariate>> {
+public class TimeSeriesMultivariateDataMiningWorkflow
+		implements ITimeSeriesDataMiningWorkflow<ITimeSeriesMultivariate> {
 
 	/**
 	 * Routines to be applied on the input multivariate time series. Preprocessing,
@@ -40,7 +40,7 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements
 	/**
 	 * Transformation of the multivariate time series into the feature space
 	 */
-	INumericFeatureVectorDescriptor<ITimeSeriesMultivariate> descriptor = null;
+	IDescriptor<ITimeSeriesMultivariate, NumericalFeatureVector> descriptor = null;
 
 	/**
 	 * Feature vector representation of the multivariate time series. Output of the
@@ -59,20 +59,16 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements
 	IDistanceMeasure<NumericalFeatureVector> distanceMeasure = new EuclideanDistanceMeasure();
 
 	@Override
-	public void addPreProcessor(IDataProcessor<ITimeSeriesMultivariate> preProcessor) {
-		dataProcessors.add(preProcessor);
+	public void addPreProcessor(IDataProcessor<ITimeSeriesMultivariate> processor) {
+		addPreProcessor(processor, false);
 	}
 
+	@Override
 	public void addPreProcessor(IDataProcessor<ITimeSeriesMultivariate> processor, boolean firstPosition) {
 		if (firstPosition)
 			dataProcessors.add(0, processor);
 		else
-			addPreProcessor(processor);
-	}
-
-	@Override
-	public void setDescriptor(INumericFeatureVectorDescriptor<ITimeSeriesMultivariate> descriptor) {
-		this.descriptor = descriptor;
+			dataProcessors.add(processor);
 	}
 
 	@Override
@@ -104,5 +100,10 @@ public class TimeSeriesMultivariateDataMiningWorkflow implements
 					fvProcessor.process(featureVectors);
 
 		return featureVectors;
+	}
+
+	@Override
+	public void setDescriptor(IDescriptor<ITimeSeriesMultivariate, NumericalFeatureVector> descriptor) {
+		this.descriptor = descriptor;
 	}
 }

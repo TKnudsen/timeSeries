@@ -6,7 +6,7 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningWorkflow;
 
@@ -27,11 +27,10 @@ import com.github.TKnudsen.timeseries.operations.workflow.ITimeSeriesDataMiningW
  * @author Juergen Bernard
  * @version 1.09
  */
-public class TimeSeriesUnivariateDataMiningWorkflow implements
-		ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate, INumericFeatureVectorDescriptor<ITimeSeriesUnivariate>> {
+public class TimeSeriesUnivariateDataMiningWorkflow implements ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate> {
 
 	private List<IDataProcessor<ITimeSeriesUnivariate>> dataProcessors = new ArrayList<>();
-	private INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> descriptor = null;
+	private IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector> descriptor = null;
 
 	private List<NumericalFeatureVector> featureVectors;
 
@@ -39,12 +38,20 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements
 	private IDistanceMeasure<NumericalFeatureVector> distanceMeasure;
 
 	@Override
-	public void addPreProcessor(IDataProcessor<ITimeSeriesUnivariate> preProcessor) {
-		dataProcessors.add(preProcessor);
+	public void addPreProcessor(IDataProcessor<ITimeSeriesUnivariate> processor) {
+		addPreProcessor(processor, false);
 	}
 
 	@Override
-	public void setDescriptor(INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> descriptor) {
+	public void addPreProcessor(IDataProcessor<ITimeSeriesUnivariate> processor, boolean firstPosition) {
+		if (firstPosition)
+			dataProcessors.add(0, processor);
+		else
+			dataProcessors.add(processor);
+	}
+
+	@Override
+	public void setDescriptor(IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector> descriptor) {
 		this.descriptor = descriptor;
 	}
 
@@ -83,7 +90,7 @@ public class TimeSeriesUnivariateDataMiningWorkflow implements
 		return dataProcessors;
 	}
 
-	public INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> getDescriptor() {
+	public IDescriptor<ITimeSeriesUnivariate, NumericalFeatureVector> getDescriptor() {
 		return descriptor;
 	}
 
