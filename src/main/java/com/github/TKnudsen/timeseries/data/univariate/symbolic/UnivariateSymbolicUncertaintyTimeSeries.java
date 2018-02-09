@@ -10,7 +10,7 @@ import com.github.TKnudsen.timeseries.data.ITemporalUncertainty;
 
 /**
  * <p>
- * Title: UncertaintyTimeSeriesSymbolic
+ * Title: UnivariateSymbolicUncertaintyTimeSeries
  * </p>
  * 
  * <p>
@@ -18,17 +18,19 @@ import com.github.TKnudsen.timeseries.data.ITemporalUncertainty;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2017
+ * Copyright: Copyright (c) 2015-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public class UncertaintyTimeSeriesSymbolic extends SymbolicTimeSeries implements ITemporalUncertainty<LabelUncertainty> {
+public class UnivariateSymbolicUncertaintyTimeSeries extends UnivariateSymbolicTimeSeries
+		implements ITemporalUncertainty<LabelUncertainty> {
 
 	private List<LabelUncertainty> labelUncertainties;
 
-	public UncertaintyTimeSeriesSymbolic(List<Long> timeStamps, List<String> values, Collection<Map<String, Double>> labelUncertainties) {
+	public UnivariateSymbolicUncertaintyTimeSeries(List<Long> timeStamps, List<String> values,
+			Collection<Map<String, Double>> labelUncertainties) {
 		super(timeStamps, values);
 
 		this.labelUncertainties = new ArrayList<>();
@@ -37,7 +39,8 @@ public class UncertaintyTimeSeriesSymbolic extends SymbolicTimeSeries implements
 		}
 	}
 
-	public UncertaintyTimeSeriesSymbolic(List<Long> timeStamps, List<String> values, List<LabelUncertainty> labelUncertainties) {
+	public UnivariateSymbolicUncertaintyTimeSeries(List<Long> timeStamps, List<String> values,
+			List<LabelUncertainty> labelUncertainties) {
 		super(timeStamps, values);
 
 		this.labelUncertainties = labelUncertainties;

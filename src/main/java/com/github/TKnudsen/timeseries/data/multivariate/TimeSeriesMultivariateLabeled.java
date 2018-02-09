@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.symbolic.ISymbolicTimeSeries;
-import com.github.TKnudsen.timeseries.data.univariate.symbolic.SymbolicTimeSeries;
+import com.github.TKnudsen.timeseries.data.univariate.symbolic.UnivariateSymbolicTimeSeries;
 
 /**
  * <p>
@@ -65,7 +65,7 @@ public class TimeSeriesMultivariateLabeled extends TimeSeriesMultivariate {
 		if (timeStamps.size() != labelsForTimeStamps.size())
 			throw new IllegalArgumentException("timeSeriesMultivariateLabeled: label count != time stamp count");
 
-		labels = new SymbolicTimeSeries(new ArrayList<>(timeStamps), labelsForTimeStamps);
+		labels = new UnivariateSymbolicTimeSeries(new ArrayList<>(timeStamps), labelsForTimeStamps);
 	}
 
 	public List<String> getLabelsForTimeStamps() {
