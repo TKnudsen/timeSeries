@@ -31,20 +31,10 @@ public class DynamicTimeWarping implements IDistanceMeasure<NumericalFeatureVect
 	 */
 	private static final long serialVersionUID = -6065943390224705989L;
 
-	// net.sf.javaml.distance.fastdtw.FastDTW dtw;
-
 	DistanceFunction<DoubleTuple> dtw = DoubleTupleDistanceFunctions.dynamicTimeWarping();
-
-	// public DynamicTimeWarping(int kernel) {
-	// this.dtw = new net.sf.javaml.distance.fastdtw.FastDTW(kernel);
-	// }
 
 	@Override
 	public double getDistance(NumericalFeatureVector o1, NumericalFeatureVector o2) {
-		// Instance instance = new DenseInstance(o1.getVector());
-		// Instance instance2 = new DenseInstance(o2.getVector());
-		// return dtw.measure(instance, instance2);
-
 		return dtw.distance(o1, o2);
 	}
 
