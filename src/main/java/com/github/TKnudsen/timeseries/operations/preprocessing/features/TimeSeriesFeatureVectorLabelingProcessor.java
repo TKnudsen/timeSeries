@@ -23,7 +23,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesLabelingTools;
  * </p>
  *
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  * 
  */
 public class TimeSeriesFeatureVectorLabelingProcessor implements IDataProcessor<NumericalFeatureVector> {
@@ -33,6 +33,9 @@ public class TimeSeriesFeatureVectorLabelingProcessor implements IDataProcessor<
 
 	public TimeSeriesFeatureVectorLabelingProcessor(String classLabelName) {
 		this.classLabelName = classLabelName;
+
+		System.err.println(
+				"TimeSeriesFeatureVectorLabelingProcessor works on the attribute StartTime. This, hoever, may have been changed to TimeStamp.");
 	}
 
 	public TimeSeriesFeatureVectorLabelingProcessor(String classLabelName, String timeStampAttribute) {
