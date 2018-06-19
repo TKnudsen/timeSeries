@@ -3,9 +3,13 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing.RelativeValueDomainModificationMeasure;
 
 /**
  * <p>
@@ -28,7 +32,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * @author Juergen Bernard
  * @version 1.03
  */
-public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProcessor {
+public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProcessor implements IUncertainDataProcessor<ITimeSeriesMultivariate, NumericalUncertainty> {
 
 	// standard deviation ratio
 	double stdDeviationRatio;
@@ -65,4 +69,11 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 	public double getStdDeviationRatio() {
 		return stdDeviationRatio;
 	}
+
+	@Override
+	public IProcessingUncertaintyMeasure<ITimeSeriesMultivariate, NumericalUncertainty> getUncertaintyMeasure(
+			ITimeSeriesMultivariate originalTS, ITimeSeriesMultivariate processedTS) {
+		return new RelativeValueDomainModificationMeasure(originalTS, processedTS);
+	}
+
 }
