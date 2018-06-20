@@ -6,7 +6,6 @@ import java.util.TreeMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
 
 /**
  * <p>
@@ -14,13 +13,11 @@ import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
  * </p>
  * 
  * <p>
- * Description: Basic class for calculations of value uncertainty information of
- * a (time series) processor.
+ * Description:
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2018 VISSECT,
- * http://www.gris.informatik.tu-darmstadt.de/projects/vissect/index.html
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
@@ -82,9 +79,9 @@ public class RelativeValueDomainModificationMeasure
 						relatives.add(0.0);
 					else {
 						double rel = (modifiedValues.get(i) - originalValues.get(i)) / originalValues.get(i);
-//						if(Math.abs(rel) > 1) {
-//							System.out.println("Error, relative value larger than 1: " + rel);
-//						}
+						// if(Math.abs(rel) > 1) {
+						// System.out.println("Error, relative value larger than 1: " + rel);
+						// }
 						if (Math.abs(rel) < epsilon)
 							rel = 0.0;
 						relatives.add(rel);
