@@ -1,10 +1,11 @@
-package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
+package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dimensionBased;
 
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.TimeSeriesMultivariatetimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesMultivariateTools;
 
@@ -25,7 +26,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesMultivariateToo
  * @author Juergen Bernard
  * @version 1.01
  */
-public abstract class DimensionBasedTimeSeriesMultivariateProcessor implements ITimeSeriesMultivariatePreprocessor {
+public abstract class DimensionBasedTimeSeriesMultivariateProcessor extends TimeSeriesMultivariatetimeSeriesProcessor {
 
 	private ITimeSeriesUnivariatePreprocessor univariateTimeSeriesProcessor;
 
@@ -39,7 +40,8 @@ public abstract class DimensionBasedTimeSeriesMultivariateProcessor implements I
 		if (data == null)
 			return;
 
-		List<List<ITimeSeriesUnivariate>> univariateTimeSeriesLists = TimeSeriesMultivariateTools.getUnivariateTimeSeriesLists(data);
+		List<List<ITimeSeriesUnivariate>> univariateTimeSeriesLists = TimeSeriesMultivariateTools
+				.getUnivariateTimeSeriesLists(data);
 
 		for (List<ITimeSeriesUnivariate> timeSeriesUnivariateList : univariateTimeSeriesLists)
 			univariateTimeSeriesProcessor.process(timeSeriesUnivariateList);
@@ -57,4 +59,5 @@ public abstract class DimensionBasedTimeSeriesMultivariateProcessor implements I
 	protected void setUnivariateTimeSeriesProcessor(ITimeSeriesUnivariatePreprocessor univariateTimeSeriesProcessor) {
 		this.univariateTimeSeriesProcessor = univariateTimeSeriesProcessor;
 	}
+
 }

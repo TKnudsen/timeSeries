@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.string.LabelUncertainty;
-import com.github.TKnudsen.timeseries.data.ITemporalUncertainty;
+import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.data.ITemporalUncertainty;
  * @version 1.02
  */
 public class UnivariateSymbolicUncertaintyTimeSeries extends UnivariateSymbolicTimeSeries
-		implements ITemporalUncertainty<LabelUncertainty> {
+		implements IUncertaintyAtTimeStamp<LabelUncertainty> {
 
 	private List<LabelUncertainty> labelUncertainties;
 

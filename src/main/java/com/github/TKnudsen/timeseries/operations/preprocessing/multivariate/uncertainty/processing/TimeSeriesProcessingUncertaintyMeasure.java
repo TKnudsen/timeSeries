@@ -7,8 +7,8 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.IUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
+import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.IUncertaintyAtTimeStamp;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.unce
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public abstract class TimeSeriesProcessingUncertaintyMeasure<TS extends ITimeSeries<?>, U extends IUncertainty<?>>
 		implements IUncertaintyAtTimeStamp<U>, ISelfDescription, IProcessingUncertaintyMeasure<TS, U> {
