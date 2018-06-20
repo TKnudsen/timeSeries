@@ -3,11 +3,15 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
+import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing.RelativeValueDomainModificationMeasure;
 
 /**
  * <p>
@@ -28,7 +32,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
  * @author Juergen Bernard
  * @version 1.02
  */
-public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariateProcessor {
+public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariateProcessor implements IUncertainDataProcessor<ITimeSeriesMultivariate, NumericalUncertainty> {
 
 	/**
 	 * threshold duration when a local interpolation process will be triggered.
@@ -73,4 +77,9 @@ public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariatePro
 		return timeDuration;
 	}
 
+	@Override
+	public IProcessingUncertaintyMeasure<ITimeSeriesMultivariate, NumericalUncertainty> getUncertaintyMeasure(
+			ITimeSeriesMultivariate originalTS, ITimeSeriesMultivariate processedTS) {
+		return new RelativeValueDomainModificationMeasure(originalTS, processedTS);
+	}
 }
