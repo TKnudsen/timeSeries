@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.IUncertaintyQuantitative;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
-import com.github.TKnudsen.timeseries.data.ITemporalUncertainty;
+import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
 
-public class UncertaintyTimeSeries extends TimeSeriesUnivariate implements ITemporalUncertainty<IUncertaintyQuantitative<Double>> {
+public class UncertaintyTimeSeries extends TimeSeriesUnivariate implements IUncertaintyAtTimeStamp<IUncertaintyQuantitative<Double>> {
 
 	private List<IUncertaintyQuantitative<Double>> uncertainties;
 

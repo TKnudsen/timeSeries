@@ -3,7 +3,9 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
@@ -20,13 +22,14 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public class SamplingTimeDurationBased extends com.github.TKnudsen.timeseries.operations.preprocessing.SamplingTimeDurationBased<ITimeSeriesUnivariate> {
+public class SamplingTimeDurationBased extends
+		com.github.TKnudsen.timeseries.operations.preprocessing.SamplingTimeDurationBased<ITimeSeriesUnivariate> {
 
 	private TimeDuration timeDurationKernel;
 
@@ -56,6 +59,16 @@ public class SamplingTimeDurationBased extends com.github.TKnudsen.timeseries.op
 				processors.add(new SamplingTimeDurationBased(timeDurationKernel.getType(), l));
 
 		return processors;
+	}
+
+	@Override
+	public IProcessingUncertaintyMeasure<ITimeSeriesUnivariate, NumericalUncertainty> getUncertaintyMeasure(
+			ITimeSeriesUnivariate originalData, ITimeSeriesUnivariate processedData) {
+		// TODO Auto-generated method stub
+
+		System.err.println("SamplingTimeDurationBased: uncertainty analysis not provided yet.");
+
+		return null;
 	}
 
 }
