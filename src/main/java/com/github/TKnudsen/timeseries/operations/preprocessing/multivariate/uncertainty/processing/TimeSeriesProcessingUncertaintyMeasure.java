@@ -21,8 +21,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.unce
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2018 VISSECT,
- * http://www.gris.informatik.tu-darmstadt.de/projects/vissect/index.html
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
