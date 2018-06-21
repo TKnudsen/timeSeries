@@ -10,7 +10,7 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * <p>
- * Description:
+ * Description: loads a ITimeSeries<?> from file.
  * </p>
  * 
  * <p>
@@ -18,8 +18,8 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public interface TimeSeriesLoader extends Function<String, ITimeSeries<?>> {
+public interface TimeSeriesLoader<TS extends ITimeSeries<?>> extends Function<String, TS> {
 
 }
