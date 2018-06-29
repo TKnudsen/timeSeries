@@ -3,6 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.unc
 import java.util.List;
 import java.util.SortedMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.complexDataObject.ComplexDataObject;
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.IUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
@@ -27,12 +28,12 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * @author Juergen Bernard
  * @version 1.02
  */
-public abstract class TimeSeriesProcessingUncertaintyMeasure<TS extends ITimeSeries<?>, U extends IUncertainty<?>>
+public abstract class TimeSeriesProcessingUncertaintyMeasure<TS extends ITimeSeries<?>, U extends IUncertainty<?>> extends ComplexDataObject
 		implements IUncertaintyAtTimeStamp<U>, ISelfDescription, IProcessingUncertaintyMeasure<TS, U> {
 
-	private final ITimeSeriesMultivariate originalTimeSeries;
+	private ITimeSeriesMultivariate originalTimeSeries;
 
-	private final ITimeSeriesMultivariate processedTimeSeries;
+	private ITimeSeriesMultivariate processedTimeSeries;
 
 	protected SortedMap<Long, U> uncertaintiesOverTime;
 
@@ -40,6 +41,10 @@ public abstract class TimeSeriesProcessingUncertaintyMeasure<TS extends ITimeSer
 			ITimeSeriesMultivariate processedTimeSeries) {
 		this.originalTimeSeries = originalTimeSeries;
 		this.processedTimeSeries = processedTimeSeries;
+	}
+	
+	public TimeSeriesProcessingUncertaintyMeasure() {
+		super();
 	}
 
 	public abstract void calculateUncertaintyMeasure();
