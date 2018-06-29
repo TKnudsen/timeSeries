@@ -32,6 +32,10 @@ public class RelativeValueDomainModificationMeasure
 			ITimeSeriesMultivariate processedTimeSeries) {
 		super(originalTS, processedTimeSeries);
 	}
+	
+	public RelativeValueDomainModificationMeasure() {
+		super();
+	}
 
 	@Override
 	public String getName() {
