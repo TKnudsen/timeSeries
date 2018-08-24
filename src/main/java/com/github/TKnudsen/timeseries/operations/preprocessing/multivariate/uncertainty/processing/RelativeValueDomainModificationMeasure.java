@@ -6,21 +6,11 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.util.TreeMap;
 
-import org.apache.commons.math3.analysis.function.Sqrt;
 import org.apache.commons.math3.distribution.NormalDistribution;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.DecompositionSolver;
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.stat.correlation.Covariance;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-
-import smile.math.distance.MahalanobisDistance;
-import weka.core.matrix.Matrix;
-import weka.estimators.MahalanobisEstimator;
 
 /**
  * <p>
