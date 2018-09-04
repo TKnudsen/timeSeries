@@ -10,15 +10,15 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * <p>
- * Description: interface for time series pre-processing routines
+ * Description: interface for time series processing routines
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public interface ITimeSeriesPreprocessor<TS extends ITimeSeries<?>> extends IDataProcessor<TS>, IParameterSupport<TS> {
 

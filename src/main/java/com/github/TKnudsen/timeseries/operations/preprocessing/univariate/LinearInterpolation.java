@@ -9,6 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 
 /**
  * <p>
@@ -22,13 +23,13 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2017
+ * Copyright: Copyright (c) 2015-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class LinearInterpolation implements ITimeSeriesUnivariatePreprocessor {
+public class LinearInterpolation extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 	/**
 	 * threshold duration when a local interpolation process will be triggered.

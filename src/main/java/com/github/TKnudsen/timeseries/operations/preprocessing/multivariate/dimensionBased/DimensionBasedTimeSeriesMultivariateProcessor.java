@@ -5,8 +5,7 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.TimeSeriesMultivariatetimeSeriesProcessor;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesMultivariateTools;
 
 /**
@@ -26,9 +25,10 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesMultivariateToo
  * @author Juergen Bernard
  * @version 1.01
  */
-public abstract class DimensionBasedTimeSeriesMultivariateProcessor extends TimeSeriesMultivariatetimeSeriesProcessor {
+public abstract class DimensionBasedTimeSeriesMultivariateProcessor
+		extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
-	private ITimeSeriesUnivariatePreprocessor univariateTimeSeriesProcessor;
+	private TimeSeriesProcessor<ITimeSeriesUnivariate> univariateTimeSeriesProcessor;
 
 	protected abstract void initializeUnivariateTimeSeriesProcessor();
 
@@ -52,11 +52,11 @@ public abstract class DimensionBasedTimeSeriesMultivariateProcessor extends Time
 		return univariateTimeSeriesProcessor.getPreprocessingCategory();
 	}
 
-	protected ITimeSeriesUnivariatePreprocessor getUnivariateTimeSeriesProcessor() {
+	protected TimeSeriesProcessor<ITimeSeriesUnivariate> getTimeSeriesProcessor() {
 		return univariateTimeSeriesProcessor;
 	}
 
-	protected void setUnivariateTimeSeriesProcessor(ITimeSeriesUnivariatePreprocessor univariateTimeSeriesProcessor) {
+	protected void setTimeSeriesProcessor(TimeSeriesProcessor<ITimeSeriesUnivariate> univariateTimeSeriesProcessor) {
 		this.univariateTimeSeriesProcessor = univariateTimeSeriesProcessor;
 	}
 

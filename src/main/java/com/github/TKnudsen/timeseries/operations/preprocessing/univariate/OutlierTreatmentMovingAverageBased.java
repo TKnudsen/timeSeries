@@ -8,6 +8,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesStatistics;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
@@ -23,14 +24,14 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 
-public class OutlierTreatmentMovingAverageBased implements ITimeSeriesUnivariatePreprocessor {
+public class OutlierTreatmentMovingAverageBased extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 	// standard deviation ratio
 	double stdDeviationRatio;

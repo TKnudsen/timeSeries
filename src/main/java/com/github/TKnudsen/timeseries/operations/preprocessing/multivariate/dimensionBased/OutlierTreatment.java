@@ -3,9 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dim
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
@@ -28,10 +26,9 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.06
  */
-public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProcessor
-		implements IUncertainDataProcessor<ITimeSeriesMultivariate, NumericalUncertainty> {
+public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	// standard deviation ratio
 	double stdDeviationRatio;
@@ -62,9 +59,8 @@ public class OutlierTreatment extends DimensionBasedTimeSeriesMultivariateProces
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		setUnivariateTimeSeriesProcessor(
-				new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(
-						stdDeviationRatio));
+		setTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatment(
+				stdDeviationRatio));
 	}
 
 	public double getStdDeviationRatio() {

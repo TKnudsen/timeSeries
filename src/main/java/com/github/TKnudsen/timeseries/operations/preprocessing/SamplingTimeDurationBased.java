@@ -2,8 +2,6 @@ package com.github.TKnudsen.timeseries.operations.preprocessing;
 
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
@@ -20,14 +18,13 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017
+ * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.03
  */
-public abstract class SamplingTimeDurationBased<TS extends ITimeSeries<?>>
-		implements ITimeSeriesPreprocessor<TS>, IUncertainDataProcessor<TS, NumericalUncertainty> {
+public abstract class SamplingTimeDurationBased<TS extends ITimeSeries<?>> extends TimeSeriesProcessor<TS> {
 
 	protected TimeDuration timeDurationKernel;
 

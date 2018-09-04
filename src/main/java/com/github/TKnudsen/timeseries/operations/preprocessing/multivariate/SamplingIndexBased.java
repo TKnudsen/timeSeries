@@ -7,6 +7,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 
 /**
  * <p>
@@ -25,7 +26,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * @author Juergen Bernard
  * @version 1.04
  */
-public class SamplingIndexBased extends TimeSeriesMultivariatetimeSeriesProcessor {
+public class SamplingIndexBased extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
 	private int timeStampsToBeRemoved;
 

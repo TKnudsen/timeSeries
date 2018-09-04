@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.io.json.processors;
 
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization.MinMaxNormalization;
 
 /**
@@ -26,7 +27,7 @@ public class JSONProcessorWriterTester {
 		String create = JSONProcessorWriter.create(new MinMaxNormalization(true));
 		System.out.println(create);
 
-		ITimeSeriesUnivariatePreprocessor loadKonfigs = JSONProcessorLoader.loadKonfigs(create);
+		TimeSeriesProcessor<ITimeSeriesUnivariate> loadKonfigs = JSONProcessorLoader.loadKonfigs(create);
 		System.out.println(loadKonfigs);
 	}
 

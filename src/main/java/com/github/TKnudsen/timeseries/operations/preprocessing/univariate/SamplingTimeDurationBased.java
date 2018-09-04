@@ -3,9 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
@@ -59,16 +57,6 @@ public class SamplingTimeDurationBased extends
 				processors.add(new SamplingTimeDurationBased(timeDurationKernel.getType(), l));
 
 		return processors;
-	}
-
-	@Override
-	public IProcessingUncertaintyMeasure<ITimeSeriesUnivariate, NumericalUncertainty> getUncertaintyMeasure(
-			ITimeSeriesUnivariate originalData, ITimeSeriesUnivariate processedData) {
-		// TODO Auto-generated method stub
-
-		System.err.println("SamplingTimeDurationBased: uncertainty analysis not provided yet.");
-
-		return null;
 	}
 
 }
