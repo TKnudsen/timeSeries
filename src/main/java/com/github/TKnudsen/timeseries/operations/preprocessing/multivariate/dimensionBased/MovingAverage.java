@@ -3,9 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dim
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
@@ -26,10 +24,9 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.04
  */
-public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor
-		implements IUncertainDataProcessor<ITimeSeriesMultivariate, NumericalUncertainty> {
+public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	private IIntegerWeightingKernel kernel;
 	private boolean considerFutureValues = false;
@@ -48,7 +45,7 @@ public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		this.setUnivariateTimeSeriesProcessor(
+		this.setTimeSeriesProcessor(
 				new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverage(kernel,
 						considerFutureValues));
 	}

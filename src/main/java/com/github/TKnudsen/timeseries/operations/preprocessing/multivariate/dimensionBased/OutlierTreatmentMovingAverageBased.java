@@ -3,9 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dim
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverage;
@@ -26,10 +24,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.Moving
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.06
+ * @version 1.08
  */
-public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeriesMultivariateProcessor
-		implements IUncertainDataProcessor<ITimeSeriesMultivariate, NumericalUncertainty> {
+public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	// standard deviation ratio
 	double stdDeviationRatio;
@@ -82,11 +79,11 @@ public class OutlierTreatmentMovingAverageBased extends DimensionBasedTimeSeries
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
 		if (movingAverage == null)
-			setUnivariateTimeSeriesProcessor(
+			setTimeSeriesProcessor(
 					new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(
 							stdDeviationRatio, elements, considerFutureValues));
 		else
-			setUnivariateTimeSeriesProcessor(
+			setTimeSeriesProcessor(
 					new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.OutlierTreatmentMovingAverageBased(
 							stdDeviationRatio, movingAverage));
 	}

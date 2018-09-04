@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 
 /**
  * <p>
@@ -24,14 +25,14 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  */
 public class JSONProcessorLoader {
 
-	public static ITimeSeriesUnivariatePreprocessor loadKonfigs(String jsonString) {
+	public static TimeSeriesProcessor<ITimeSeriesUnivariate> loadKonfigs(String jsonString) {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-		ITimeSeriesUnivariatePreprocessor readValue;
+		TimeSeriesProcessor<ITimeSeriesUnivariate> readValue;
 		try {
-			readValue = mapper.readValue(jsonString, ITimeSeriesUnivariatePreprocessor.class);
+			readValue = mapper.readValue(jsonString, TimeSeriesProcessor.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();

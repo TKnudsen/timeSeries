@@ -22,5 +22,7 @@ public interface IUncertaintyAtTimeStamp<U extends IUncertainty<?>> {
 
 	public U getUncertainty(Long timeStamp);
 
+	@Deprecated // avoid index-based access on time series. you never know how the time stamps
+				// are represented internally.
 	public U getUncertainty(int index);
 }

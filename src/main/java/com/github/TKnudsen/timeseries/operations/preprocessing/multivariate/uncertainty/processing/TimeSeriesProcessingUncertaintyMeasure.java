@@ -1,6 +1,5 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing;
 
-import java.util.List;
 import java.util.SortedMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.complexDataObject.ComplexDataObject;
@@ -8,8 +7,10 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.IUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
+import com.github.TKnudsen.timeseries.data.ITimeSeriesListener;
 import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
-import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.TimeSeriesEvent;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
 
 /**
  * <p>
@@ -26,48 +27,20 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.05
  */
-public abstract class TimeSeriesProcessingUncertaintyMeasure<TS extends ITimeSeries<?>, U extends IUncertainty<?>> extends ComplexDataObject
-		implements IUncertaintyAtTimeStamp<U>, ISelfDescription, IProcessingUncertaintyMeasure<TS, U> {
+public abstract class TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate, U extends IUncertainty<?>>
+		extends ComplexDataObject implements IUncertaintyAtTimeStamp<U>, ISelfDescription,
+		IProcessingUncertaintyMeasure<ITimeSeriesMultivariate, U>, ITimeSeriesListener {
 
-	private ITimeSeriesMultivariate originalTimeSeries;
-
-	private ITimeSeriesMultivariate processedTimeSeries;
-
+	// TODO decide whether the uncertainties should rather be handed to some
+	// obeserver instantly. Goal: avoid state variables in the measures.
 	protected SortedMap<Long, U> uncertaintiesOverTime;
-
-	public TimeSeriesProcessingUncertaintyMeasure(ITimeSeriesMultivariate originalTimeSeries,
-			ITimeSeriesMultivariate processedTimeSeries) {
-		this.originalTimeSeries = originalTimeSeries;
-		this.processedTimeSeries = processedTimeSeries;
-	}
-	
-	public TimeSeriesProcessingUncertaintyMeasure() {
-		super();
-	}
-
-	public abstract void calculateUncertaintyMeasure();
-
-	public ITimeSeriesMultivariate getOriginalTimeSeries() {
-		return originalTimeSeries;
-	}
-
-	public ITimeSeriesMultivariate getProcessedTimeSeries() {
-		return processedTimeSeries;
-	}
-
-	public List<Long> getTimestamps() {
-		return originalTimeSeries.getTimestamps();
-	}
 
 	@Override
 	public U getUncertainty(Long timeStamp) {
-		if (uncertaintiesOverTime == null)
-			calculateUncertaintyMeasure();
-
 		if (uncertaintiesOverTime == null) {
-			System.err.println(getName() + ": problems with the calculation of uncertainty information.");
+			System.err.println(getName() + ": no uncertainty information calculated yet.");
 			return null;
 		}
 
@@ -76,9 +49,28 @@ public abstract class TimeSeriesProcessingUncertaintyMeasure<TS extends ITimeSer
 
 	@Override
 	public U getUncertainty(int index) {
-		long timestamp = processedTimeSeries.getTimestamp(index);
+		throw new IllegalArgumentException(getName()
+				+ "index-based access to uncertainty information of time series is unsafe and thus deprecated.");
+	}
 
-		return getUncertainty(timestamp);
+	@Override
+	public void valueDomainChanged(TimeSeriesEvent learningDataEvent) {
+		ITimeSeries<?> oldTimeSeries = learningDataEvent.getOldTimeSeries();
+		if (oldTimeSeries.getClass().isAssignableFrom(TimeSeriesMultivariate.class))
+			calculateUncertainty((ITimeSeriesMultivariate) learningDataEvent.getOldTimeSeries(),
+					(ITimeSeriesMultivariate) learningDataEvent.getTimeSeries());
+	}
+
+	@Override
+	public void temporalDomainChanged(TimeSeriesEvent learningDataEvent) {
+		ITimeSeries<?> oldTimeSeries = learningDataEvent.getOldTimeSeries();
+		if (oldTimeSeries.getClass().isAssignableFrom(TimeSeriesMultivariate.class))
+			calculateUncertainty((ITimeSeriesMultivariate) learningDataEvent.getOldTimeSeries(),
+					(ITimeSeriesMultivariate) learningDataEvent.getTimeSeries());
+	}
+
+	public SortedMap<Long, U> getUncertaintiesOverTime() {
+		return uncertaintiesOverTime;
 	}
 
 }

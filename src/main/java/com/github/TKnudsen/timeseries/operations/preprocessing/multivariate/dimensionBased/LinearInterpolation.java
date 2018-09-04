@@ -3,9 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dim
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
@@ -28,10 +26,9 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariateProcessor
-		implements IUncertainDataProcessor<ITimeSeriesMultivariate, NumericalUncertainty> {
+public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	/**
 	 * threshold duration when a local interpolation process will be triggered.
@@ -54,7 +51,7 @@ public class LinearInterpolation extends DimensionBasedTimeSeriesMultivariatePro
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		this.setUnivariateTimeSeriesProcessor(
+		this.setTimeSeriesProcessor(
 				new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.LinearInterpolation(
 						timeDuration));
 	}

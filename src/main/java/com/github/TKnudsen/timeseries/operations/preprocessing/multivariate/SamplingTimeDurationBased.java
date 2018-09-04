@@ -3,14 +3,11 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
-import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing.RelativeValueDomainModificationMeasure;
 
 /**
  * <p>
@@ -60,9 +57,4 @@ public class SamplingTimeDurationBased extends
 		return processors;
 	}
 
-	@Override
-	public IProcessingUncertaintyMeasure<ITimeSeriesMultivariate, NumericalUncertainty> getUncertaintyMeasure(
-			ITimeSeriesMultivariate originalTS, ITimeSeriesMultivariate processedTS) {
-		return new RelativeValueDomainModificationMeasure(originalTS, processedTS);
-	}
 }

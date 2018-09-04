@@ -2,14 +2,12 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.unc
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.IUncertaintyQuantitative;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
 
-public class ValueAggregationModificationMeasure extends TimeSeriesProcessingUncertaintyMeasure<TimeSeriesMultivariate, IUncertaintyQuantitative<Integer>> {
+public class ValueAggregationModificationMeasure
+		extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate, IUncertaintyQuantitative<Integer>> {
 
-	public ValueAggregationModificationMeasure(ITimeSeriesMultivariate originalTimeSeries,
-			ITimeSeriesMultivariate processedTimeSeries) {
-		super(originalTimeSeries, processedTimeSeries);
-		// TODO Auto-generated constructor stub
+	public ValueAggregationModificationMeasure() {
+		super();
 	}
 
 	@Override
@@ -23,9 +21,9 @@ public class ValueAggregationModificationMeasure extends TimeSeriesProcessingUnc
 	}
 
 	@Override
-	public void calculateUncertaintyMeasure() {
+	public void calculateUncertainty(ITimeSeriesMultivariate originalData, ITimeSeriesMultivariate processedData) {
 		// TODO Auto-generated method stub
-		
+		throw new NullPointerException(getName() + ": calculateUncertaintyMeasure() not implemented yet.");
 	}
 
 }

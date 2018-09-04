@@ -9,6 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 
 /**
  * <p>
@@ -21,13 +22,13 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
-public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
+public class MovingAverage extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 	private IIntegerWeightingKernel kernel;
 	private boolean considerFutureValues = false;
@@ -70,7 +71,8 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 				double values = 0;
 
 				double weights = 0;
-				for (int k = Math.max(0, i - kernel.getInterval().intValue()); k < Math.min(i + kernel.getInterval().intValue() + 1, timeSeries.size()); k++)
+				for (int k = Math.max(0, i - kernel.getInterval().intValue()); k < Math
+						.min(i + kernel.getInterval().intValue() + 1, timeSeries.size()); k++)
 					if (!considerFutureValues && k > i)
 						break;
 					else if (!Double.isNaN(timeSeries.getValue(k))) {
@@ -128,7 +130,8 @@ public class MovingAverage implements ITimeSeriesUnivariatePreprocessor {
 
 		MovingAverage other = (MovingAverage) o;
 
-		return other.kernel.getInterval().equals(kernel.getInterval()) && other.considerFutureValues == considerFutureValues;
+		return other.kernel.getInterval().equals(kernel.getInterval())
+				&& other.considerFutureValues == considerFutureValues;
 	}
 
 }

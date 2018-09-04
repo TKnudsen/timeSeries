@@ -8,6 +8,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTo
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
@@ -20,13 +21,13 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
-public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
+public class TemporalQuantization extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 	private TimeDuration quantization;
 	private TimeDuration maximumAllowedGap;
@@ -89,7 +90,8 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 					} else {
 						// interpolate between last time stamp before...
 						// and next time stamp after the target
-						double value = TimeSeriesTools.getInterpolatedValue(timeSeries, currentTimestamp, nextTimeStamp, targetTimeStamp);
+						double value = TimeSeriesTools.getInterpolatedValue(timeSeries, currentTimestamp, nextTimeStamp,
+								targetTimeStamp);
 						timeSeries.removeTimeValue(i);
 						timeSeries.insert(targetTimeStamp, value);
 						targetTimeStamp += quantization.getDuration();
@@ -103,7 +105,8 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 				}
 			} else {
 				// temporal gap > quantization. feed in new time stamps..
-				double value = TimeSeriesTools.getInterpolatedValue(timeSeries, timeSeries.getTimestamp(i - 1), currentTimestamp, targetTimeStamp);
+				double value = TimeSeriesTools.getInterpolatedValue(timeSeries, timeSeries.getTimestamp(i - 1),
+						currentTimestamp, targetTimeStamp);
 				timeSeries.insert(targetTimeStamp, value);
 				targetTimeStamp += quantization.getDuration();
 				continue;
@@ -123,10 +126,12 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 		for (Long timeStamp : timestamps) {
 			if (lastTimeStamp != null) {
 				if (lastTimeStamp > timeStamp)
-					throw new IllegalArgumentException("TemporalQuantization.checkForGaps: given time series not sorted.");
+					throw new IllegalArgumentException(
+							"TemporalQuantization.checkForGaps: given time series not sorted.");
 
 				if (timeStamp - lastTimeStamp > referenceDuration)
-					throw new IllegalArgumentException("TemporalQuantization.checkForGaps: given time series has a too large gap");
+					throw new IllegalArgumentException(
+							"TemporalQuantization.checkForGaps: given time series has a too large gap");
 			}
 
 			lastTimeStamp = timeStamp;
@@ -148,7 +153,8 @@ public class TemporalQuantization implements ITimeSeriesUnivariatePreprocessor {
 	public String toString() {
 		if (quantization == null || maximumAllowedGap == null)
 			return "TemporalQuantization with undefined values";
-		return "TemporalQuantization: quantization: " + quantization.toString() + ", maximumAllowedGap" + maximumAllowedGap.toString();
+		return "TemporalQuantization: quantization: " + quantization.toString() + ", maximumAllowedGap"
+				+ maximumAllowedGap.toString();
 	}
 
 	public TimeDuration getQuantization() {

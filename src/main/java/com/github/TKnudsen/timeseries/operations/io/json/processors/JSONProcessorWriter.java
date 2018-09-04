@@ -2,7 +2,8 @@ package com.github.TKnudsen.timeseries.operations.io.json.processors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 
 /**
  * <p>
@@ -22,7 +23,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  */
 public class JSONProcessorWriter {
 
-	public static String create(ITimeSeriesUnivariatePreprocessor maxNormalization) {
+	public static String create(TimeSeriesProcessor<ITimeSeriesUnivariate> maxNormalization) {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 

@@ -9,6 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTo
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
@@ -30,13 +31,13 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
-public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreprocessor {
+public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 	private int pipCount;
 
@@ -95,10 +96,13 @@ public class PerceptuallyImportantPoints implements ITimeSeriesUnivariatePreproc
 			pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
 			for (int i = 1; i < data.size(); i++) {
 				if (data.getTimestamp(i) == pipTmp.get(pipIterator).getTimestamp()) {
-					double steigung = (pipTmp.get(pipIterator).getValue() - pipTmp.get(pipIterator - 1).getValue()) / (pipTmp.get(pipIterator).getTimestamp() - pipTmp.get(pipIterator - 1).getTimestamp());
-					double xAxisIntercept = pipTmp.get(pipIterator).getValue() - (pipTmp.get(pipIterator).getTimestamp() * steigung);
+					double steigung = (pipTmp.get(pipIterator).getValue() - pipTmp.get(pipIterator - 1).getValue())
+							/ (pipTmp.get(pipIterator).getTimestamp() - pipTmp.get(pipIterator - 1).getTimestamp());
+					double xAxisIntercept = pipTmp.get(pipIterator).getValue()
+							- (pipTmp.get(pipIterator).getTimestamp() * steigung);
 					for (int sub = 0; sub < subSequence.size(); sub++) {
-						dist = Math.abs(steigung * subSequence.get(sub).getTimestamp() + xAxisIntercept - subSequence.get(sub).getValue());
+						dist = Math.abs(steigung * subSequence.get(sub).getTimestamp() + xAxisIntercept
+								- subSequence.get(sub).getValue());
 						if (dist > pipYOffsetCurrent) {
 							pipYOffsetCurrent = dist;
 							nextPipIndex = i - subSequence.size() + sub;

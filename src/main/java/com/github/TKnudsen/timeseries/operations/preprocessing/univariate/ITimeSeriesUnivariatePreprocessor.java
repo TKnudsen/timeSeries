@@ -1,7 +1,5 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
-import java.util.List;
-
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessor;
 
@@ -20,8 +18,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPrepro
  * 
  * @author Juergen Bernard
  * @version 1.04
+ * @deprecated
  */
 public interface ITimeSeriesUnivariatePreprocessor extends ITimeSeriesPreprocessor<ITimeSeriesUnivariate> {
 
-	public void process(List<ITimeSeriesUnivariate> data);
+	// public void process(List<ITimeSeriesUnivariate> data);
 }

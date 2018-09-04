@@ -3,9 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dim
 import java.util.Arrays;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IUncertainDataProcessor;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
 /**
@@ -22,10 +20,9 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.04
  */
-public class MinMaxNormalization extends DimensionBasedTimeSeriesMultivariateProcessor
-		implements IUncertainDataProcessor<ITimeSeriesMultivariate, NumericalUncertainty> {
+public class MinMaxNormalization extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	private boolean globalMinMax;
 
@@ -40,7 +37,7 @@ public class MinMaxNormalization extends DimensionBasedTimeSeriesMultivariatePro
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		setUnivariateTimeSeriesProcessor(
+		setTimeSeriesProcessor(
 				new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization.MinMaxNormalization(
 						globalMinMax));
 	}
