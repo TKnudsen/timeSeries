@@ -141,6 +141,8 @@ public class RelativeValueDomainModificationMeasure
 			// // TODO please validate
 			for (int i = 0; i < originalValues.size(); i++) {
 				// we assume that our distribution is normally distributed
+				// TODO the execution speed of this routine is terrible. Try to avoid defining a
+				// (hige) StatisticsSupport instance for every iteration.
 				StatisticsSupport currentStat = samplingStatsList.get(i);
 				if (currentStat.getVariance() > 0) {
 					NormalDistribution nd = new NormalDistribution(currentStat.getMean(),
