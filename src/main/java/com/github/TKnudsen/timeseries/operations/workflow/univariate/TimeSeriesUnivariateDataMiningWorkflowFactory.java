@@ -9,7 +9,7 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.features.numerical
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.numericalData.NormalizationRoutineFactory;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeSeriesUnivariatePreprocessor;
+import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessor;
 
 /**
  * <p>
@@ -25,18 +25,18 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.ITimeS
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class TimeSeriesUnivariateDataMiningWorkflowFactory {
 
 	public static TimeSeriesUnivariateDataMiningWorkflow createWorkflow(
-			List<ITimeSeriesUnivariatePreprocessor> preprocessingRoutines,
+			List<ITimeSeriesPreprocessor<ITimeSeriesUnivariate>> preprocessingRoutines,
 			INumericFeatureVectorDescriptor<ITimeSeriesUnivariate> descriptor, NormalizationType normalizationType,
 			IDistanceMeasure<NumericalFeatureVector> distanceMeasure) {
 
 		TimeSeriesUnivariateDataMiningWorkflow workflow = new TimeSeriesUnivariateDataMiningWorkflow();
 
-		for (ITimeSeriesUnivariatePreprocessor processor : preprocessingRoutines)
+		for (ITimeSeriesPreprocessor<ITimeSeriesUnivariate> processor : preprocessingRoutines)
 			workflow.addPreProcessor(processor);
 
 		workflow.setDescriptor(descriptor);
