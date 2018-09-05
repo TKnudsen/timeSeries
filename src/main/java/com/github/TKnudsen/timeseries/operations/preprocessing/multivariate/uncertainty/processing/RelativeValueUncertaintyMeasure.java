@@ -9,7 +9,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
 /**
  * <p>
- * Title: RelativeValueUncertantyMeasure
+ * Title: RelativeValueUncertaintyMeasure
  * </p>
  * 
  * <p>
@@ -23,12 +23,12 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * @author Juergen Bernard
  * @version 1.03
  */
-public class RelativeValueUncertantyMeasure
+public class RelativeValueUncertaintyMeasure
 		extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate, NumericalUncertainty> {
 
 	private static Double epsilon = 0.000000001;
 
-	public RelativeValueUncertantyMeasure() {
+	public RelativeValueUncertaintyMeasure() {
 		super();
 	}
 
