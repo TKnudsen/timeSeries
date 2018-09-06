@@ -1,5 +1,11 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
@@ -52,5 +58,35 @@ public class TimeQuantizationTools {
 		long endTime = tsd.getLastTimestamp();
 		long newBinCount = (endTime - startTime) / quantization / quantizationTypeToLong(qType);
 		return newBinCount < binCount * 10;
+	}
+	
+	public static SortedMap<Long, Integer> calculateQuantizationDistribution(ITimeSeries<?> tsd) {		
+		SortedMap<Long, Integer> quantizationDist = new TreeMap<Long, Integer>();
+		long prevTimeStamp = tsd.getFirstTimestamp();
+		for(int i = 1; i < tsd.getTimestamps().size(); i++) {
+			long nextTimeStamp = tsd.getTimestamp(i);			
+			long quantization = Math.abs(nextTimeStamp - prevTimeStamp);
+			if(quantizationDist.containsKey(quantization)) {
+				quantizationDist.put(quantization, quantizationDist.get(quantization) + 1);
+			} else {
+				quantizationDist.put(quantization, 1);
+			}
+			prevTimeStamp = nextTimeStamp;
+		}
+		return quantizationDist;		
+	}
+	
+	public static long guessQuantization(ITimeSeries<?> tsd) {				
+		SortedMap<Long, Integer> quantizationDist = calculateQuantizationDistribution(tsd);		
+		List<Entry<Long, Integer>> entrySet = new ArrayList<>(quantizationDist.entrySet());
+		entrySet.sort(Entry.comparingByValue());
+		for(Entry<Long, Integer> entry : entrySet) {
+			System.out.println(entry.getKey() + ": " + entry.getValue());
+		}
+		long quantizationGuess = 0;
+		if(entrySet.size() > 0) {
+			quantizationGuess = entrySet.get(0).getKey();
+		}			
+		return quantizationGuess;		
 	}
 }
