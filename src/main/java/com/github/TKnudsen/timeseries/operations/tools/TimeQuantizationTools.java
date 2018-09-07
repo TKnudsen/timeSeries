@@ -60,6 +60,11 @@ public class TimeQuantizationTools {
 		return newBinCount < binCount * 10;
 	}
 	
+	/**
+	 * 
+	 * @param tsd
+	 * @return
+	 */
 	public static SortedMap<Long, Integer> calculateQuantizationDistribution(ITimeSeries<?> tsd) {		
 		SortedMap<Long, Integer> quantizationDist = new TreeMap<Long, Integer>();
 		long prevTimeStamp = tsd.getFirstTimestamp();
@@ -76,6 +81,11 @@ public class TimeQuantizationTools {
 		return quantizationDist;		
 	}
 	
+	/**
+	 * 
+	 * @param tsd
+	 * @return
+	 */
 	public static long guessQuantization(ITimeSeries<?> tsd) {				
 		SortedMap<Long, Integer> quantizationDist = calculateQuantizationDistribution(tsd);		
 		List<Entry<Long, Integer>> entrySet = new ArrayList<>(quantizationDist.entrySet());

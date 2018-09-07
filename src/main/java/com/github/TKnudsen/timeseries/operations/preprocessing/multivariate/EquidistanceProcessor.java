@@ -76,13 +76,11 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 
 	@Override
 	public DataProcessingCategory getPreprocessingCategory() {
-		// TODO Auto-generated method stub
-		return null;
+		return DataProcessingCategory.DATA_CLEANING;
 	}
 
 	@Override
 	public List<IDataProcessor<ITimeSeriesMultivariate>> getAlternativeParameterizations(int count) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
