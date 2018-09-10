@@ -24,12 +24,20 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	private IIntegerWeightingKernel kernel;
 	private boolean considerFutureValues = false;
+
+	/**
+	 * for serialization/reflection purposes.
+	 */
+	@SuppressWarnings("unused")
+	private MovingAverage() {
+		this(3, true);
+	}
 
 	public MovingAverage(int kernelInterval, boolean considerFutureValues) {
 		this(new LinearIndexWeightingKernel(kernelInterval), considerFutureValues);

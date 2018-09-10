@@ -26,6 +26,14 @@ public class MinMaxNormalization extends DimensionBasedTimeSeriesMultivariatePro
 
 	private boolean globalMinMax;
 
+	/**
+	 * for serialization/reflection purposes
+	 */
+	@SuppressWarnings("unused")
+	private MinMaxNormalization() {
+		this(false);
+	}
+
 	public MinMaxNormalization(boolean globalMinMax) {
 		this.globalMinMax = globalMinMax;
 	}

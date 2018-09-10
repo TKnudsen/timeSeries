@@ -21,11 +21,18 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class DefaultTimeSeriesMultivariateTemporalDescriptor extends DefaultTimeSeriesMultivariateDescriptor {
 
 	private long kernelTime = 100L;
+
+	/**
+	 * for serialization/reflection purposes
+	 */
+	private DefaultTimeSeriesMultivariateTemporalDescriptor() {
+		this(100L);
+	}
 
 	public DefaultTimeSeriesMultivariateTemporalDescriptor(long kernelTime) {
 		this.kernelTime = kernelTime;
