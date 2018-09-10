@@ -49,6 +49,9 @@ public abstract class DimensionBasedTimeSeriesMultivariateProcessor
 
 	@Override
 	public DataProcessingCategory getPreprocessingCategory() {
+		if (univariateTimeSeriesProcessor == null)
+			initializeUnivariateTimeSeriesProcessor();
+
 		return univariateTimeSeriesProcessor.getPreprocessingCategory();
 	}
 
