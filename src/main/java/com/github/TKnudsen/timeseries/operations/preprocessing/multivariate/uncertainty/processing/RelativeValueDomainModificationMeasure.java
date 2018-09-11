@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
@@ -25,7 +26,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
- * @author Juergen Bernard
+ * @author Juergen Bernard, Christian Bors
  * @version 1.03
  */
 public class RelativeValueDomainModificationMeasure
@@ -52,6 +53,116 @@ public class RelativeValueDomainModificationMeasure
 		return "Calculates the relative change of the value domains of a given MVTS over time";
 	}
 
+	@Override
+	public void calculateUncertainty(ITimeSeriesMultivariate originalData, ITimeSeriesMultivariate processedData) {
+		uncertaintiesOverTime = new TreeMap<>();
+
+		int maxSampleSize = originalData.getTimestamps().size();
+		Random samplingGenerator = new Random();
+		List<StatisticsSupport> samplingStatsList = new ArrayList<>();
+		List<NormalDistribution> normalDistributions = new ArrayList<>();
+
+		List<Double> originalValues;
+		List<Double> modifiedValues;
+
+		Iterator<Long> tsIt;
+		if (originalData.getTimestamps().size() > processedData.getTimestamps().size()) {
+			tsIt = originalData.getTimestamps().iterator();
+		} else {
+			tsIt = processedData.getTimestamps().iterator();
+		}
+		
+		for (int i = 0; i < processedData.getDimensionality(); ++i)
+			samplingStatsList.add(new StatisticsSupport(new ArrayList<>()));
+
+		int samplesNeeded = (int) (maxSampleSize * this.samplingRate);
+		// this loop calculates a random number based on the timeStamp size
+		while (samplesNeeded > 0 && tsIt.hasNext()) {
+			int rand = samplingGenerator.nextInt(maxSampleSize);
+
+			// only add value if it is below the samples needed value
+			if (rand < samplesNeeded) {
+				Long timeStamp = tsIt.next();
+				originalValues = originalData.getValue(timeStamp, false);
+
+				try {
+					modifiedValues = processedData.getValue(timeStamp, false);
+				} catch (Exception e) {
+					continue;
+				}
+				ListIterator<Double> modIt = modifiedValues.listIterator();
+				ListIterator<Double> origIt = originalValues.listIterator();
+				while (origIt.hasNext()) {
+					int dimensionIdx = origIt.nextIndex();
+					Double origVal = origIt.next();
+					Double modVal = modIt.next();
+
+					if (modVal == null)
+						samplingStatsList.get(dimensionIdx).addValue(1.0);
+					else
+						samplingStatsList.get(dimensionIdx).addValue(getRelativeValue(origVal, modVal));
+
+				}
+				samplesNeeded--;
+			} else {
+				tsIt.next();
+			}
+		}
+
+		for (StatisticsSupport stats : samplingStatsList) {
+			if (stats.getVariance() > 0)
+				normalDistributions.add(new NormalDistribution(stats.getMean(),
+						Math.sqrt(stats.getVariance())));
+			else
+				normalDistributions.add(null);
+		}
+
+		for (Long timeStamp : originalData.getTimestamps()) {
+			originalValues = originalData.getValue(timeStamp, false);
+			modifiedValues = null;
+
+			try {
+				modifiedValues = processedData.getValue(timeStamp, false);
+			} catch (Exception e) {
+				// System.err.println(
+				// getName() + ": unable to retrieve time stamp of original time series in
+				// modified time series");
+				// uncertaintiesOverTime.put(timeStamp, new NumericalUncertainty(relatives));
+				continue;
+			}
+
+			List<Double> deviations = new ArrayList<>(originalValues.size());
+			// // TODO please validate
+			for (int i = 0; i < originalValues.size(); i++) {
+				// we assume that our relative deviation is normally distributed
+				if (samplingStatsList.get(i).getVariance() > 0) {
+					Double originalValue = originalValues.get(i);
+					Double modifiedValue = modifiedValues.get(i);
+					if (originalValue == null ^ modifiedValue == null) // exclusive or, change is maximal if either value is null
+						deviations.add(1.0);
+
+					// relative difference
+					Double relativeValue = getRelativeValue(originalValue, modifiedValue);
+					// normalized relative difference
+					Double normalizedRelDif = Math.abs(relativeValue - samplingStatsList.get(i).getMean());
+					// cumulative probability
+					Double cumProb = normalDistributions.get(i).cumulativeProbability(normalizedRelDif);
+					// subtracted by 0.5 (due to this being highest density around mean
+					cumProb -= 0.5;
+					// take absolute, to compensate for small variations around mean
+					cumProb = Math.abs(cumProb);
+
+					// absolute value of difference between cumulative prob. of relative difference,
+					// normalized by mean
+					deviations.add(Math.abs(cumProb));
+				} else {
+					deviations.add(0.0);
+				}
+			}
+			uncertaintiesOverTime.put(timeStamp, new NumericalUncertainty(deviations));
+		}
+	}
+
 	private double getRelativeValue(double originalValue, double modifiedValue) {
 		// relative change.
 		if (originalValue == 0)
@@ -69,113 +180,4 @@ public class RelativeValueDomainModificationMeasure
 			return relativeValue;
 		}
 	}
-
-	@Override
-	public void calculateUncertainty(ITimeSeriesMultivariate originalData, ITimeSeriesMultivariate processedData) {
-		uncertaintiesOverTime = new TreeMap<>();
-
-		int maxSampleSize = originalData.getTimestamps().size();
-		List<Double> sampleRelatives = new ArrayList<>();
-		Random samplingGenerator = new Random();
-		List<StatisticsSupport> samplingStatsList = new ArrayList<StatisticsSupport>();
-
-		List<Double> originalValues;
-		List<Double> modifiedValues;
-		List<Double> relatives;
-
-		for (int i = 0; i <= maxSampleSize * this.samplingRate; ++i) {
-			int randIdx = samplingGenerator.nextInt(maxSampleSize);
-			Long timeStamp = originalData.getTimestamp(randIdx);
-			originalValues = originalData.getValue(timeStamp, false);
-			modifiedValues = null;
-
-			relatives = new ArrayList<>();
-			try {
-				modifiedValues = processedData.getValue(timeStamp, false);
-			} catch (Exception e) {
-				// System.err.println(
-				// getName() + ": unable to retrieve time stamp of original time series in
-				// modified time series");
-				// uncertaintiesOverTime.put(timeStamp, new NumericalUncertainty(relatives));
-				continue;
-			}
-
-			ListIterator<Double> modIt = modifiedValues.listIterator();
-			ListIterator<Double> origIt = originalValues.listIterator();
-			while (origIt.hasNext()) {
-				int idx = origIt.nextIndex();
-
-				StatisticsSupport stats = null;
-				if (!samplingStatsList.isEmpty() && idx < samplingStatsList.size())
-					stats = samplingStatsList.get(idx);
-				if (stats == null) {
-					stats = new StatisticsSupport(sampleRelatives);
-					samplingStatsList.add(idx, stats);
-				}
-
-				Double origVal = origIt.next();
-				Double modVal = modIt.next();
-
-				if (modVal == null)
-					stats.addValue(1.0);
-				else
-					stats.addValue(getRelativeValue(origVal, modVal));
-			}
-		}
-
-		for (Long timeStamp : originalData.getTimestamps()) {
-			originalValues = originalData.getValue(timeStamp, false);
-			modifiedValues = null;
-
-			relatives = new ArrayList<>();
-			try {
-				modifiedValues = processedData.getValue(timeStamp, false);
-			} catch (Exception e) {
-				// System.err.println(
-				// getName() + ": unable to retrieve time stamp of original time series in
-				// modified time series");
-				// uncertaintiesOverTime.put(timeStamp, new NumericalUncertainty(relatives));
-				continue;
-			}
-
-			// // TODO please validate
-			for (int i = 0; i < originalValues.size(); i++) {
-				// we assume that our distribution is normally distributed
-				// TODO the execution speed of this routine is terrible. Try to avoid defining a
-				// (hige) StatisticsSupport instance for every iteration.
-				StatisticsSupport currentStat = samplingStatsList.get(i);
-				if (currentStat.getVariance() > 0) {
-					NormalDistribution nd = new NormalDistribution(currentStat.getMean(),
-							Math.sqrt(currentStat.getVariance()));
-
-					Double originalValue = originalValues.get(i);
-					Double modifiedValue = modifiedValues.get(i);
-					if (modifiedValue == null)
-						relatives.add(1.0);
-
-					// relative difference
-					Double relativeValue = getRelativeValue(originalValue, modifiedValue);
-					// normalized relative difference
-					Double normalizedRelDif = Math.abs(relativeValue - currentStat.getMean());
-					// cumulative probability
-					Double cumProb = nd.cumulativeProbability(normalizedRelDif);
-					// subtracted by 0.5 (due to this being highest density around mean
-					cumProb -= 0.5;
-					// take absolute, to compensate for small variations around mean
-					cumProb = Math.abs(cumProb);
-
-					// absolute value of difference between cumulative prob. of relative difference,
-					// normalized by mean
-					relatives.add(Math.abs(cumProb));
-
-				} else {
-					relatives.add(0.0);
-				}
-			}
-
-			uncertaintiesOverTime.put(timeStamp, new NumericalUncertainty(relatives));
-		}
-
-	}
-
 }
