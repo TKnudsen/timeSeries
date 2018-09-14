@@ -73,4 +73,7 @@ public abstract class TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivar
 		return uncertaintiesOverTime;
 	}
 
+	public void addUncertaintiesOverTime(SortedMap<Long, U> uncertainties) {
+		this.uncertaintiesOverTime = uncertainties;
+	}
 }
