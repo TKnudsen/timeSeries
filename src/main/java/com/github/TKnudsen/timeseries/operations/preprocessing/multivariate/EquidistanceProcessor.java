@@ -1,6 +1,5 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 
-import java.util.Date;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
@@ -31,49 +30,23 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 	}
 
 	private void process(ITimeSeriesMultivariate timeSeries) {
-		long quantization = TimeQuantizationTools.guessQuantization(timeSeries);
-		long temporalOffset = guessTemporalOffset(quantization, timeSeries);
-				
-		for(int i = 0; i < timeSeries.getTimestamps().size(); i++) {
-
-			//TODO
-			System.out.println(new Date(timeSeries.getTimestamp(i)));
-		}
 		
-		System.out.println("Offset: " + new Date(temporalOffset));
+		List<Long> quantizationList = TimeQuantizationTools.getQuantizationList(timeSeries.getTimestamps());
+		List<Long> quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList);
+		int offsetIndex = TimeQuantizationTools.guessTemporalOffset(quantizationGuesses, quantizationList);		
+		long quantization = TimeQuantizationTools.getQuantizationFromTimeStampIndex(offsetIndex, quantizationList);
+				
+		for(int i = 0; i < timeSeries.getTimestamps().size(); i++) {						
+			System.out.println("index: " + i + ", timeStamp: " + timeSeries.getTimestamp(i));				
+		}
+		System.out.println("offsetIndex: " + offsetIndex);
+		System.out.println("quantization: " + quantization);
+				
+		//long offsetTimeStamp = timeSeries.getTimestamp(offsetIndex);
+		
+		// TODO	process
 	}
 	
-	private long guessTemporalOffset(long quantization, ITimeSeriesMultivariate timeSeries) {
-		
-		long offset = timeSeries.getFirstTimestamp();	
-			
-		if(timeSeries.getTimestamps().size() > 0) {		
-			
-			long prevTimeStamp = timeSeries.getFirstTimestamp();
-			long prevQuantization = Math.abs(timeSeries.getTimestamp(1) - prevTimeStamp);
-			
-			int max = 0;
-			int counter = 0;
-			
-			for(int i = 1; i < timeSeries.getTimestamps().size(); i++) {
-				long nextTimeStamp = timeSeries.getTimestamp(i);
-				long currentQuantization = Math.abs(nextTimeStamp - prevTimeStamp);
-				if(prevQuantization == currentQuantization) {
-					counter++;
-				} else {
-					if(prevQuantization == quantization && counter > max) {					
-						max = counter;							
-						offset = timeSeries.getTimestamp(i - max);						
-					}	
-					counter = 0;					
-				}								
-				prevTimeStamp = nextTimeStamp;			
-			}
-		}
-		
-		return offset;		
-	}
-
 	@Override
 	public DataProcessingCategory getPreprocessingCategory() {
 		return DataProcessingCategory.DATA_CLEANING;
