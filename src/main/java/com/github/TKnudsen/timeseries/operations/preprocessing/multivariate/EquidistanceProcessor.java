@@ -35,16 +35,20 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 		List<Long> quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList);
 		int offsetIndex = TimeQuantizationTools.guessTemporalOffset(quantizationGuesses, quantizationList);		
 		long quantization = TimeQuantizationTools.getQuantizationFromTimeStampIndex(offsetIndex, quantizationList);
-				
-		for(int i = 0; i < timeSeries.getTimestamps().size(); i++) {						
-			System.out.println("index: " + i + ", timeStamp: " + timeSeries.getTimestamp(i));				
+								
+		long offsetTimeStamp = timeSeries.getTimestamp(offsetIndex);
+		int j = 1;
+		for(int i = offsetIndex + 1; i < timeSeries.getTimestamps().size(); i++) {						
+			timeSeries.replaceTimeValue(i, offsetTimeStamp + j * quantization);		
+			j++;
 		}
-		System.out.println("offsetIndex: " + offsetIndex);
-		System.out.println("quantization: " + quantization);
-				
-		//long offsetTimeStamp = timeSeries.getTimestamp(offsetIndex);
-		
-		// TODO	process
+		if(offsetIndex > 0) {
+			int k = 1;
+			for(int i = offsetIndex - 1; i > -1; i--) {			
+				timeSeries.replaceTimeValue(i, offsetTimeStamp - k * quantization);		
+				k++;
+			}
+		}		
 	}
 	
 	@Override

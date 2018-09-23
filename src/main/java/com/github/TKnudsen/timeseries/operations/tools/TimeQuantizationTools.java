@@ -108,20 +108,20 @@ public class TimeQuantizationTools {
 		SortedMap<Long, Integer> quantizationDist = calculateQuantizationDistribution(quantizationList);
 		List<Entry<Long, Integer>> quantizationDistEntryList = new ArrayList<>(quantizationDist.entrySet());
 		quantizationDistEntryList.sort(Collections.reverseOrder(Entry.comparingByValue()));
-
+				
 		List<Long> quantizationGuesses = new ArrayList<Long>();
 		if (quantizationDistEntryList.size() > 0) {
 			long firstGuess = quantizationDistEntryList.get(0).getKey();
-			long firstGuessValue = quantizationDistEntryList.get(0).getValue();
+			long firstGuessOccurences = quantizationDistEntryList.get(0).getValue();
 			quantizationGuesses.add(firstGuess);
 			if (quantizationDistEntryList.size() > 1) {
-				int i = 1;
-				while (quantizationDistEntryList.get(i).getValue() == firstGuessValue) {
+				int i = 1; 
+				while (i < quantizationDistEntryList.size() && quantizationDistEntryList.get(i).getValue() == firstGuessOccurences) {
 					quantizationGuesses.add(quantizationDistEntryList.get(i).getKey());
 					i++;
 				}
 			}
-		}		
+		}				
 		return quantizationGuesses;
 	}
 	
@@ -131,12 +131,11 @@ public class TimeQuantizationTools {
 	 * @param quantizationList
 	 * @return timeStamp distance for the given timeStamp index
 	 */
-	public static long getQuantizationFromTimeStampIndex(int timeStampIndex, List<Long> quantizationList) {
-		long quantization = 0;
-		if(timeStampIndex > 0 && timeStampIndex < quantizationList.size()) {
-			quantization = quantizationList.get(timeStampIndex);			
+	public static long getQuantizationFromTimeStampIndex(int timeStampIndex, List<Long> quantizationList) {		
+		if(timeStampIndex > -1 && timeStampIndex < quantizationList.size()) {
+			return quantizationList.get(timeStampIndex);			
 		}
-		return quantization;		
+		return 0;		
 	}
 
 	/**

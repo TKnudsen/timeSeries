@@ -66,5 +66,4 @@ public class UnivariateSymbolicTimeSeries extends TimeSeriesWithTimeValuePairs<S
 
 		throw new IllegalArgumentException("TimeSeriesUnivariate.getValue(long): time stamp does not exist");
 	}
-
 }

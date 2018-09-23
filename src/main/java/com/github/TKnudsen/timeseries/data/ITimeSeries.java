@@ -87,6 +87,8 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	void removeTimeValue(long timestamp);
 
 	void removeTimeValue(int index);
+	
+	void replaceTimeValue(int index, long timestamp);
 
 	void replaceValue(int index, T value);
 

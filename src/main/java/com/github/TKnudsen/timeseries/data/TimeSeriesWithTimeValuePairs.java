@@ -277,9 +277,20 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 
 		resetHash();
 	}
+	
+	@Override
+	public void replaceTimeValue(int index, long timestamp) throws IllegalArgumentException {
+		
+		if (index < 0 || index >= timeStamps.size())
+			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
+		
+		timeStamps.set(index, timestamp);
+		
+		resetHash();
+	}
 
 	@Override
-	public void replaceValue(int index, T value) {
+	public void replaceValue(int index, T value) throws IllegalArgumentException {
 		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
 

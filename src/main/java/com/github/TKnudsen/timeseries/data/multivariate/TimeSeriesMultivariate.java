@@ -218,6 +218,12 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			timeSeriesUnivariateList.get(i).removeTimeValue(index);
 	}
+	
+	@Override
+	public void replaceTimeValue(int index, long timestamp) {
+		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
+			timeSeriesUnivariateList.get(i).replaceTimeValue(index, timestamp);		
+	}
 
 	@Override
 	public void replaceValue(int index, List<Double> values) {
