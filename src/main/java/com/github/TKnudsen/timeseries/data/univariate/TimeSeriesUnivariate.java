@@ -320,9 +320,19 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 		resetHash();
 	}
+	
+	@Override
+	public void replaceTimeValue(int index, long timestamp) throws IllegalArgumentException {
+		if (index < 0 || index >= timeStamps.size())
+			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
+		
+		timeStamps.set(index, timestamp);
+		
+		resetHash();
+	}
 
 	@Override
-	public void replaceValue(int index, Double value) {
+	public void replaceValue(int index, Double value) throws IllegalArgumentException {
 		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
 
@@ -474,5 +484,5 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		// be equal?
 
 		return true;
-	}
+	}	
 }
