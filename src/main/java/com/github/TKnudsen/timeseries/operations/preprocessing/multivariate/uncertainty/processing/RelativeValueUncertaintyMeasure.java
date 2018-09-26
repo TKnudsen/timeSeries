@@ -21,10 +21,9 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class RelativeValueUncertaintyMeasure
-		extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate, NumericalUncertainty> {
+public class RelativeValueUncertaintyMeasure extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate> {
 
 	private static Double epsilon = 0.000000001;
 
