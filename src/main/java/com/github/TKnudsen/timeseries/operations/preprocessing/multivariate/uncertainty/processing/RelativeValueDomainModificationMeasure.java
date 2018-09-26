@@ -27,10 +27,10 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard, Christian Bors
- * @version 1.03
+ * @version 1.04
  */
 public class RelativeValueDomainModificationMeasure
-		extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate, NumericalUncertainty> {
+		extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate> {
 
 	private static Double epsilon = 0.000000001;
 	private Double samplingRate = 0.4;
@@ -71,7 +71,7 @@ public class RelativeValueDomainModificationMeasure
 		} else {
 			tsIt = processedData.getTimestamps().iterator();
 		}
-		
+
 		for (int i = 0; i < processedData.getDimensionality(); ++i)
 			samplingStatsList.add(new StatisticsSupport(new ArrayList<>()));
 
@@ -111,8 +111,7 @@ public class RelativeValueDomainModificationMeasure
 
 		for (StatisticsSupport stats : samplingStatsList) {
 			if (stats.getVariance() > 0)
-				normalDistributions.add(new NormalDistribution(stats.getMean(),
-						Math.sqrt(stats.getVariance())));
+				normalDistributions.add(new NormalDistribution(stats.getMean(), Math.sqrt(stats.getVariance())));
 			else
 				normalDistributions.add(null);
 		}
@@ -138,7 +137,8 @@ public class RelativeValueDomainModificationMeasure
 				if (samplingStatsList.get(i).getVariance() > 0) {
 					Double originalValue = originalValues.get(i);
 					Double modifiedValue = modifiedValues.get(i);
-					if (originalValue == null ^ modifiedValue == null) // exclusive or, change is maximal if either value is null
+					if (originalValue == null ^ modifiedValue == null) // exclusive or, change is maximal if either
+																		// value is null
 						deviations.add(1.0);
 
 					// relative difference
