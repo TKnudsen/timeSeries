@@ -150,16 +150,33 @@ public class WEKATimeSeriesConverter {
 
 		// add labels if class attribute exists
 		if (instances.classIndex() >= 0) {
-			List<String> labels = new ArrayList<String>();
-			for (int i = 0; i < instances.numInstances(); i++) {
-				Instance instance = instances.get(i);
-				labels.add(instance.stringValue(instances.classIndex()));
-			}
+			System.out.println(
+					"WEKATimeSeriesConverter.toTimeSeriesMultivariate: class index detected. creating a labeled time series");
 
-			return new TimeSeriesMultivariateLabeled(timeSeries, labels);
+			return labeledTimeSeries(instances, timeSeries, instances.classIndex());
+		} else {
+			for (int i = 0; i < instances.numAttributes(); i++)
+				if (instances.attribute(i).name().equals("class") || instances.attribute(i).name().equals("Class")
+						|| instances.attribute(i).name().equals("CLASS")) {
+					System.out.println(
+							"WEKATimeSeriesConverter.toTimeSeriesMultivariate: class attribute detected. creating a labeled time series");
+
+					return labeledTimeSeries(instances, timeSeries, i);
+				}
 		}
 
 		return timeSeries;
+	}
+
+	private static TimeSeriesMultivariateLabeled labeledTimeSeries(Instances instances,
+			ITimeSeriesMultivariate timeSeries, int classIndex) {
+		List<String> labels = new ArrayList<String>();
+		for (int i = 0; i < instances.numInstances(); i++) {
+			Instance instance = instances.get(i);
+			labels.add(instance.stringValue(classIndex));
+		}
+
+		return new TimeSeriesMultivariateLabeled(timeSeries, labels);
 	}
 
 }

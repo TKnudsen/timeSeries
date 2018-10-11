@@ -31,7 +31,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	private String description;
 
 	private List<ITimeSeriesUnivariate> timeSeriesUnivariateList;
-	List<String> attributeNames;
 	private List<Double> missingValueIndicators;
 
 	private int dimensionality;
@@ -64,7 +63,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 		if (timeSeriesNames != null)
 			if (timeSeriesUnivariateList.size() != timeSeriesNames.size())
-				throw new IllegalArgumentException("TimeSeriesMultivariate: content and attributes have different sizes");
+				throw new IllegalArgumentException(
+						"TimeSeriesMultivariate: content and attributes have different sizes");
 
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			if (timeSeriesNames != null && timeSeriesNames.get(i) != null)
@@ -73,7 +73,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 				timeSeriesUnivariateList.get(i).setName("");
 	}
 
-	public TimeSeriesMultivariate(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList, List<String> timeSeriesNames) {
+	public TimeSeriesMultivariate(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList,
+			List<String> timeSeriesNames) {
 		this.id = id;
 		this.timeSeriesUnivariateList = timeSeriesUnivariateList;
 
@@ -81,7 +82,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 		if (timeSeriesNames != null)
 			if (timeSeriesUnivariateList.size() != timeSeriesNames.size())
-				throw new IllegalArgumentException("TimeSeriesMultivariate: content and attributes have different sizes");
+				throw new IllegalArgumentException(
+						"TimeSeriesMultivariate: content and attributes have different sizes");
 
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			timeSeriesUnivariateList.get(i).setName(timeSeriesNames.get(i));
@@ -156,7 +158,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	}
 
 	@Override
-	public List<Double> getValue(long timestamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException {
+	public List<Double> getValue(long timestamp, boolean allowInterpolation)
+			throws IndexOutOfBoundsException, IllegalArgumentException {
 		List<Double> values = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++) {
 			values.add(timeSeriesUnivariateList.get(i).getValue(timestamp, allowInterpolation));
@@ -218,11 +221,11 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			timeSeriesUnivariateList.get(i).removeTimeValue(index);
 	}
-	
+
 	@Override
 	public void replaceTimeValue(int index, long timestamp) {
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
-			timeSeriesUnivariateList.get(i).replaceTimeValue(index, timestamp);		
+			timeSeriesUnivariateList.get(i).replaceTimeValue(index, timestamp);
 	}
 
 	@Override
@@ -296,13 +299,11 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public List<String> getAttributeNames() {
-		if (attributeNames != null)
-			return attributeNames;
+		List<String> attributeNames = new ArrayList<>();
 
-		attributeNames = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			attributeNames.add(timeSeriesUnivariateList.get(i).getName());
-		attributeNames = Collections.unmodifiableList(attributeNames);
+
 		return attributeNames;
 	}
 
@@ -336,7 +337,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 		if (ts != null)
 			if (index < 0 || index >= ts.size())
-				throw new IndexOutOfBoundsException("TimeSeriesMultivariate: required index (dimension) not meaningful");
+				throw new IndexOutOfBoundsException(
+						"TimeSeriesMultivariate: required index (dimension) not meaningful");
 
 		return ts.getValue(index);
 	}
