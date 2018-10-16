@@ -106,7 +106,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 		for (int i = 0; i < timeStamps.size() - 1; i++)
 			if (timeStamps.get(i) >= timeStamps.get(i + 1))
-				throw new IllegalArgumentException("TimeSeriesUnivariate: temporal information needs to be sorted and unique");
+				throw new IllegalArgumentException(
+						"TimeSeriesUnivariate: temporal information needs to be sorted and unique");
 
 		resetHash();
 	}
@@ -147,7 +148,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public Double getValue(long timeStamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException {
+	public Double getValue(long timeStamp, boolean allowInterpolation)
+			throws IndexOutOfBoundsException, IllegalArgumentException {
 		if (allowInterpolation) {
 			int index = findByDate(timeStamp, false);
 			if (getTimestamp(index) == timeStamp)
@@ -157,7 +159,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 				double vBefore = getValue(index);
 
 				if (timeStamps.size() - 1 < index + 1)
-					throw new IndexOutOfBoundsException("TimeSeriesUnivariate.getValue: given time stamp outside bouds");
+					throw new IndexOutOfBoundsException(
+							"TimeSeriesUnivariate.getValue: given time stamp outside bouds");
 				long lAfter = getTimestamp(index + 1);
 				double vAfter = getValue(index + 1);
 
@@ -214,7 +217,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		return interpolationSearch(0, timeStamps.size() - 1, timeStamp, requireExactMatch);
 	}
 
-	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
+	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch)
+			throws IllegalArgumentException {
 		if (indexStart > indexEnd)
 			System.out.println("Debug: this must be fixed for the next release!");
 
@@ -320,14 +324,14 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 
 		resetHash();
 	}
-	
+
 	@Override
 	public void replaceTimeValue(int index, long timestamp) throws IllegalArgumentException {
 		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
-		
+
 		timeStamps.set(index, timestamp);
-		
+
 		resetHash();
 	}
 
@@ -382,7 +386,8 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	public String toString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		for (int i = 0; i < this.size(); i++)
-			stringBuffer.append(new Date(timeStamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
+			stringBuffer
+					.append(new Date(timeStamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
 
 		return stringBuffer.toString();
 	}
@@ -480,9 +485,6 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 			if (getTimestamp(i) != otherTimeSeries.getTimestamp(i) || getValue(i) != otherTimeSeries.getValue(i))
 				return false;
 
-		// TODO decision needed: do the attributes (not the time-values) need to
-		// be equal?
-
 		return true;
-	}	
+	}
 }
