@@ -9,9 +9,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcess
 import com.github.TKnudsen.timeseries.operations.tools.TimeQuantizationTools;
 
 public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
-			
+
 	public EquidistanceProcessor() {
-		
+
 	}
 
 	@Override
@@ -30,27 +30,32 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 	}
 
 	private void process(ITimeSeriesMultivariate timeSeries) {
-		
+
 		List<Long> quantizationList = TimeQuantizationTools.getQuantizationList(timeSeries.getTimestamps());
 		List<Long> quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList);
-		int offsetIndex = TimeQuantizationTools.guessTemporalOffset(quantizationGuesses, quantizationList);		
+
+		// Long newStartTimeStamp
+
+		int offsetIndex = TimeQuantizationTools.guessTemporalOffset(quantizationGuesses, quantizationList);
 		long quantization = TimeQuantizationTools.getQuantizationFromTimeStampIndex(offsetIndex, quantizationList);
-								
+
+		// TimeSeriesTools.getInterpolatedValue(timeSeries, time1, time2, target)
+
 		long offsetTimeStamp = timeSeries.getTimestamp(offsetIndex);
 		int j = 1;
-		for(int i = offsetIndex + 1; i < timeSeries.getTimestamps().size(); i++) {						
-			timeSeries.replaceTimeValue(i, offsetTimeStamp + j * quantization);		
+		for (int i = offsetIndex + 1; i < timeSeries.getTimestamps().size(); i++) {
+			timeSeries.replaceTimeValue(i, offsetTimeStamp + j * quantization);
 			j++;
 		}
-		if(offsetIndex > 0) {
+		if (offsetIndex > 0) {
 			int k = 1;
-			for(int i = offsetIndex - 1; i > -1; i--) {			
-				timeSeries.replaceTimeValue(i, offsetTimeStamp - k * quantization);		
+			for (int i = offsetIndex - 1; i > -1; i--) {
+				timeSeries.replaceTimeValue(i, offsetTimeStamp - k * quantization);
 				k++;
 			}
-		}		
+		}
 	}
-	
+
 	@Override
 	public DataProcessingCategory getPreprocessingCategory() {
 		return DataProcessingCategory.DATA_CLEANING;
