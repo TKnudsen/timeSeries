@@ -2,9 +2,7 @@ package com.github.TKnudsen.timeseries.operations.tools;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -88,7 +86,7 @@ public class TimeQuantizationTools {
 	 */
 	public static SortedMap<Long, Integer> calculateQuantizationDistribution(List<Long> quantizationList) {
 		SortedMap<Long, Integer> quantizationDist = new TreeMap<Long, Integer>();
-		for (long quantization : quantizationList) {
+		for (Long quantization : quantizationList) {
 			if (quantizationDist.containsKey(quantization)) {
 				quantizationDist.put(quantization, quantizationDist.get(quantization) + 1);
 			} else {
@@ -128,66 +126,95 @@ public class TimeQuantizationTools {
 	}
 
 	/**
-	 * 
-	 * @param timeStampIndex
-	 * @param quantizationList
-	 * @return timeStamp distance for the given timeStamp index
+	 *
+	 * @param <X>
+	 * @param <Y>
 	 */
-	public static long getQuantizationFromTimeStampIndex(int timeStampIndex, List<Long> quantizationList) {
-		if (timeStampIndex > -1 && timeStampIndex < quantizationList.size()) {
-			return quantizationList.get(timeStampIndex);
-		}
-		return 0;
-	}
-
+	public static class TimeStampQuantizationTuple<X, Y> { 
+		  public final X timeStamp; 
+		  public final Y quantization; 		  
+		  public TimeStampQuantizationTuple(X timeStamp, Y quantization) { 
+		    this.timeStamp = timeStamp; 
+		    this.quantization = quantization; 
+		  }		 
+	} 
+	
 	/**
 	 * 
 	 * @param quantizationGuesses
-	 * @param quantizationList
-	 * @return timeStamp offset index for equidistance. The start of the timeStamp
-	 *         distance series with the most consecutive occurrences will be used
+	 * @param timeStamps
+	 * @return
 	 */
-	public static int guessTemporalOffset(List<Long> quantizationGuesses, List<Long> quantizationList) {
+	public static TimeStampQuantizationTuple<Long, Long> guessStartTimeStamp(List<Long> quantizationGuesses, List<Long> timeStamps) {
 
-		int maxConsecutive = 0;
-		int offsetIndex = 0;
-
-		for (long quantizationGuess : quantizationGuesses) {
-
-			List<Integer> startIndexList = new ArrayList<Integer>();
-
-			if (quantizationList.get(0).equals(quantizationGuess)) {
-				startIndexList.add(0);
-			}
-			for (int i = 1; i < quantizationList.size(); i++) {
-				if (quantizationList.get(i).equals(quantizationGuess)) {
-					if (!quantizationList.get(i - 1).equals(quantizationGuess)) {
-						startIndexList.add(i);
+		Long bestStartTimeStamp = timeStamps.get(0);	
+		Long bestQuantization = quantizationGuesses.get(0);
+		
+		int minimalCountAllGuesses = Integer.MAX_VALUE;		
+		
+		for (Long quantizationCandidate : quantizationGuesses) {	
+						
+			Long startTimeStampCandidate = bestStartTimeStamp;
+			
+			int minimalCountForQuantizationGuess = Integer.MAX_VALUE;	
+			
+			for(Long startTimeStamp : timeStamps) {
+								
+				int opCountForStartTimeStamp = 0;
+								
+				Long timeStamp = startTimeStamp;
+				int i = 1;
+				
+				Long firstTimeStamp = timeStamps.get(0);
+				Long lastTimeStamp = timeStamps.get(timeStamps.size()-1);
+				
+				while(timeStamp < lastTimeStamp) {
+					
+					timeStamp = startTimeStamp + i * quantizationCandidate;	
+					long prevTimeStamp = timeStamp - quantizationCandidate;
+										
+					if(!timeStamps.contains(timeStamp)) {
+						opCountForStartTimeStamp++;
 					}
-				}
-			}
-
-			Map<Integer, Integer> startIndexCount = new HashMap<Integer, Integer>();
-
-			for (int startIndex : startIndexList) {
-				startIndexCount.put(startIndex, 0);
-				for (int i = startIndex; i < quantizationList.size(); i++) {
-					if (quantizationList.get(i).equals(quantizationGuess)) {
-						startIndexCount.put(startIndex, startIndexCount.get(startIndex) + 1);
-					} else {
-						break;
+					for(Long tS : timeStamps) {
+						if(prevTimeStamp < tS && tS < timeStamp && timeStamp != lastTimeStamp) {
+							opCountForStartTimeStamp++;
+						}
+					}									
+					i++;
+				}		
+				
+				timeStamp = startTimeStamp;
+				i = 1;		
+				
+				while(timeStamp > firstTimeStamp) {	
+					
+					timeStamp = startTimeStamp - i * quantizationCandidate;
+					long nextTimeStamp = timeStamp + quantizationCandidate;
+									
+					if(!timeStamps.contains(timeStamp)) {
+						opCountForStartTimeStamp++;
 					}
+					for(Long tS : timeStamps) {
+						if(timeStamp < tS && tS < nextTimeStamp && timeStamp != lastTimeStamp) {
+							opCountForStartTimeStamp++;
+						}
+					}														
+					i++;
+				}	
+								
+				if(opCountForStartTimeStamp < minimalCountForQuantizationGuess) {
+					minimalCountForQuantizationGuess = opCountForStartTimeStamp;
+					startTimeStampCandidate = startTimeStamp;
 				}
 			}
-
-			for (Entry<Integer, Integer> entry : startIndexCount.entrySet()) {
-				if (maxConsecutive < entry.getValue()) {
-					maxConsecutive = entry.getValue();
-					offsetIndex = entry.getKey();
-				}
+			
+			if(minimalCountForQuantizationGuess < minimalCountAllGuesses) {
+				minimalCountAllGuesses = minimalCountForQuantizationGuess;
+				bestQuantization = quantizationCandidate;
+				bestStartTimeStamp = startTimeStampCandidate;
 			}
-		}
-
-		return offsetIndex;
+		}	
+		return new TimeStampQuantizationTuple<Long, Long>(bestStartTimeStamp, bestQuantization);
 	}
 }
