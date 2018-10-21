@@ -473,6 +473,29 @@ public final class TimeSeriesTools {
 
 		return returnTimeSeries;
 	}
+	
+	/**
+	 * 
+	 * @param timeSeries
+	 * @param time
+	 * @return
+	 */
+	public static List<Long> getNearestNeighbors(ITimeSeriesUnivariate timeSeries, Long time) {
+
+		List<Long> nearestNeighbors = new ArrayList<Long>();
+		long timeStampLower = timeSeries.getFirstTimestamp();
+		long timeStampUpper = timeSeries.getLastTimestamp();
+		for (int i = 0; i < timeSeries.getTimestamps().size() - 1; i++) {
+			timeStampLower = timeSeries.getTimestamp(i);
+			timeStampUpper = timeSeries.getTimestamp(i + 1);
+			if (timeStampLower <= time && time <= timeStampUpper) {
+				nearestNeighbors.add(timeStampLower);
+				nearestNeighbors.add(timeStampUpper);
+				break;
+			} 
+		}		
+		return nearestNeighbors;
+	}
 
 	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, Long time1, Long time2, Long target) throws IllegalArgumentException, IndexOutOfBoundsException {
 		if (timeSeries == null || time1 == null || time2 == null || target == null)
@@ -493,7 +516,7 @@ public final class TimeSeriesTools {
 		// may throw an IllegalArgumentException if time stamps don't exist
 		double value1 = timeSeries.getValue(time1, false);
 		double value2 = timeSeries.getValue(time2, false);
-
+			
 		return value1 + ((target - time1) / (double) (time2 - time1) * (value2 - value1));
 	}
 
