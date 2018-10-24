@@ -21,6 +21,8 @@ public class EquidistanceProcessorTester {
 		List<ITimeSeriesMultivariate> tSList2 = generateRandomNonEquiMultivariateTimeSeriesList();
 		List<ITimeSeriesMultivariate> tSList3 = generateRandomEquiMultivariateTimeSeriesList();
 		List<ITimeSeriesMultivariate> tSList4 = generateCustomNonEquiMultivariateTimeSeriesList(1);
+		
+		//tSList1.get(0).removeTimeValue(tSList1.get(0).getLastTimestamp());
 
 		EquidistanceProcessor processor = new EquidistanceProcessor();
 
