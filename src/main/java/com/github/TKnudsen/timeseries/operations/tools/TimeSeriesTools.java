@@ -480,7 +480,7 @@ public final class TimeSeriesTools {
 	 * @param time
 	 * @return
 	 */
-	public static List<Long> getNearestNeighbors(ITimeSeriesUnivariate timeSeries, Long time) {
+	public static List<Long> getNearestTimeStampNeighbors(ITimeSeriesUnivariate timeSeries, Long time) {
 
 		List<Long> nearestNeighbors = new ArrayList<Long>();
 		long timeStampLower = timeSeries.getFirstTimestamp();

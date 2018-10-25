@@ -70,15 +70,19 @@ public class TimeSeriesGenerator {
 		}
 
 		for (int i = 0; i < dimensionality; i++) {
+			
+			List<Long> timeStampsCopy = new ArrayList<>();
+			timeStampsCopy.addAll(timeStamps);
+			
 			List<Double> values = new ArrayList<>();
 			double lastValue = 0.5;
 
-			for (int j = 0; j < timeStamps.size(); j++) {
+			for (int j = 0; j < timeStampsCopy.size(); j++) {
 				values.add(lastValue);
 				lastValue = lastValue + Math.random() * 0.2 - 0.1;
 			}
 
-			timeSeriesUnivariateList.add(new TimeSeriesUnivariate(timeStamps, values, Double.NaN));
+			timeSeriesUnivariateList.add(new TimeSeriesUnivariate(timeStampsCopy, values, Double.NaN));
 			timeSeriesNames.add("" + i);
 		}
 
