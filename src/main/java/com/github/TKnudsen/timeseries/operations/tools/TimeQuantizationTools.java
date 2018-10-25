@@ -177,7 +177,7 @@ public class TimeQuantizationTools {
 						opCountForStartTimeStamp++;
 					}
 					for(Long tS : timeStamps) {
-						if(prevTimeStamp < tS && tS < timeStamp && timeStamp != lastTimeStamp) {
+						if(prevTimeStamp < tS && tS < timeStamp) {
 							opCountForStartTimeStamp++;
 						}
 					}									
@@ -196,7 +196,7 @@ public class TimeQuantizationTools {
 						opCountForStartTimeStamp++;
 					}
 					for(Long tS : timeStamps) {
-						if(timeStamp < tS && tS < nextTimeStamp && timeStamp != lastTimeStamp) {
+						if(timeStamp < tS && tS < nextTimeStamp) {
 							opCountForStartTimeStamp++;
 						}
 					}														

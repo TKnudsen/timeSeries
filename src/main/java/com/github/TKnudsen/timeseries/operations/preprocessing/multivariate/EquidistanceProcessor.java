@@ -14,8 +14,10 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
-	public EquidistanceProcessor() {
-
+	private boolean allowExtrapolatedTemporalBorders;
+	
+	public EquidistanceProcessor(boolean allowExtrapolatedTemporalBorders) {
+		this.allowExtrapolatedTemporalBorders = allowExtrapolatedTemporalBorders;
 	}
 
 	@Override
@@ -69,7 +71,7 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 			timeStamp = startTimeStamp + i * quantization;
 			long prevTimeStamp = timeStamp - quantization;
 		
-			insertInterpolatedEntry(timeSeries, timeStamp);
+			insertEntry(timeSeries, timeStamp);
 			removeEntriesBetween(timeSeries, prevTimeStamp, timeStamp);
 					
 			i++;
@@ -83,7 +85,7 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 			timeStamp = startTimeStamp - i * quantization;
 			long nextTimeStamp = timeStamp + quantization;
 			
-			insertInterpolatedEntry(timeSeries, timeStamp);
+			insertEntry(timeSeries, timeStamp);
 			removeEntriesBetween(timeSeries, timeStamp, nextTimeStamp);
 			
 			i++;
@@ -95,26 +97,64 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 	 * @param timeSeries
 	 * @param timeStamp
 	 */
-	private void insertInterpolatedEntry(ITimeSeriesMultivariate timeSeries, Long timeStamp) {
+	private void insertEntry(ITimeSeriesMultivariate timeSeries, Long timeStamp) {
 
-		List<Long> timeStamps = timeSeries.getTimestamps();		
-		if (!timeStamps.contains(timeStamp)) {
-			List<Double> interpolatedValues = new ArrayList<Double>();
-			List<ITimeSeriesUnivariate> timeSeriesUnivariateList = timeSeries.getTimeSeriesList();
+		List<Long> timeStamps = timeSeries.getTimestamps();
+		
+		if (!timeStamps.contains(timeStamp)) {			
 			
-			List<Long> nearestNeighbors = TimeSeriesTools.getNearestNeighbors(timeSeriesUnivariateList.get(0), timeStamp);			
-			
-			for (ITimeSeriesUnivariate timeSeriesUnivariate : timeSeriesUnivariateList) {
-				
-				if (!nearestNeighbors.isEmpty()) {
-					interpolatedValues.add(TimeSeriesTools.getInterpolatedValue(timeSeriesUnivariate,
-							nearestNeighbors.get(0), nearestNeighbors.get(nearestNeighbors.size() - 1), timeStamp));
-				}
-			}
-			if (!interpolatedValues.isEmpty()) {
-				timeSeries.insert(timeStamp, interpolatedValues);				
+			if(allowExtrapolatedTemporalBorders) {
+				if(timeStamp > timeSeries.getLastTimestamp()) {
+					insertNewBorderEntry(timeSeries, timeStamp, timeSeries.getLastTimestamp());
+				} else if(timeStamp < timeSeries.getFirstTimestamp()) {
+					insertNewBorderEntry(timeSeries, timeStamp, timeSeries.getFirstTimestamp());
+				} else {
+					insertInterpolatedEntry(timeSeries, timeStamp);	
+				}				
+			} else {
+				insertInterpolatedEntry(timeSeries, timeStamp);			
 			}
 		}
+	}
+	
+	private void insertNewBorderEntry(ITimeSeriesMultivariate timeSeries, Long timeStamp, Long timeStampWithValues) {
+				
+		List<ITimeSeriesUnivariate> timeSeriesUnivariateList = timeSeries.getTimeSeriesList();
+		
+		List<Double> values = new ArrayList<Double>();
+		
+		for (ITimeSeriesUnivariate timeSeriesUnivariate : timeSeriesUnivariateList) {		
+			values.add(timeSeriesUnivariate.getValue(timeStampWithValues, false));
+		}	
+		
+		if (values.size() == timeSeriesUnivariateList.size()) {
+			timeSeries.insert(timeStamp, values);
+		}
+			
+	}
+	
+	private void insertInterpolatedEntry(ITimeSeriesMultivariate timeSeries, Long timeStamp) {
+				
+		List<ITimeSeriesUnivariate> timeSeriesUnivariateList = timeSeries.getTimeSeriesList();
+		
+		List<Long> nearestTimeStampNeighbors = TimeSeriesTools.getNearestTimeStampNeighbors(timeSeriesUnivariateList.get(0), timeStamp);	
+		
+		List<Double> interpolatedValues = new ArrayList<Double>();
+		
+		if (nearestTimeStampNeighbors.size() == 2) {
+			
+			Long neighborPrev = nearestTimeStampNeighbors.get(0);
+			Long neighborNext = nearestTimeStampNeighbors.get(nearestTimeStampNeighbors.size() - 1);		
+				
+			for (ITimeSeriesUnivariate timeSeriesUnivariate : timeSeriesUnivariateList) {					
+				double value = TimeSeriesTools.getInterpolatedValue(timeSeriesUnivariate, neighborPrev, neighborNext, timeStamp);
+				interpolatedValues.add(value);					
+			}
+		}
+		
+		if (interpolatedValues.size() == timeSeriesUnivariateList.size()) {
+			timeSeries.insert(timeStamp, interpolatedValues);				
+		}		
 	}
 	
 	/**
@@ -130,7 +170,7 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 			timeStamps.add(timeStamp);
 		}
 		for(Long timeStamp : timeStamps) {
-			if(timeStamp1 < timeStamp && timeStamp < timeStamp2 && timeStamp != timeSeries.getLastTimestamp()) {							
+			if(timeStamp1 < timeStamp && timeStamp < timeStamp2) {							
 				timeSeries.removeTimeValue(timeStamp);				
 			}			
 		}
