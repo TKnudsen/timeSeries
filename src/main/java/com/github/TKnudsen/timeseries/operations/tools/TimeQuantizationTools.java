@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
+import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 
 /**
  * <p>
@@ -98,29 +99,73 @@ public class TimeQuantizationTools {
 
 	/**
 	 * 
-	 * @param quantizationList
-	 * @return List with quantization suggestions, criterion: most occurrences. In
-	 *         future, other concepts/heuristics may also be considered (greatest
-	 *         common divisor, least common multiple, etc.)
+	 * @param a
+	 * @param b
+	 * @return
 	 */
-	public static List<Long> guessQuantization(List<Long> quantizationList) {
+	private static Long gcd(Long a, Long b) {
+		if (a == 0)
+			return b;
+		return gcd(b % a, a);
+	}
+		
+	/**
+	 * 
+	 * @param quantizationList
+	 * @return
+	 */
+	private static Long findGCD(List<Long> quantizationList) {
+		Long result = quantizationList.get(0);
+		for (int i = 1; i < quantizationList.size(); i++) {
+			result = gcd(quantizationList.get(i), result);
+		}
+		return result;
+	}
+		
+	/**
+	 * 
+	 * @param quantizationList
+	 * @return
+	 */
+	private static List<Long> findQuantizationWithMostOccurences(List<Long> quantizationList) {
+		
+		List<Long> result = new ArrayList<Long>();
+		
 		SortedMap<Long, Integer> quantizationDist = calculateQuantizationDistribution(quantizationList);
 		List<Entry<Long, Integer>> quantizationDistEntryList = new ArrayList<>(quantizationDist.entrySet());
 		quantizationDistEntryList.sort(Collections.reverseOrder(Entry.comparingByValue()));
-
-		List<Long> quantizationGuesses = new ArrayList<Long>();
+		
 		if (quantizationDistEntryList.size() > 0) {
 			long firstGuess = quantizationDistEntryList.get(0).getKey();
 			long firstGuessOccurences = quantizationDistEntryList.get(0).getValue();
-			quantizationGuesses.add(firstGuess);
+			result.add(firstGuess);
 			if (quantizationDistEntryList.size() > 1) {
 				int i = 1;
 				while (i < quantizationDistEntryList.size()
 						&& quantizationDistEntryList.get(i).getValue() == firstGuessOccurences) {
-					quantizationGuesses.add(quantizationDistEntryList.get(i).getKey());
+					result.add(quantizationDistEntryList.get(i).getKey());
 					i++;
 				}
 			}
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param quantizationList
+	 * @return List with quantization suggestions, criterion: most occurrences and greatest common divisor
+	 */
+	public static List<Long> guessQuantization(List<Long> quantizationList, QuantizationGuess quantizationGuess) {
+		
+		List<Long> quantizationGuesses = new ArrayList<Long>();
+		
+		if(quantizationGuess == QuantizationGuess.MostOccurences) {
+			quantizationGuesses.addAll(findQuantizationWithMostOccurences(quantizationList));
+		} else if(quantizationGuess == QuantizationGuess.GCD) {
+			quantizationGuesses.add(findGCD(quantizationList));
+		} else {
+			quantizationGuesses.addAll(findQuantizationWithMostOccurences(quantizationList));
 		}
 		return quantizationGuesses;
 	}
@@ -130,91 +175,93 @@ public class TimeQuantizationTools {
 	 * @param <X>
 	 * @param <Y>
 	 */
-	public static class TimeStampQuantizationTuple<X, Y> { 
-		  public final X timeStamp; 
-		  public final Y quantization; 		  
-		  public TimeStampQuantizationTuple(X timeStamp, Y quantization) { 
-		    this.timeStamp = timeStamp; 
-		    this.quantization = quantization; 
-		  }		 
-	} 
-	
+	public static class TimeStampQuantizationTuple<X, Y> {
+		public final X timeStamp;
+		public final Y quantization;
+
+		public TimeStampQuantizationTuple(X timeStamp, Y quantization) {
+			this.timeStamp = timeStamp;
+			this.quantization = quantization;
+		}
+	}
+
 	/**
 	 * 
 	 * @param quantizationGuesses
 	 * @param timeStamps
 	 * @return
 	 */
-	public static TimeStampQuantizationTuple<Long, Long> guessStartTimeStamp(List<Long> quantizationGuesses, List<Long> timeStamps) {
+	public static TimeStampQuantizationTuple<Long, Long> guessStartTimeStamp(List<Long> quantizationGuesses,
+			List<Long> timeStamps) {
 
-		Long bestStartTimeStamp = timeStamps.get(0);	
+		Long bestStartTimeStamp = timeStamps.get(0);
 		Long bestQuantization = quantizationGuesses.get(0);
-		
-		int minimalCountAllGuesses = Integer.MAX_VALUE;		
-		
-		for (Long quantizationCandidate : quantizationGuesses) {	
-						
+
+		int minimalCountAllGuesses = Integer.MAX_VALUE;
+
+		for (Long quantizationCandidate : quantizationGuesses) {
+
 			Long startTimeStampCandidate = bestStartTimeStamp;
-			
-			int minimalCountForQuantizationGuess = Integer.MAX_VALUE;	
-			
-			for(Long startTimeStamp : timeStamps) {
-								
+
+			int minimalCountForQuantizationGuess = Integer.MAX_VALUE;
+
+			for (Long startTimeStamp : timeStamps) {
+
 				int opCountForStartTimeStamp = 0;
-								
+
 				Long timeStamp = startTimeStamp;
 				int i = 1;
-				
+
 				Long firstTimeStamp = timeStamps.get(0);
-				Long lastTimeStamp = timeStamps.get(timeStamps.size()-1);
-				
-				while(timeStamp < lastTimeStamp) {
-					
-					timeStamp = startTimeStamp + i * quantizationCandidate;	
+				Long lastTimeStamp = timeStamps.get(timeStamps.size() - 1);
+
+				while (timeStamp < lastTimeStamp) {
+
+					timeStamp = startTimeStamp + i * quantizationCandidate;
 					long prevTimeStamp = timeStamp - quantizationCandidate;
-										
-					if(!timeStamps.contains(timeStamp)) {
+
+					if (!timeStamps.contains(timeStamp)) {
 						opCountForStartTimeStamp++;
 					}
-					for(Long tS : timeStamps) {
-						if(prevTimeStamp < tS && tS < timeStamp) {
+					for (Long tS : timeStamps) {
+						if (prevTimeStamp < tS && tS < timeStamp) {
 							opCountForStartTimeStamp++;
 						}
-					}									
+					}
 					i++;
-				}		
-				
+				}
+
 				timeStamp = startTimeStamp;
-				i = 1;		
-				
-				while(timeStamp > firstTimeStamp) {	
-					
+				i = 1;
+
+				while (timeStamp > firstTimeStamp) {
+
 					timeStamp = startTimeStamp - i * quantizationCandidate;
 					long nextTimeStamp = timeStamp + quantizationCandidate;
-									
-					if(!timeStamps.contains(timeStamp)) {
+
+					if (!timeStamps.contains(timeStamp)) {
 						opCountForStartTimeStamp++;
 					}
-					for(Long tS : timeStamps) {
-						if(timeStamp < tS && tS < nextTimeStamp) {
+					for (Long tS : timeStamps) {
+						if (timeStamp < tS && tS < nextTimeStamp) {
 							opCountForStartTimeStamp++;
 						}
-					}														
+					}
 					i++;
-				}	
-								
-				if(opCountForStartTimeStamp < minimalCountForQuantizationGuess) {
+				}
+
+				if (opCountForStartTimeStamp < minimalCountForQuantizationGuess) {
 					minimalCountForQuantizationGuess = opCountForStartTimeStamp;
 					startTimeStampCandidate = startTimeStamp;
 				}
 			}
-			
-			if(minimalCountForQuantizationGuess < minimalCountAllGuesses) {
+
+			if (minimalCountForQuantizationGuess < minimalCountAllGuesses) {
 				minimalCountAllGuesses = minimalCountForQuantizationGuess;
 				bestQuantization = quantizationCandidate;
 				bestStartTimeStamp = startTimeStampCandidate;
 			}
-		}	
+		}
 		return new TimeStampQuantizationTuple<Long, Long>(bestStartTimeStamp, bestQuantization);
 	}
 }

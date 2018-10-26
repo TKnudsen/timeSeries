@@ -12,75 +12,95 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.EquidistanceProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
+import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 
 public class EquidistanceProcessorTester {
 
 	public static void main(String[] args) {
+				
+		EquidistanceProcessor processor = new EquidistanceProcessor(false, QuantizationGuess.MostOccurences);
 
 		List<ITimeSeriesMultivariate> tSList1 = generateCustomNonEquiMultivariateTimeSeriesList(0);
-		List<ITimeSeriesMultivariate> tSList2 = generateCustomNonEquiMultivariateTimeSeriesList(1);
-		List<ITimeSeriesMultivariate> tSList3 = generateRandomNonEquiMultivariateTimeSeriesList();		
-		List<ITimeSeriesMultivariate> tSList4 = generateRandomEquiMultivariateTimeSeriesList();
-		List<ITimeSeriesMultivariate> tSList5 = generateRandomNonEquiMultivariateTimeSeriesList();
-				
-		EquidistanceProcessor processor = new EquidistanceProcessor(false);
-
-		System.out.println("Test 1 (custom time series) before processing:");
+		
+		System.out.println("Test 1 (custom time series, most occ.) before processing:");
 		printTimeStamps(tSList1);	
 		Long firstOld1 = tSList1.get(0).getFirstTimestamp();
 		Long lastOld1 = tSList1.get(0).getLastTimestamp();
 		processor.process(tSList1);
 		Long firstNew1 = tSList1.get(0).getFirstTimestamp();
 		Long lastNew1 = tSList1.get(0).getLastTimestamp();
-		System.out.println("\n" + "Test 1 (custom time series) after processing:");
+		System.out.println("\n" + "Test 1 (custom time series, most occ.) after processing:");
 		printTimeStamps(tSList1);
 		printFirstLastTimeStampComparison(firstOld1, firstNew1, lastOld1, lastNew1);
 
-		System.out.println("\n" + "Test 2 (custom time series)  before processing:");
+		List<ITimeSeriesMultivariate> tSList2 = generateCustomNonEquiMultivariateTimeSeriesList(1);
+		
+		System.out.println("\n" + "Test 2 (custom time series, most occ.)  before processing:");
 		printTimeStamps(tSList2);
 		Long firstOld2 = tSList2.get(0).getFirstTimestamp();
 		Long lastOld2 = tSList2.get(0).getLastTimestamp();
 		processor.process(tSList2);
 		Long firstNew2 = tSList2.get(0).getFirstTimestamp();
 		Long lastNew2 = tSList2.get(0).getLastTimestamp();
-		System.out.println("\n" + "Test 2 (custom time series) after processing:");
+		System.out.println("\n" + "Test 2 (custom time series, most occ.) after processing:");
 		printTimeStamps(tSList2);
 		printFirstLastTimeStampComparison(firstOld2, firstNew2, lastOld2, lastNew2);
 
-		System.out.println("\n" + "Test 3 (random time series) before processing:");
+		List<ITimeSeriesMultivariate> tSList3 = generateRandomNonEquiMultivariateTimeSeriesList();		
+		
+		System.out.println("\n" + "Test 3 (random time series, most occ.) before processing:");
 		printTimeStamps(tSList3);
 		Long firstOld3 = tSList3.get(0).getFirstTimestamp();
 		Long lastOld3 = tSList3.get(0).getLastTimestamp();
 		processor.process(tSList3);
 		Long firstNew3 = tSList3.get(0).getFirstTimestamp();
 		Long lastNew3 = tSList3.get(0).getLastTimestamp();
-		System.out.println("\n" + "Test 3 (random time series) after processing:");
+		System.out.println("\n" + "Test 3 (random time series, most occ.) after processing:");
 		printTimeStamps(tSList3);
 		printFirstLastTimeStampComparison(firstOld3, firstNew3, lastOld3, lastNew3);
 		
-		System.out.println("\n" + "Test 4 (equidistant time series) before processing:");
+		List<ITimeSeriesMultivariate> tSList4 = generateRandomEquiMultivariateTimeSeriesList();
+		
+		System.out.println("\n" + "Test 4 (equidistant time series, most occ.) before processing:");
 		printTimeStamps(tSList4);
 		Long firstOld4 = tSList4.get(0).getFirstTimestamp();
 		Long lastOld4 = tSList4.get(0).getLastTimestamp();
 		processor.process(tSList4);
 		Long firstNew4 = tSList4.get(0).getFirstTimestamp();
 		Long lastNew4 = tSList4.get(0).getLastTimestamp();
-		System.out.println("\n" + "Test 4 (equidistant time series) after processing:");
+		System.out.println("\n" + "Test 4 (equidistant time series, most occ.) after processing:");
 		printTimeStamps(tSList4);
 		printFirstLastTimeStampComparison(firstOld4, firstNew4, lastOld4, lastNew4);
 		
-		EquidistanceProcessor processor2 = new EquidistanceProcessor(true);
+		EquidistanceProcessor processor2 = new EquidistanceProcessor(true, QuantizationGuess.MostOccurences);
 		
-		System.out.println("\n" + "Test 5 (random time series with extrapolation of temp borders) before processing:");
+		List<ITimeSeriesMultivariate> tSList5 = generateRandomNonEquiMultivariateTimeSeriesList();
+		
+		System.out.println("\n" + "Test 5 (random time series, extrapolation of temp borders, most occ.) before processing:");
 		printTimeStamps(tSList5);
 		Long firstOld5 = tSList5.get(0).getFirstTimestamp();
 		Long lastOld5 = tSList5.get(0).getLastTimestamp();
 		processor2.process(tSList5);
 		Long firstNew5 = tSList5.get(0).getFirstTimestamp();
 		Long lastNew5 = tSList5.get(0).getLastTimestamp();
-		System.out.println("\n" + "Test 5 (random time series with extrapolation of temp borders) after processing:");
+		System.out.println("\n" + "Test 5 (random time series with extrapolation of temp borders, most occ.) after processing:");
 		printTimeStamps(tSList5);
 		printFirstLastTimeStampComparison(firstOld5, firstNew5, lastOld5, lastNew5);
+		
+		EquidistanceProcessor processor3 = new EquidistanceProcessor(false, QuantizationGuess.GCD);
+		
+		List<ITimeSeriesMultivariate> tSList6 = generateCustomNonEquiMultivariateTimeSeriesList(2);
+		
+		System.out.println("\n" + "Test 6 (custom time series, gcd) before processing:");
+		printTimeStamps(tSList6);
+		Long firstOld6 = tSList6.get(0).getFirstTimestamp();
+		Long lastOld6 = tSList6.get(0).getLastTimestamp();
+		processor3.process(tSList6);
+		Long firstNew6 = tSList6.get(0).getFirstTimestamp();
+		Long lastNew6 = tSList6.get(0).getLastTimestamp();
+		System.out.println("\n" + "Test 6 (custom time series, gcd) after processing:");
+		printTimeStamps(tSList6);
+		printFirstLastTimeStampComparison(firstOld6, firstNew6, lastOld6, lastNew6);		
 	}
 	
 	private static void printFirstLastTimeStampComparison(Long firstOld, Long firstNew, Long lastOld, Long lastNew) {
@@ -179,7 +199,20 @@ public class EquidistanceProcessorTester {
 			timeStamps.add(new Long(1040));
 			timeStamps.add(new Long(1041));
 			timeStamps.add(new Long(1045));			
-		}
+		} else if(number == 2) {
+			timeStamps.add(new Long(1000));
+			timeStamps.add(new Long(1015));
+			timeStamps.add(new Long(1020));
+			timeStamps.add(new Long(1050));
+			timeStamps.add(new Long(1070));
+			timeStamps.add(new Long(1120));
+			timeStamps.add(new Long(1130));
+			timeStamps.add(new Long(1170));
+			timeStamps.add(new Long(1180));
+			timeStamps.add(new Long(1205));
+			timeStamps.add(new Long(1230));
+			timeStamps.add(new Long(1240));		
+		} 
 		return timeStamps;
 	}
 

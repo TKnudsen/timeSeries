@@ -10,14 +10,17 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeQuantizationTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeQuantizationTools.TimeStampQuantizationTuple;
+import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
 	private boolean allowExtrapolatedTemporalBorders;
-	
-	public EquidistanceProcessor(boolean allowExtrapolatedTemporalBorders) {
+	private final QuantizationGuess quantizationGuess;
+		
+	public EquidistanceProcessor(boolean allowExtrapolatedTemporalBorders, QuantizationGuess quantizationGuess) {
 		this.allowExtrapolatedTemporalBorders = allowExtrapolatedTemporalBorders;
+		this.quantizationGuess = quantizationGuess;
 	}
 
 	@Override
@@ -43,14 +46,14 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 
 		List<Long> timeStamps = timeSeries.getTimestamps();
 		List<Long> quantizationList = TimeQuantizationTools.getQuantizationList(timeStamps);
-		List<Long> quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList);
+		List<Long> quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList, quantizationGuess);
 		TimeStampQuantizationTuple<Long, Long> timeStampQuantizationTuple = TimeQuantizationTools
 				.guessStartTimeStamp(quantizationGuesses, timeStamps);
 		Long startTimeStamp = timeStampQuantizationTuple.timeStamp;
 		Long quantization = timeStampQuantizationTuple.quantization;
 		
-		System.out.println("startTimeStamp: " + startTimeStamp);
-		System.out.println("quantization: " + quantization);
+		System.out.println("start timestamp: " + startTimeStamp);
+		System.out.println("quantization: " + quantization + " (" + quantizationGuess.toString() + ")");
 		
 		applyEquidistance(timeSeries, startTimeStamp, quantization);
 	}
