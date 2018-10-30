@@ -4,7 +4,7 @@ import java.util.SortedMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.complexDataObject.ComplexDataObject;
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeSeriesListener;
@@ -30,15 +30,15 @@ import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
  * @version 1.06
  */
 public abstract class TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate> extends ComplexDataObject
-		implements IUncertaintyAtTimeStamp<NumericalUncertainty>, ISelfDescription,
-		IProcessingUncertaintyMeasure<ITimeSeriesMultivariate, NumericalUncertainty>, ITimeSeriesListener {
+		implements IUncertaintyAtTimeStamp<IValueUncertainty<Double>>, ISelfDescription,
+		IProcessingUncertaintyMeasure<ITimeSeriesMultivariate, IValueUncertainty<Double>>, ITimeSeriesListener {
 
 	// TODO decide whether the uncertainties should rather be handed to some
 	// obeserver instantly. Goal: avoid state variables in the measures.
-	protected SortedMap<Long, NumericalUncertainty> uncertaintiesOverTime;
+	protected SortedMap<Long, IValueUncertainty<Double>> uncertaintiesOverTime;
 
 	@Override
-	public NumericalUncertainty getUncertainty(Long timeStamp) {
+	public IValueUncertainty<Double> getUncertainty(Long timeStamp) {
 		if (uncertaintiesOverTime == null) {
 			System.err.println(getName() + ": no uncertainty information calculated yet.");
 			return null;
@@ -48,7 +48,7 @@ public abstract class TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivar
 	}
 
 	@Override
-	public NumericalUncertainty getUncertainty(int index) {
+	public IValueUncertainty<Double> getUncertainty(int index) {
 		throw new IllegalArgumentException(getName()
 				+ "index-based access to uncertainty information of time series is unsafe and thus deprecated.");
 	}
@@ -69,11 +69,11 @@ public abstract class TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivar
 					(ITimeSeriesMultivariate) learningDataEvent.getTimeSeries());
 	}
 
-	public SortedMap<Long, NumericalUncertainty> getUncertaintiesOverTime() {
+	public SortedMap<Long, IValueUncertainty<Double>> getUncertaintiesOverTime() {
 		return uncertaintiesOverTime;
 	}
 
-	public void addUncertaintiesOverTime(SortedMap<Long, NumericalUncertainty> uncertainties) {
+	public void addUncertaintiesOverTime(SortedMap<Long, IValueUncertainty<Double>> uncertainties) {
 		this.uncertaintiesOverTime = uncertainties;
 	}
 }

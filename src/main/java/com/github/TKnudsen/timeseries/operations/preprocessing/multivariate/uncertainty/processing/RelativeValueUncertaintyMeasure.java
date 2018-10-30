@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
 /**
@@ -89,7 +89,7 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesProcessingUncerta
 				}
 			}
 
-			uncertaintiesOverTime.put(timeStamp, new NumericalUncertainty(relatives));
+			uncertaintiesOverTime.put(timeStamp, new NumericalDistributionUncertainty(relatives));
 		}
 	}
 
