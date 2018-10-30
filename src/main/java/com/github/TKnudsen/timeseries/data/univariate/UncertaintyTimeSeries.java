@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.IUncertaintyQuantitative;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.NumericalUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.IValueDistributionUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
 import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
 
-public class UncertaintyTimeSeries extends TimeSeriesUnivariate implements IUncertaintyAtTimeStamp<IUncertaintyQuantitative<Double>> {
+public class UncertaintyTimeSeries extends TimeSeriesUnivariate implements IUncertaintyAtTimeStamp<IValueDistributionUncertainty<Double>> {
 
-	private List<IUncertaintyQuantitative<Double>> uncertainties;
+	private List<IValueDistributionUncertainty<Double>> uncertainties;
 
-	public UncertaintyTimeSeries(List<Long> timeStamps, List<Double> values, List<IUncertaintyQuantitative<Double>> uncertainties) {
+	public UncertaintyTimeSeries(List<Long> timeStamps, List<Double> values, List<IValueDistributionUncertainty<Double>> uncertainties) {
 		super(timeStamps, values);
 	}
 
@@ -21,11 +21,11 @@ public class UncertaintyTimeSeries extends TimeSeriesUnivariate implements IUnce
 
 		this.uncertainties = new ArrayList<>();
 		for (List<Double> u : uncertainties)
-			this.uncertainties.add(new NumericalUncertainty(u));
+			this.uncertainties.add(new NumericalDistributionUncertainty(u));
 	}
 
 	@Override
-	public IUncertaintyQuantitative<Double> getUncertainty(Long timeStamp) {
+	public IValueDistributionUncertainty<Double> getUncertainty(Long timeStamp) {
 		List<Long> timestamps = getTimestamps();
 		for (int i = 0; i < timestamps.size(); i++)
 			if (timestamps.get(i).equals(timeStamp))
@@ -35,7 +35,7 @@ public class UncertaintyTimeSeries extends TimeSeriesUnivariate implements IUnce
 	}
 
 	@Override
-	public IUncertaintyQuantitative<Double> getUncertainty(int index) {
+	public IValueDistributionUncertainty<Double> getUncertainty(int index) {
 		return uncertainties.get(index);
 	}
 
