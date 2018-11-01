@@ -1,31 +1,31 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
+import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.LinearNormalizationFunction;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
- * <p>
- * Title: RelativeValueUncertaintyMeasure
- * </p>
- * 
- * <p>
- * Description:
- * </p>
+ * Computes the relative change of every timestamp and dimension. Relative
+ * change is assessed by the bounds of the value domaines of the individual
+ * (original) time series. For every timestamp the relative changes in every
+ * dimension are collected and represented as a
+ * {@link NumericalDistributionUncertainty}.
  * 
  * <p>
  * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class RelativeValueUncertaintyMeasure extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate> {
-
-	private static Double epsilon = 0.000000001;
 
 	public RelativeValueUncertaintyMeasure() {
 		super();
@@ -47,49 +47,37 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesProcessingUncerta
 
 		uncertaintiesOverTime = new TreeMap<>();
 
+		// characterize value domain of every dimension
+		Map<String, LinearNormalizationFunction> valueDeltaNormalizationFunctionsPerDimension = new LinkedHashMap<>();
+
+		for (String dimension : originalTimeSeries.getAttributeNames()) {
+			double min = TimeSeriesTools.getMinValue(originalTimeSeries.getTimeSeries(dimension));
+			double max = TimeSeriesTools.getMaxValue(originalTimeSeries.getTimeSeries(dimension));
+
+			valueDeltaNormalizationFunctionsPerDimension.put(dimension,
+					new LinearNormalizationFunction(0.0, max - min, true));
+		}
+
 		for (Long timeStamp : originalTimeSeries.getTimestamps()) {
-			List<Double> originalValues = originalTimeSeries.getValue(timeStamp, false);
-			List<Double> modifiedValues = null;
 
 			List<Double> relatives = new ArrayList<>();
+
 			try {
-				modifiedValues = processedTimeSeries.getValue(timeStamp, false);
-			} catch (Exception e) {
-				// System.err.println(
-				// getName() + ": unable to retrieve time stamp of original time series in
-				// modified time series");
-				// uncertaintiesOverTime.put(timeStamp, new NumericalUncertainty(relatives));
-				continue;
-			}
+				// dummy access
+				processedTimeSeries.getValue(timeStamp, false);
 
-			// TODO please validate
-			for (int i = 0; i < originalValues.size(); i++) {
-				if (modifiedValues == null)
-					relatives.add(1.0); // no value means 100% change
-				else if (modifiedValues.get(i) == null)
-					relatives.add(1.0); // no value means 100% change
-				else {
-					// relative change.
-					if (originalValues.get(i) == 0)
-						if (modifiedValues.get(i) != 0)
-							relatives.add(1.0);// from zero to something means 100% change. ARGHH
-						else
-							relatives.add(0.0);
-					else if (modifiedValues.get(i) == originalValues.get(i))
-						relatives.add(0.0);
-					else {
-						double rel = (modifiedValues.get(i) - originalValues.get(i)) / originalValues.get(i);
-						// if(Math.abs(rel) > 1) {
-						// System.out.println("Error, relative value larger than 1: " + rel);
-						// }
-						if (Math.abs(rel) < epsilon)
-							rel = 0.0;
-						relatives.add(rel);
-					}
+				for (String dimension : originalTimeSeries.getAttributeNames()) {
+					double originalV = originalTimeSeries.getTimeSeries(dimension).getValue(timeStamp, false);
+					double processedV = processedTimeSeries.getTimeSeries(dimension).getValue(timeStamp, false);
+
+					relatives.add(valueDeltaNormalizationFunctionsPerDimension.get(dimension)
+							.apply(Math.abs(originalV - processedV)).doubleValue());
 				}
-			}
 
-			uncertaintiesOverTime.put(timeStamp, new NumericalDistributionUncertainty(relatives));
+				uncertaintiesOverTime.put(timeStamp, new NumericalDistributionUncertainty(relatives));
+			} catch (Exception e) {
+				// time stamp does not exist in processed time series
+			}
 		}
 	}
 
