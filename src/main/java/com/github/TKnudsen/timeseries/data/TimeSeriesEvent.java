@@ -17,34 +17,34 @@ import java.util.EventObject;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public final class TimeSeriesEvent extends EventObject {
+public final class TimeSeriesEvent<TS extends ITimeSeries<?>> extends EventObject {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3094406853801488793L;
 
-	private final ITimeSeries<?> timeSeries;
-	private ITimeSeries<?> oldTimeSeries;
+	private final TS timeSeries;
+	private TS oldTimeSeries;
 
-	public TimeSeriesEvent(Object source, ITimeSeries<?> timeSeries) {
+	public TimeSeriesEvent(Object source, TS timeSeries) {
 		this(source, timeSeries, null);
 	}
 
-	public TimeSeriesEvent(Object source, ITimeSeries<?> timeSeries, ITimeSeries<?> oldTimeSeries) {
+	public TimeSeriesEvent(Object source, TS timeSeries, TS oldTimeSeries) {
 		super(source);
 
 		this.timeSeries = timeSeries;
 		this.oldTimeSeries = oldTimeSeries;
 	}
 
-	public ITimeSeries<?> getTimeSeries() {
+	public TS getTimeSeries() {
 		return timeSeries;
 	}
 
-	public ITimeSeries<?> getOldTimeSeries() {
+	public TS getOldTimeSeries() {
 		return oldTimeSeries;
 	}
 

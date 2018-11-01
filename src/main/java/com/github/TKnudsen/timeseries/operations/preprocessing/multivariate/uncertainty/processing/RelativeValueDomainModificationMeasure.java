@@ -12,6 +12,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesProcessingUncertaintyMeasure;
 
 /**
  * <p>
