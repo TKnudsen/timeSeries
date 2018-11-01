@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
-import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.LinearNormalizationFunction;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
+import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesProcessingUncertaintyMeasure;
 
 /**
  * Computes the relative change of every timestamp and dimension. Relative
- * change is assessed by the bounds of the value domaines of the individual
+ * change is assessed by the bounds of the value domains of the individual
  * (original) time series. For every timestamp the relative changes in every
  * dimension are collected and represented as a
  * {@link NumericalDistributionUncertainty}.
@@ -47,19 +48,21 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesProcessingUncerta
 
 		uncertaintiesOverTime = new TreeMap<>();
 
-		// characterize value domain of every dimension
-		Map<String, LinearNormalizationFunction> valueDeltaNormalizationFunctionsPerDimension = new LinkedHashMap<>();
+		// create composition of univariate value uncertainties
+		Map<String, SortedMap<Long, IValueUncertainty<Double>>> valueUncertaintyMeasuresPerDimension = new LinkedHashMap<>();
 
 		for (String dimension : originalTimeSeries.getAttributeNames()) {
-			double min = TimeSeriesTools.getMinValue(originalTimeSeries.getTimeSeries(dimension));
-			double max = TimeSeriesTools.getMaxValue(originalTimeSeries.getTimeSeries(dimension));
+			com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate.RelativeValueUncertaintyMeasure measure = new com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate.RelativeValueUncertaintyMeasure();
+			measure.calculateUncertainty(originalTimeSeries.getTimeSeries(dimension),
+					processedTimeSeries.getTimeSeries(dimension));
 
-			valueDeltaNormalizationFunctionsPerDimension.put(dimension,
-					new LinearNormalizationFunction(0.0, max - min, true));
+			SortedMap<Long, IValueUncertainty<Double>> uncertaintiesOverTime = measure.getUncertaintiesOverTime();
+			valueUncertaintyMeasuresPerDimension.put(dimension, uncertaintiesOverTime);
 		}
 
+		// iterate over timestamps and aggregate the relative uncertainty values of
+		// every domain
 		for (Long timeStamp : originalTimeSeries.getTimestamps()) {
-
 			List<Double> relatives = new ArrayList<>();
 
 			try {
@@ -67,11 +70,10 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesProcessingUncerta
 				processedTimeSeries.getValue(timeStamp, false);
 
 				for (String dimension : originalTimeSeries.getAttributeNames()) {
-					double originalV = originalTimeSeries.getTimeSeries(dimension).getValue(timeStamp, false);
-					double processedV = processedTimeSeries.getTimeSeries(dimension).getValue(timeStamp, false);
+					SortedMap<Long, IValueUncertainty<Double>> uncertainties = valueUncertaintyMeasuresPerDimension
+							.get(dimension);
 
-					relatives.add(valueDeltaNormalizationFunctionsPerDimension.get(dimension)
-							.apply(Math.abs(originalV - processedV)).doubleValue());
+					relatives.add(uncertainties.get(timeStamp).getUncertainty());
 				}
 
 				uncertaintiesOverTime.put(timeStamp, new NumericalDistributionUncertainty(relatives));

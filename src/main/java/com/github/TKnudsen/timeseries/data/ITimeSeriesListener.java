@@ -17,16 +17,16 @@ import java.util.EventListener;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
-public interface ITimeSeriesListener extends EventListener {
+public interface ITimeSeriesListener<TS extends ITimeSeries<?>> extends EventListener {
 
 	/**
 	 * Will be called when the values of a time series have been changed.
 	 * 
 	 * @param learningDataEvent
 	 */
-	void valueDomainChanged(TimeSeriesEvent learningDataEvent);
+	void valueDomainChanged(TimeSeriesEvent<TS> learningDataEvent);
 
 	/**
 	 * Will be called when the time / temporal information of a time series have
@@ -34,5 +34,5 @@ public interface ITimeSeriesListener extends EventListener {
 	 * 
 	 * @param learningDataEvent
 	 */
-	void temporalDomainChanged(TimeSeriesEvent learningDataEvent);
+	void temporalDomainChanged(TimeSeriesEvent<TS> learningDataEvent);
 }

@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing;
+package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures;
 
 import java.util.SortedMap;
 
@@ -10,7 +10,6 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeSeriesListener;
 import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
 import com.github.TKnudsen.timeseries.data.TimeSeriesEvent;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
 
 /**
  * <p>
@@ -29,9 +28,9 @@ import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
  * @author Juergen Bernard
  * @version 1.06
  */
-public abstract class TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate> extends ComplexDataObject
+public abstract class TimeSeriesProcessingUncertaintyMeasure<TS extends ITimeSeries<?>> extends ComplexDataObject
 		implements IUncertaintyAtTimeStamp<IValueUncertainty<Double>>, ISelfDescription,
-		IProcessingUncertaintyMeasure<ITimeSeriesMultivariate, IValueUncertainty<Double>>, ITimeSeriesListener {
+		IProcessingUncertaintyMeasure<TS, IValueUncertainty<Double>>, ITimeSeriesListener<TS> {
 
 	// TODO decide whether the uncertainties should rather be handed to some
 	// obeserver instantly. Goal: avoid state variables in the measures.
@@ -54,19 +53,13 @@ public abstract class TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivar
 	}
 
 	@Override
-	public void valueDomainChanged(TimeSeriesEvent learningDataEvent) {
-		ITimeSeries<?> oldTimeSeries = learningDataEvent.getOldTimeSeries();
-		if (oldTimeSeries.getClass().isAssignableFrom(TimeSeriesMultivariate.class))
-			calculateUncertainty((ITimeSeriesMultivariate) learningDataEvent.getOldTimeSeries(),
-					(ITimeSeriesMultivariate) learningDataEvent.getTimeSeries());
+	public void valueDomainChanged(TimeSeriesEvent<TS> learningDataEvent) {
+		calculateUncertainty(learningDataEvent.getOldTimeSeries(), learningDataEvent.getTimeSeries());
 	}
 
 	@Override
-	public void temporalDomainChanged(TimeSeriesEvent learningDataEvent) {
-		ITimeSeries<?> oldTimeSeries = learningDataEvent.getOldTimeSeries();
-		if (oldTimeSeries.getClass().isAssignableFrom(TimeSeriesMultivariate.class))
-			calculateUncertainty((ITimeSeriesMultivariate) learningDataEvent.getOldTimeSeries(),
-					(ITimeSeriesMultivariate) learningDataEvent.getTimeSeries());
+	public void temporalDomainChanged(TimeSeriesEvent<TS> learningDataEvent) {
+		calculateUncertainty((TS) learningDataEvent.getOldTimeSeries(), (TS) learningDataEvent.getTimeSeries());
 	}
 
 	public SortedMap<Long, IValueUncertainty<Double>> getUncertaintiesOverTime() {
