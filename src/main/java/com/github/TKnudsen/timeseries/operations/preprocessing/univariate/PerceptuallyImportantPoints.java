@@ -1,16 +1,18 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import com.github.TKnudsen.ComplexDataObject.data.entry.EntryWithComparableKey;
+import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
-import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
-import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
  * <p>
@@ -35,12 +37,13 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.06
+ * @version 1.07
  */
 public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 	private int pipCount;
 
+	@SuppressWarnings("unused")
 	private PerceptuallyImportantPoints() {
 	}
 
@@ -79,54 +82,128 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 		if (data.size() < pipCount)
 			return;
 
-		List<ITimeValuePair<Double>> pipTmp = new ArrayList<>();
-		pipTmp.add(TimeSeriesTools.getTimeValuePair(data, 0));
-		pipTmp.add(TimeSeriesTools.getTimeValuePair(data, data.size() - 1));
+		SortedSet<Long> pipTimeStamps = new TreeSet<>();
+		pipTimeStamps.add(data.getFirstTimestamp());
+		pipTimeStamps.add(data.getLastTimestamp());
 
-		List<ITimeValuePair<Double>> subSequence = new ArrayList<ITimeValuePair<Double>>(getPipCount());
-
-		double dist = Double.NaN;
-		double pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
-		int pipIterator = 1;
-		int nextPipIndex = 0;
-
-		for (int index = 0; index < getPipCount() - 2; index++) {
-			pipIterator = 1;
-			nextPipIndex = -1;
-			pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
-			for (int i = 1; i < data.size(); i++) {
-				if (data.getTimestamp(i) == pipTmp.get(pipIterator).getTimestamp()) {
-					double steigung = (pipTmp.get(pipIterator).getValue() - pipTmp.get(pipIterator - 1).getValue())
-							/ (pipTmp.get(pipIterator).getTimestamp() - pipTmp.get(pipIterator - 1).getTimestamp());
-					double xAxisIntercept = pipTmp.get(pipIterator).getValue()
-							- (pipTmp.get(pipIterator).getTimestamp() * steigung);
-					for (int sub = 0; sub < subSequence.size(); sub++) {
-						dist = Math.abs(steigung * subSequence.get(sub).getTimestamp() + xAxisIntercept
-								- subSequence.get(sub).getValue());
-						if (dist > pipYOffsetCurrent) {
-							pipYOffsetCurrent = dist;
-							nextPipIndex = i - subSequence.size() + sub;
-						}
-					}
-					subSequence.clear();
-					pipIterator++;
-				} else {
-					subSequence.add(TimeSeriesTools.getTimeValuePair(data, i));
-				}
-			}
-			//// TODO: nextPipIndex == -1
-			if (nextPipIndex >= data.size() || nextPipIndex < 0)
-				continue;
-			//////
-			pipTmp.add(TimeSeriesTools.getTimeValuePair(data, nextPipIndex));
-			Collections.sort(pipTmp);
+		// identify additional pips until pipCount is reached
+		for (int i = 0; i < getPipCount() - 2; i++) {
+			pipTimeStamps.add(calculateNextPip(data, pipTimeStamps));
 		}
 
 		// remove all data not matching the pipTmp result
-		for (int i = 0; i < pipTmp.size(); i++) {
-			while (pipTmp.get(i).getTimestamp() != data.getTimestamp(i))
+		int i = 0;
+		Iterator<Long> pipTimeStampIterator = pipTimeStamps.iterator();
+		while (pipTimeStampIterator.hasNext()) {
+			Long nextPiPTimeStamp = pipTimeStampIterator.next();
+			while (nextPiPTimeStamp != data.getTimestamp(i++))
 				data.removeTimeValue(i);
 		}
+	}
+
+	/**
+	 * identifies the next pip. For that purpose all intervals between existing pips
+	 * are investigated.
+	 * 
+	 * @param data
+	 * @param pipTimeStamps
+	 * @return
+	 */
+	public static Long calculateNextPip(ITimeSeriesUnivariate data, SortedSet<Long> pipTimeStamps) {
+
+		if (data.size() <= pipTimeStamps.size())
+			throw new IllegalArgumentException(
+					"PIP: impossible to calculate another pip if given time series does not contain more time-value-pairs than current pip count");
+
+		Iterator<Long> timeSeriesIterator = data.getTimestamps().iterator();
+		timeSeriesIterator.next(); // first time stamp is always included
+
+		Iterator<Long> pipTimeStampIterator = pipTimeStamps.iterator();
+		Long lastPiPTimeStamp = pipTimeStampIterator.next(); // first existing pip
+
+		Long nextPip = -1L;
+		double pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
+
+		while (pipTimeStampIterator.hasNext()) {
+
+			// address a subSequence between two existing pips (pipTimeStampsSorted)
+			Long nextPiPTimeStamp = pipTimeStampIterator.next();
+
+			// calculate reference gradient and xAxisIntercept
+			double gradient = (data.getValue(nextPiPTimeStamp, false) - data.getValue(lastPiPTimeStamp, false))
+					/ (nextPiPTimeStamp - lastPiPTimeStamp);
+			double xAxisIntercept = data.getValue(nextPiPTimeStamp, false) - (nextPiPTimeStamp * gradient);
+
+			// identify the most applicable point within the particular interval
+			while (timeSeriesIterator.hasNext()) {
+				Long timeStamp = timeSeriesIterator.next();
+				if (timeStamp >= nextPiPTimeStamp)
+					break;
+				else {
+					double dist = Math.abs(gradient * timeStamp + xAxisIntercept - data.getValue(timeStamp, false));
+
+					if (dist > pipYOffsetCurrent) {
+						pipYOffsetCurrent = dist;
+						nextPip = timeStamp;
+					}
+				}
+			}
+
+			lastPiPTimeStamp = nextPiPTimeStamp;
+		}
+
+		return nextPip;
+	}
+
+	/**
+	 * calculates the interestingness value of every remaining time stamp to be the
+	 * next pip.
+	 * 
+	 * @param data
+	 * @param pipTimeStamps
+	 * @return
+	 */
+	public static Ranking<EntryWithComparableKey<Double, Long>> calculateNextPipCandidates(ITimeSeriesUnivariate data,
+			SortedSet<Long> pipTimeStamps) {
+
+		if (data.size() <= pipTimeStamps.size())
+			throw new IllegalArgumentException(
+					"PIP: impossible to calculate another pip if given time series does not contain more time-value-pairs than current pip count");
+
+		Ranking<EntryWithComparableKey<Double, Long>> ranking = new Ranking<>();
+
+		Iterator<Long> timeSeriesIterator = data.getTimestamps().iterator();
+		timeSeriesIterator.next(); // first time stamp is always included
+
+		Iterator<Long> pipTimeStampIterator = pipTimeStamps.iterator();
+		Long lastPiPTimeStamp = pipTimeStampIterator.next(); // first existing pip
+
+		while (pipTimeStampIterator.hasNext()) {
+
+			// address a subSequence between two existing pips (pipTimeStampsSorted)
+			Long nextPiPTimeStamp = pipTimeStampIterator.next();
+
+			// calculate reference gradient and xAxisIntercept
+			double gradient = (data.getValue(nextPiPTimeStamp, false) - data.getValue(lastPiPTimeStamp, false))
+					/ (nextPiPTimeStamp - lastPiPTimeStamp);
+			double xAxisIntercept = data.getValue(nextPiPTimeStamp, false) - (nextPiPTimeStamp * gradient);
+
+			// identify the most applicable point within the particular interval
+			while (timeSeriesIterator.hasNext()) {
+				Long timeStamp = timeSeriesIterator.next();
+				if (timeStamp >= nextPiPTimeStamp)
+					break;
+				else {
+					double dist = Math.abs(gradient * timeStamp + xAxisIntercept - data.getValue(timeStamp, false));
+
+					ranking.add(new EntryWithComparableKey<Double, Long>(dist, timeStamp));
+				}
+			}
+
+			lastPiPTimeStamp = nextPiPTimeStamp;
+		}
+
+		return ranking;
 	}
 
 	@Override

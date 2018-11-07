@@ -13,6 +13,7 @@ import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeValuePairMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
@@ -287,12 +288,12 @@ public final class TimeSeriesTools {
 		return ret;
 	}
 
-	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeriesUnivariate ts, int i) {
+	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeriesUnivariate ts, int index) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.size() - 1 < i)
+		if (ts.size() - 1 < index)
 			return null;
-		return new TimeValuePairUnivariate(ts.getTimestamp(i), ts.getValue(i));
+		return new TimeValuePairUnivariate(ts.getTimestamp(index), ts.getValue(index));
 	}
 
 	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeriesUnivariate ts) {
@@ -302,6 +303,14 @@ public final class TimeSeriesTools {
 		for (int i = 0; i < ts.size(); i++)
 			list.add(new TimeValuePairUnivariate(ts.getTimestamp(i), ts.getValue(i)));
 		return list;
+	}
+
+	public static ITimeValuePair<List<Double>> getTimeValuePair(ITimeSeriesMultivariate ts, int index) {
+		if (ts == null)
+			throw new IllegalStateException("TimeSeries is null");
+		if (ts.size() - 1 < index)
+			throw new IllegalArgumentException("given time series is shorter than required index " + index);
+		return new TimeValuePairMultivariate(ts.getTimestamp(index), ts.getValue(index));
 	}
 
 	public static List<Entry<Long, List<Double>>> getTimeValueLists(ITimeSeriesMultivariate ts) {
@@ -315,7 +324,8 @@ public final class TimeSeriesTools {
 		return pairs;
 	}
 
-	public static ITimeSeriesUnivariate createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs, Double missingValueIndicator) {
+	public static ITimeSeriesUnivariate createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs,
+			Double missingValueIndicator) {
 		if (timeValuePairs == null)
 			return null;
 
@@ -380,8 +390,8 @@ public final class TimeSeriesTools {
 
 	/**
 	 * finds the flat date/time after the start time according to the given time
-	 * series interval. if the TimeQuantization of the patternInterval is at
-	 * least of one day length, the next 00:00:00 GMT time is achieved
+	 * series interval. if the TimeQuantization of the patternInterval is at least
+	 * of one day length, the next 00:00:00 GMT time is achieved
 	 * 
 	 * @param startTime
 	 * @param patternInterval
@@ -466,14 +476,16 @@ public final class TimeSeriesTools {
 
 		if (timeSeries instanceof ITemporalLabeling<?>) {
 			ITemporalLabeling<?> returnTimeSeriesLabeled = new TimeSeriesUnivariateLabeled(returnTimeSeries);
-			returnTimeSeriesLabeled.setEventLabels(TimeSeriesLabelingTools.cloneEventLabels(((TimeSeriesUnivariateLabeled) timeSeries).getEventLabels()));
-			returnTimeSeriesLabeled.setIntervalLabels(TimeSeriesLabelingTools.cloneIntervalLabels(((TimeSeriesUnivariateLabeled) timeSeries).getIntervalLabels()));
+			returnTimeSeriesLabeled.setEventLabels(TimeSeriesLabelingTools
+					.cloneEventLabels(((TimeSeriesUnivariateLabeled) timeSeries).getEventLabels()));
+			returnTimeSeriesLabeled.setIntervalLabels(TimeSeriesLabelingTools
+					.cloneIntervalLabels(((TimeSeriesUnivariateLabeled) timeSeries).getIntervalLabels()));
 			return (ITimeSeriesUnivariate) returnTimeSeriesLabeled;
 		}
 
 		return returnTimeSeries;
 	}
-	
+
 	/**
 	 * 
 	 * @param timeSeries
@@ -492,12 +504,13 @@ public final class TimeSeriesTools {
 				nearestNeighbors.add(timeStampLower);
 				nearestNeighbors.add(timeStampUpper);
 				break;
-			} 
-		}		
+			}
+		}
 		return nearestNeighbors;
 	}
 
-	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, Long time1, Long time2, Long target) throws IllegalArgumentException, IndexOutOfBoundsException {
+	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, Long time1, Long time2, Long target)
+			throws IllegalArgumentException, IndexOutOfBoundsException {
 		if (timeSeries == null || time1 == null || time2 == null || target == null)
 			throw new IllegalArgumentException("TimeSeriesTools.getInterpolatedValue: given time stamps null");
 
@@ -516,7 +529,7 @@ public final class TimeSeriesTools {
 		// may throw an IllegalArgumentException if time stamps don't exist
 		double value1 = timeSeries.getValue(time1, false);
 		double value2 = timeSeries.getValue(time2, false);
-			
+
 		return value1 + ((target - time1) / (double) (time2 - time1) * (value2 - value1));
 	}
 
@@ -527,13 +540,14 @@ public final class TimeSeriesTools {
 	 * @param start
 	 * @param end
 	 * @param requireStartEndTimestampsExist
-	 *            whether or not the identification of the subsequence is sort
-	 *            of sophisticated in case of NOT exact matches. If not a
-	 *            subsequence is returned with start/end time stamps larger than
-	 *            the defined interval.
+	 *            whether or not the identification of the subsequence is sort of
+	 *            sophisticated in case of NOT exact matches. If not a subsequence
+	 *            is returned with start/end time stamps larger than the defined
+	 *            interval.
 	 * @return
 	 */
-	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end, boolean requireStartEndTimestampsExist) {
+	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
+			boolean requireStartEndTimestampsExist) {
 		if (timeSeries == null)
 			return null;
 		if (timeSeries.isEmpty())
@@ -577,17 +591,17 @@ public final class TimeSeriesTools {
 	 * @param start
 	 * @param end
 	 * @param requireStartEndTimestampsExist
-	 *            whether or not the identification of the subsequence is sort
-	 *            of sophisticated in case of NOT exact matches. If not a
-	 *            subsequence is returned with start/end time stamps larger than
-	 *            the defined interval.
+	 *            whether or not the identification of the subsequence is sort of
+	 *            sophisticated in case of NOT exact matches. If not a subsequence
+	 *            is returned with start/end time stamps larger than the defined
+	 *            interval.
 	 * @param cropIfTimeStampsDontExist
-	 *            if no exact match is needed this routine provides the
-	 *            opportunity to crop start and end time stamp by linear
-	 *            interpolation.
+	 *            if no exact match is needed this routine provides the opportunity
+	 *            to crop start and end time stamp by linear interpolation.
 	 * @return
 	 */
-	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end, boolean requireStartEndTimestampsExist, boolean cropIfTimeStampsDontExist) {
+	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
+			boolean requireStartEndTimestampsExist, boolean cropIfTimeStampsDontExist) {
 		ITimeSeriesUnivariate subsequence = getSubsequence(timeSeries, start, end, false);
 
 		if (subsequence == null)
@@ -603,7 +617,8 @@ public final class TimeSeriesTools {
 				subsequence.insert(start, value);
 				subsequence.removeTimeValue(subsequence.getFirstTimestamp());
 			} else {
-				throw new IllegalArgumentException("TimeSeriesTools.getSubsequence: unexpected return value. please verify.");
+				throw new IllegalArgumentException(
+						"TimeSeriesTools.getSubsequence: unexpected return value. please verify.");
 			}
 
 		// crop end time stamp
@@ -613,7 +628,8 @@ public final class TimeSeriesTools {
 				subsequence.insert(end, value);
 				subsequence.removeTimeValue(subsequence.getLastTimestamp());
 			} else {
-				throw new IllegalArgumentException("TimeSeriesTools.getSubsequence: unexpected return value. please verify");
+				throw new IllegalArgumentException(
+						"TimeSeriesTools.getSubsequence: unexpected return value. please verify");
 			}
 
 		return subsequence;
@@ -626,7 +642,8 @@ public final class TimeSeriesTools {
 	 * @param timeDuration
 	 * @return
 	 */
-	public static List<ITimeSeriesUnivariate> segmentTimeSeries(ITimeSeriesUnivariate timeSeries, TimeDuration timeDuration) {
+	public static List<ITimeSeriesUnivariate> segmentTimeSeries(ITimeSeriesUnivariate timeSeries,
+			TimeDuration timeDuration) {
 		if (timeSeries == null)
 			return null;
 
@@ -684,9 +701,8 @@ public final class TimeSeriesTools {
 	}
 
 	/**
-	 * Checks whether a timeSeries is equidistant. A time series is equidistant
-	 * iff the time intervals (the quantization) between any to time stamps are
-	 * equal.
+	 * Checks whether a timeSeries is equidistant. A time series is equidistant iff
+	 * the time intervals (the quantization) between any to time stamps are equal.
 	 * 
 	 * @param timeSeries
 	 * @return
