@@ -10,8 +10,8 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeQuantizationTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeQuantizationTools.TimeStampQuantizationTuple;
-import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
+import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 
 public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
