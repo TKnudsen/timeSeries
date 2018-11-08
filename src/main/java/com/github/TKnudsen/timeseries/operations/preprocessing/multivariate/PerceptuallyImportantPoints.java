@@ -2,7 +2,6 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -34,7 +33,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcess
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.03
  */
 public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
@@ -108,13 +107,9 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 		}
 
 		// remove all data not matching the pipTmp result
-		int i = 0;
-		Iterator<Long> pipTimeStampIterator = pipTimeStamps.iterator();
-		while (pipTimeStampIterator.hasNext()) {
-			Long nextPiPTimeStamp = pipTimeStampIterator.next();
-			while (nextPiPTimeStamp != data.getTimestamp(i++))
-				data.removeTimeValue(i);
-		}
+		for (int i = 0; i < data.getTimestamps().size(); i++)
+			if (!pipTimeStamps.contains(data.getTimestamp(i)))
+				data.removeTimeValue(i--);
 	}
 
 	@Override
