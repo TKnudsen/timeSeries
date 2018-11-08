@@ -9,7 +9,6 @@ import java.util.TreeMap;
 
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
-import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 
 /**
  * <p>
@@ -156,17 +155,15 @@ public class TimeQuantizationTools {
 	 * @param quantizationList
 	 * @return List with quantization suggestions, criterion: most occurrences and greatest common divisor
 	 */
-	public static List<Long> guessQuantization(List<Long> quantizationList, QuantizationGuess quantizationGuess) {
+	public static List<Long> guessQuantization(List<Long> quantizationList, boolean gcd) {
 		
 		List<Long> quantizationGuesses = new ArrayList<Long>();
 		
-		if(quantizationGuess == QuantizationGuess.MostOccurences) {
+		if(!gcd) {
 			quantizationGuesses.addAll(findQuantizationWithMostOccurences(quantizationList));
-		} else if(quantizationGuess == QuantizationGuess.GCD) {
-			quantizationGuesses.add(findGCD(quantizationList));
 		} else {
-			quantizationGuesses.addAll(findQuantizationWithMostOccurences(quantizationList));
-		}
+			quantizationGuesses.add(findGCD(quantizationList));
+		} 
 		return quantizationGuesses;
 	}
 
