@@ -196,6 +196,10 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 				else {
 					double dist = Math.abs(gradient * timeStamp + xAxisIntercept - data.getValue(timeStamp, false));
 
+					// avoid insert/delete for weak candidates
+					if (ranking.size() == rankCount && ranking.getFirst().getKey() > dist)
+						continue;
+
 					ranking.add(new EntryWithComparableKey<Double, Long>(dist, timeStamp));
 
 					// stick to the maximum length defined with rankCount
