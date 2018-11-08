@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
@@ -11,17 +12,20 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcess
 import com.github.TKnudsen.timeseries.operations.tools.TimeQuantizationTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeQuantizationTools.TimeStampQuantizationTuple;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
-import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 
-public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
+public class Equidistance extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
 	private boolean allowExtrapolatedTemporalBorders;
-	private final QuantizationGuess quantizationGuess;
-	private Long quantization;
+	private boolean gcd;	
+	private boolean useCustomQuantization;
+	private long quantization;
+	private boolean startAtFirstTimeStamp;
 		
-	public EquidistanceProcessor(boolean allowExtrapolatedTemporalBorders, QuantizationGuess quantizationGuess, Long quantization) {
+	public Equidistance(boolean allowExtrapolatedTemporalBorders, boolean gcd, boolean useCustomQuantization, long quantization, boolean startAtFirstTimeStamp) {
 		this.allowExtrapolatedTemporalBorders = allowExtrapolatedTemporalBorders;
-		this.quantizationGuess = quantizationGuess;
+		this.gcd = gcd;
+		this.startAtFirstTimeStamp = startAtFirstTimeStamp;
+		this.useCustomQuantization = useCustomQuantization;
 		this.quantization = quantization;
 	}
 
@@ -47,24 +51,29 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 	private void process(ITimeSeriesMultivariate timeSeries) {
 
 		List<Long> timeStamps = timeSeries.getTimestamps();
-		List<Long> quantizationList = TimeQuantizationTools.getQuantizationList(timeStamps);
+		List<Long> quantizationList = TimeQuantizationTools.getQuantizationList(timeStamps);		
 		
-		List<Long> quantizationGuesses = new ArrayList<Long>();
-		if(quantizationGuess.equals(QuantizationGuess.Custom)) {
-			quantizationGuesses.add(quantization);
+		long startTimeStampToUse = timeSeries.getFirstTimestamp();
+		
+		List<Long> quantizationGuesses = null;
+		if(!useCustomQuantization) {		
+			quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList, gcd);	
+			quantization = quantizationGuesses.get(0);
 		} else {
-			quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList, quantizationGuess);
-					
-		}		
-		TimeStampQuantizationTuple<Long, Long> timeStampQuantizationTuple = TimeQuantizationTools
-				.guessStartTimeStamp(quantizationGuesses, timeStamps);
-		Long startTimeStamp = timeStampQuantizationTuple.timeStamp;
-		Long quantization = timeStampQuantizationTuple.quantization;
+			quantizationGuesses = Arrays.asList(quantization);
+		}
+						
+		if(!startAtFirstTimeStamp) {			
+			TimeStampQuantizationTuple<Long, Long> timeStampQuantizationTuple = TimeQuantizationTools
+					.guessStartTimeStamp(quantizationGuesses, timeStamps);
+			startTimeStampToUse = timeStampQuantizationTuple.timeStamp;
+			quantization = timeStampQuantizationTuple.quantization;
+		}
+						
+		System.out.println("quantization: " + quantization);
+		System.out.println("start timestamp: " + startTimeStampToUse);
 				
-		System.out.println("start timestamp: " + startTimeStamp);
-		System.out.println("quantization: " + quantization + " (" + quantizationGuess.toString() + ")");
-		
-		applyEquidistance(timeSeries, startTimeStamp, quantization);
+		applyEquidistance(timeSeries, startTimeStampToUse, quantization);
 	}
 	
 	/**
@@ -194,8 +203,32 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 	}
 
 	@Override
-	public List<IDataProcessor<ITimeSeriesMultivariate>> getAlternativeParameterizations(int count) {
-		return null;
+	public List<IDataProcessor<ITimeSeriesMultivariate>> getAlternativeParameterizations(int count) {		
+		List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
+		for (int i = 0; i < count; i++) {
+			processors.add(new Equidistance(false, false, true, 1000L + i * 1000L, true));
+		}
+		return processors;
+	}
+	
+	public boolean isExtrapolatedTemporalBordersAllowed() {
+		return allowExtrapolatedTemporalBorders;
+	}
+	
+	public boolean isGCDUsed() {
+		return gcd;
+	}
+	
+	public boolean isCustomQuantizationUsed() {
+		return useCustomQuantization;
+	}
+	
+	public long getQuantization() {
+		return quantization;
+	}
+	
+	public boolean startAtFirstTimeStamp() {
+		return startAtFirstTimeStamp;
 	}
 
 }

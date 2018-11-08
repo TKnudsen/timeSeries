@@ -10,15 +10,14 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.EquidistanceProcessor;
+import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.Equidistance;
 import com.github.TKnudsen.timeseries.operations.tools.DateTools;
-import com.github.TKnudsen.timeseries.operations.tools.enums.QuantizationGuess;
 
 public class EquidistanceProcessorTester {
 
 	public static void main(String[] args) {
 				
-		EquidistanceProcessor processor = new EquidistanceProcessor(false, QuantizationGuess.MostOccurences, null);
+		Equidistance processor = new Equidistance(false, false, false, 0L, false);
 
 		List<ITimeSeriesMultivariate> tSList1 = generateCustomNonEquiMultivariateTimeSeriesList(0);
 		
@@ -72,7 +71,7 @@ public class EquidistanceProcessorTester {
 		printTimeStamps(tSList4);
 		printFirstLastTimeStampComparison(firstOld4, firstNew4, lastOld4, lastNew4);
 		
-		EquidistanceProcessor processor2 = new EquidistanceProcessor(true, QuantizationGuess.MostOccurences, null);
+		Equidistance processor2 = new Equidistance(true, false, false, 0L, false);
 		
 		List<ITimeSeriesMultivariate> tSList5 = generateRandomNonEquiMultivariateTimeSeriesList();
 		
@@ -87,7 +86,7 @@ public class EquidistanceProcessorTester {
 		printTimeStamps(tSList5);
 		printFirstLastTimeStampComparison(firstOld5, firstNew5, lastOld5, lastNew5);
 		
-		EquidistanceProcessor processor3 = new EquidistanceProcessor(false, QuantizationGuess.GCD, null);
+		Equidistance processor3 = new Equidistance(false, true, false, 0L, false);
 		
 		List<ITimeSeriesMultivariate> tSList6 = generateCustomNonEquiMultivariateTimeSeriesList(2);
 		
@@ -102,7 +101,7 @@ public class EquidistanceProcessorTester {
 		printTimeStamps(tSList6);
 		printFirstLastTimeStampComparison(firstOld6, firstNew6, lastOld6, lastNew6);	
 		
-		EquidistanceProcessor processor4 = new EquidistanceProcessor(false, QuantizationGuess.Custom, 40L);
+		Equidistance processor4 = new Equidistance(false, false, true, 40L, false);
 		
 		List<ITimeSeriesMultivariate> tSList7 = generateCustomNonEquiMultivariateTimeSeriesList(0);
 		
