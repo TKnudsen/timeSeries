@@ -157,10 +157,14 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 	 * 
 	 * @param data
 	 * @param pipTimeStamps
-	 * @return
+	 * @param rankCount
+	 *            parameter that limits the length of the ranking. Can be used to
+	 *            cope with scalability issues.
+	 * 
+	 * @return ranking of timestamps
 	 */
 	public static Ranking<EntryWithComparableKey<Double, Long>> calculateNextPipCandidates(ITimeSeriesUnivariate data,
-			SortedSet<Long> pipTimeStamps) {
+			SortedSet<Long> pipTimeStamps, int rankCount) {
 
 		if (data.size() <= pipTimeStamps.size())
 			throw new IllegalArgumentException(
@@ -193,6 +197,10 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 					double dist = Math.abs(gradient * timeStamp + xAxisIntercept - data.getValue(timeStamp, false));
 
 					ranking.add(new EntryWithComparableKey<Double, Long>(dist, timeStamp));
+
+					// stick to the maximum length defined with rankCount
+					if (ranking.size() > rankCount)
+						ranking.removeFirst();
 				}
 			}
 
@@ -200,6 +208,20 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 		}
 
 		return ranking;
+	}
+
+	/**
+	 * calculates the interestingness value of every remaining time stamp to be the
+	 * next pip.
+	 * 
+	 * @param data
+	 * @param pipTimeStamps
+	 * @return
+	 */
+	public static Ranking<EntryWithComparableKey<Double, Long>> calculateNextPipCandidates(ITimeSeriesUnivariate data,
+			SortedSet<Long> pipTimeStamps) {
+
+		return calculateNextPipCandidates(data, pipTimeStamps, data.size());
 	}
 
 	@Override
