@@ -18,7 +18,7 @@ public class EquidistanceProcessorTester {
 
 	public static void main(String[] args) {
 				
-		EquidistanceProcessor processor = new EquidistanceProcessor(false, QuantizationGuess.MostOccurences);
+		EquidistanceProcessor processor = new EquidistanceProcessor(false, QuantizationGuess.MostOccurences, null);
 
 		List<ITimeSeriesMultivariate> tSList1 = generateCustomNonEquiMultivariateTimeSeriesList(0);
 		
@@ -72,7 +72,7 @@ public class EquidistanceProcessorTester {
 		printTimeStamps(tSList4);
 		printFirstLastTimeStampComparison(firstOld4, firstNew4, lastOld4, lastNew4);
 		
-		EquidistanceProcessor processor2 = new EquidistanceProcessor(true, QuantizationGuess.MostOccurences);
+		EquidistanceProcessor processor2 = new EquidistanceProcessor(true, QuantizationGuess.MostOccurences, null);
 		
 		List<ITimeSeriesMultivariate> tSList5 = generateRandomNonEquiMultivariateTimeSeriesList();
 		
@@ -87,7 +87,7 @@ public class EquidistanceProcessorTester {
 		printTimeStamps(tSList5);
 		printFirstLastTimeStampComparison(firstOld5, firstNew5, lastOld5, lastNew5);
 		
-		EquidistanceProcessor processor3 = new EquidistanceProcessor(false, QuantizationGuess.GCD);
+		EquidistanceProcessor processor3 = new EquidistanceProcessor(false, QuantizationGuess.GCD, null);
 		
 		List<ITimeSeriesMultivariate> tSList6 = generateCustomNonEquiMultivariateTimeSeriesList(2);
 		
@@ -100,7 +100,22 @@ public class EquidistanceProcessorTester {
 		Long lastNew6 = tSList6.get(0).getLastTimestamp();
 		System.out.println("\n" + "Test 6 (custom time series, gcd) after processing:");
 		printTimeStamps(tSList6);
-		printFirstLastTimeStampComparison(firstOld6, firstNew6, lastOld6, lastNew6);		
+		printFirstLastTimeStampComparison(firstOld6, firstNew6, lastOld6, lastNew6);	
+		
+		EquidistanceProcessor processor4 = new EquidistanceProcessor(false, QuantizationGuess.Custom, 40L);
+		
+		List<ITimeSeriesMultivariate> tSList7 = generateCustomNonEquiMultivariateTimeSeriesList(0);
+		
+		System.out.println("\n" + "Test 7 (custom time series, custom quantization) before processing:");
+		printTimeStamps(tSList7);
+		Long firstOld7 = tSList7.get(0).getFirstTimestamp();
+		Long lastOld7 = tSList7.get(0).getLastTimestamp();
+		processor4.process(tSList7);
+		Long firstNew7 = tSList7.get(0).getFirstTimestamp();
+		Long lastNew7 = tSList7.get(0).getLastTimestamp();
+		System.out.println("\n" + "Test 7 (custom time series, custom quantization) after processing:");
+		printTimeStamps(tSList7);
+		printFirstLastTimeStampComparison(firstOld7, firstNew7, lastOld7, lastNew7);		
 	}
 	
 	private static void printFirstLastTimeStampComparison(Long firstOld, Long firstNew, Long lastOld, Long lastNew) {

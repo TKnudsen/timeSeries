@@ -17,10 +17,12 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 
 	private boolean allowExtrapolatedTemporalBorders;
 	private final QuantizationGuess quantizationGuess;
+	private Long quantization;
 		
-	public EquidistanceProcessor(boolean allowExtrapolatedTemporalBorders, QuantizationGuess quantizationGuess) {
+	public EquidistanceProcessor(boolean allowExtrapolatedTemporalBorders, QuantizationGuess quantizationGuess, Long quantization) {
 		this.allowExtrapolatedTemporalBorders = allowExtrapolatedTemporalBorders;
 		this.quantizationGuess = quantizationGuess;
+		this.quantization = quantization;
 	}
 
 	@Override
@@ -46,12 +48,19 @@ public class EquidistanceProcessor extends TimeSeriesProcessor<ITimeSeriesMultiv
 
 		List<Long> timeStamps = timeSeries.getTimestamps();
 		List<Long> quantizationList = TimeQuantizationTools.getQuantizationList(timeStamps);
-		List<Long> quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList, quantizationGuess);
+		
+		List<Long> quantizationGuesses = new ArrayList<Long>();
+		if(quantizationGuess.equals(QuantizationGuess.Custom)) {
+			quantizationGuesses.add(quantization);
+		} else {
+			quantizationGuesses = TimeQuantizationTools.guessQuantization(quantizationList, quantizationGuess);
+					
+		}		
 		TimeStampQuantizationTuple<Long, Long> timeStampQuantizationTuple = TimeQuantizationTools
 				.guessStartTimeStamp(quantizationGuesses, timeStamps);
 		Long startTimeStamp = timeStampQuantizationTuple.timeStamp;
 		Long quantization = timeStampQuantizationTuple.quantization;
-		
+				
 		System.out.println("start timestamp: " + startTimeStamp);
 		System.out.println("quantization: " + quantization + " (" + quantizationGuess.toString() + ")");
 		
