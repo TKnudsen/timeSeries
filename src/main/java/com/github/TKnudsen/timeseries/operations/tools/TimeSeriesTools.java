@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -509,28 +510,73 @@ public final class TimeSeriesTools {
 		return nearestNeighbors;
 	}
 
-	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, Long time1, Long time2, Long target)
-			throws IllegalArgumentException, IndexOutOfBoundsException {
-		if (timeSeries == null || time1 == null || time2 == null || target == null)
-			throw new IllegalArgumentException("TimeSeriesTools.getInterpolatedValue: given time stamps null");
+	/**
+	 * returns the value of a time series at a given position in time (timeStamp).
+	 * Uses left and right timeStamps for the linear interpolation.
+	 * 
+	 * @param timeSeries
+	 * @param leftTimeStamp
+	 * @param rightTimeStamp
+	 * @param timeStamp
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IndexOutOfBoundsException
+	 */
+	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, long leftTimeStamp, long rightTimeStamp,
+			long timeStamp) throws IllegalArgumentException, IndexOutOfBoundsException {
 
-		if (time1 >= time2)
+		Objects.requireNonNull(timeSeries);
+
+		if (leftTimeStamp >= rightTimeStamp)
 			throw new IllegalArgumentException("TimeSeriesTools.getInterpolatedValue: given time stamps are unsorted");
 
-		if (time1 < timeSeries.getFirstTimestamp() || time1 > timeSeries.getLastTimestamp())
+		if (leftTimeStamp < timeSeries.getFirstTimestamp() || leftTimeStamp > timeSeries.getLastTimestamp())
 			throw new IndexOutOfBoundsException("TimeSeriesTools.getInterpolatedValue: given time out of bounds");
 
-		if (time2 < timeSeries.getFirstTimestamp() || time2 > timeSeries.getLastTimestamp())
+		if (rightTimeStamp < timeSeries.getFirstTimestamp() || rightTimeStamp > timeSeries.getLastTimestamp())
 			throw new IndexOutOfBoundsException("TimeSeriesTools.getInterpolatedValue: given time out of bounds");
 
-		if (target < timeSeries.getFirstTimestamp() || target > timeSeries.getLastTimestamp())
+		if (timeStamp < timeSeries.getFirstTimestamp() || timeStamp > timeSeries.getLastTimestamp())
 			throw new IndexOutOfBoundsException("TimeSeriesTools.getInterpolatedValue: given time out of bounds");
 
 		// may throw an IllegalArgumentException if time stamps don't exist
-		double value1 = timeSeries.getValue(time1, false);
-		double value2 = timeSeries.getValue(time2, false);
+		// may be improved by checking for NaN with while iterators
+		double value1 = timeSeries.getValue(leftTimeStamp, false);
+		double value2 = timeSeries.getValue(rightTimeStamp, false);
 
-		return value1 + ((target - time1) / (double) (time2 - time1) * (value2 - value1));
+		return value1 + ((timeStamp - leftTimeStamp) / (double) (rightTimeStamp - leftTimeStamp) * (value2 - value1));
+	}
+
+	/**
+	 * returns the interpolated value domain of a time series at a given position in
+	 * time (timeStamp). Uses left and right timeStamps for the linear
+	 * interpolation.
+	 * 
+	 * @param timeSeries
+	 * @param timeStamp
+	 * @return
+	 */
+	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, long timeStamp) {
+
+		Objects.requireNonNull(timeSeries);
+
+		if (timeStamp < timeSeries.getFirstTimestamp())
+			throw new IndexOutOfBoundsException(
+					"TimeSeriesTools.getInterpolatedValue: given target time stamp earlier than first time stamp of time series. Would be an extrapolation, though.");
+
+		if (timeStamp > timeSeries.getLastTimestamp())
+			throw new IndexOutOfBoundsException(
+					"TimeSeriesTools.getInterpolatedValue: given target time stamp earlier than first time stamp of time series. Would be an extrapolation, though.");
+
+		if (timeSeries.containsTimestamp(timeStamp))
+			return timeSeries.getValue(timeStamp, false);
+
+		// identify precessor and successor
+		int index1 = timeSeries.findByDate(timeStamp, false);
+		Long leftTimeStamp = timeSeries.getTimestamp(index1);
+		Long rightTimeStamp = timeSeries.getTimestamp(index1 + 1);
+
+		return getInterpolatedValue(timeSeries, leftTimeStamp, rightTimeStamp, timeStamp);
 	}
 
 	/**
