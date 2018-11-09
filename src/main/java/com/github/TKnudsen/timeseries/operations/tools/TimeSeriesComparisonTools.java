@@ -38,24 +38,29 @@ public class TimeSeriesComparisonTools {
 	}
 
 	/**
-	 * calculates the average difference of the value domains of two time series
-	 * for every common time stamp.
+	 * calculates the average difference of the value domains of two time series for
+	 * every common time stamp.
 	 * 
 	 * @param timeSeries1
 	 * @param timeSeries2
 	 * @return
 	 */
-	public static double compareValueDifferenceOnAverage(ITimeSeriesUnivariate timeSeries1, ITimeSeriesUnivariate timeSeries2) {
+	public static double compareValueDifferenceOnAverage(ITimeSeriesUnivariate timeSeries1,
+			ITimeSeriesUnivariate timeSeries2) {
 
 		List<Double> valueDifferences = new ArrayList<>();
 		for (int i = 0; i < timeSeries1.size(); i++) {
 			Double v1 = timeSeries1.getValue(i);
 
-			Long timeStamp = timeSeries1.getTimestamp(i);
-			Double v2 = timeSeries2.getValue(timeStamp, false);
+			try {
+				// second time series may have other time stamps
+				Long timeStamp = timeSeries1.getTimestamp(i);
+				Double v2 = timeSeries2.getValue(timeStamp, false);
 
-			if (v1 != null && v2 != null && !Double.isNaN(v1) && !Double.isNaN(v2))
-				valueDifferences.add(Math.abs(v2 - v1));
+				if (v1 != null && v2 != null && !Double.isNaN(v1) && !Double.isNaN(v2))
+					valueDifferences.add(Math.abs(v2 - v1));
+			} catch (Exception e) {
+			}
 		}
 
 		return MathFunctions.getMean(valueDifferences);

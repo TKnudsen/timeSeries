@@ -40,14 +40,17 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	T getValue(int index);
 
 	/**
-	 * temporal access
+	 * Retrieves the index for a given time stamp.
 	 * 
-	 * @param timestamp
+	 * In case that no exact match is needed and not existing the index left
+	 * (earlier) should be returned.
+	 * 
+	 * @param timeStamp
 	 * @param requireExactMatch
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	int findByDate(long timestamp, boolean requireExactMatch) throws IllegalArgumentException;
+	int findByDate(long timeStamp, boolean requireExactMatch) throws IllegalArgumentException;
 
 	/**
 	 * temporal access
@@ -60,13 +63,13 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	/**
 	 * temporal access
 	 * 
-	 * @param timestamp
+	 * @param timeStamp
 	 * @param allowInterpolation
 	 * @return
 	 * @throws IndexOutOfBoundsException
 	 * @throws IllegalArgumentException
 	 */
-	T getValue(long timestamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException;
+	T getValue(long timeStamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException;
 
 	long getFirstTimestamp();
 
@@ -82,17 +85,17 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	 */
 	List<T> getValues();
 
-	void insert(long timestamp, T value);
+	void insert(long timeStamp, T value);
 
-	void removeTimeValue(long timestamp);
+	void removeTimeValue(long timeStamp);
 
 	void removeTimeValue(int index);
-	
-	void replaceTimeValue(int index, long timestamp);
+
+	void replaceTimeValue(int index, long timeStamp);
 
 	void replaceValue(int index, T value);
 
-	void replaceValue(long timestamp, T value);
+	void replaceValue(long timeStamp, T value);
 
 	/**
 	 * time series can be renamed

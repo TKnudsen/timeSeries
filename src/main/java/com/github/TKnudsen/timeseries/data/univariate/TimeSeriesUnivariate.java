@@ -217,6 +217,17 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 		return interpolationSearch(0, timeStamps.size() - 1, timeStamp, requireExactMatch);
 	}
 
+	/**
+	 * retrieves the index for a given time stamp. In case that no exact match is
+	 * needed and not existing the index left (earlier) is returned.
+	 * 
+	 * @param indexStart
+	 * @param indexEnd
+	 * @param timeStamp
+	 * @param requireExactMatch
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
 	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch)
 			throws IllegalArgumentException {
 		if (indexStart > indexEnd)
@@ -268,9 +279,9 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public boolean containsTimestamp(long timestamp) {
+	public boolean containsTimestamp(long timeStamp) {
 		try {
-			int index = findByDate(timestamp, true);
+			int index = findByDate(timeStamp, true);
 			if (index >= 0)
 				return true;
 		} catch (IllegalArgumentException e) {
@@ -280,23 +291,31 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public void insert(long timestamp, Double value) {
-		if (isEmpty() || timestamp > getLastTimestamp()) {
-			timeStamps.add(timestamp);
+	public void insert(long timeStamp, Double value) {
+		if (isEmpty() || timeStamp > getLastTimestamp()) {
+			timeStamps.add(timeStamp);
 			values.add(value);
-		} else if (timestamp < getFirstTimestamp()) {
-			timeStamps.add(0, timestamp);
+		} else if (timeStamp < getFirstTimestamp()) {
+			timeStamps.add(0, timeStamp);
 			values.add(0, value);
 		} else {
-			int index = 0;
-			while (timeStamps.get(index) < timestamp)
-				index++;
+			// int index = 0;
+			// while (timeStamps.get(index) < timeStamp)
+			// index++;
+			//
+			// if (timeStamps.get(index).longValue() == timeStamp)
+			// replaceValue(index, value);
+			// else {
+			// timeStamps.add(index, timeStamp);
+			// values.add(index, value);
+			// }
 
-			if (timeStamps.get(index).longValue() == timestamp)
-				replaceValue(index, value);
+			int indexLeftIfNotExisting = findByDate(timeStamp, false);
+			if (timeStamps.get(indexLeftIfNotExisting).longValue() == timeStamp)
+				replaceValue(indexLeftIfNotExisting, value);
 			else {
-				timeStamps.add(index, timestamp);
-				values.add(index, value);
+				timeStamps.add(indexLeftIfNotExisting + 1, timeStamp);
+				values.add(indexLeftIfNotExisting + 1, value);
 			}
 		}
 
@@ -304,12 +323,12 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public void removeTimeValue(long timestamp) {
+	public void removeTimeValue(long timeStamp) {
 		int index = 0;
-		while (timeStamps.get(index) < timestamp)
+		while (timeStamps.get(index) < timeStamp)
 			index++;
 
-		if (timeStamps.get(index).longValue() == timestamp) {
+		if (timeStamps.get(index).longValue() == timeStamp) {
 			timeStamps.remove(index);
 			values.remove(index);
 		}
@@ -326,11 +345,11 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public void replaceTimeValue(int index, long timestamp) throws IllegalArgumentException {
+	public void replaceTimeValue(int index, long timeStamp) throws IllegalArgumentException {
 		if (index < 0 || index >= timeStamps.size())
 			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
 
-		timeStamps.set(index, timestamp);
+		timeStamps.set(index, timeStamp);
 
 		resetHash();
 	}
@@ -346,11 +365,11 @@ public class TimeSeriesUnivariate implements ITimeSeriesUnivariate {
 	}
 
 	@Override
-	public void replaceValue(long timestamp, Double value) throws IllegalArgumentException {
-		int index = findByDate(timestamp, true);
+	public void replaceValue(long timeStamp, Double value) throws IllegalArgumentException {
+		int index = findByDate(timeStamp, true);
 
 		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: timestamp out of bounds");
+			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: timeStamp out of bounds");
 
 		values.set(index, value);
 
