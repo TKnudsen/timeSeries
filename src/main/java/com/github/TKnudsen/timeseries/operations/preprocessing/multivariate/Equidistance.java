@@ -265,7 +265,7 @@ public class Equidistance extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 		return allowExtrapolatedTemporalBorders;
 	}
 
-	public boolean isGCDUsed() {
+	public boolean isGreatestCommonDivisor() {
 		return greatestCommonDivisor;
 	}
 
