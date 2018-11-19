@@ -1,14 +1,15 @@
 package com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.multivariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.transformations.featureExtraction.univariate.ITimeSeriesUnivariateFeatureExtractor;

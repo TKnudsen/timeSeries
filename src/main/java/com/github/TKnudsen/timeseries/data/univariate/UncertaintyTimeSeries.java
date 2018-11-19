@@ -1,11 +1,12 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.IValueDistributionUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.IValueDistributionUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
 import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
 
 public class UncertaintyTimeSeries extends TimeSeriesUnivariate implements IUncertaintyAtTimeStamp<IValueDistributionUncertainty<Double>> {

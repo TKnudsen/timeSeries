@@ -1,5 +1,7 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -9,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 
 /**
  * <p>

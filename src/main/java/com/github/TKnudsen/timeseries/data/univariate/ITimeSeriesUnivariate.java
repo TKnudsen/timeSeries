@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.IKeyValueProvider;
+
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**

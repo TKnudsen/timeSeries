@@ -1,9 +1,5 @@
 package com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
@@ -11,6 +7,11 @@ import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.
 import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;

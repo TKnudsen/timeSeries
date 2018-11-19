@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.operations.transformations.featureExtract
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.featureExtraction.IFeatureExtractor;
+
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**

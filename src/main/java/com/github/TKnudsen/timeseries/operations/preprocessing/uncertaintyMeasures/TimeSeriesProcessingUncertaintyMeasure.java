@@ -1,11 +1,12 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures;
 
-import java.util.SortedMap;
-
 import com.github.TKnudsen.ComplexDataObject.data.complexDataObject.ComplexDataObject;
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IProcessingUncertaintyMeasure;
+
+import java.util.SortedMap;
+
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeSeriesListener;
 import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;

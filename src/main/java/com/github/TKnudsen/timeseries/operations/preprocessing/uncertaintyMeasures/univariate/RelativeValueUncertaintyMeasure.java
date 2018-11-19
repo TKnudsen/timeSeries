@@ -1,9 +1,10 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate;
 
-import java.util.TreeMap;
-
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.LinearNormalizationFunction;
+
+import java.util.TreeMap;
+
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesProcessingUncertaintyMeasure;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;

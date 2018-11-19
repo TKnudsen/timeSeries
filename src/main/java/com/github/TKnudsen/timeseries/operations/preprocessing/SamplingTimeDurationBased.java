@@ -1,8 +1,9 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing;
 
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
+
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
