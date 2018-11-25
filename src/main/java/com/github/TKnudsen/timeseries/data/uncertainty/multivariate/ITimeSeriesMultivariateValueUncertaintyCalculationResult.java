@@ -3,7 +3,7 @@ package com.github.TKnudsen.timeseries.data.uncertainty.multivariate;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 
 /**
  * The result of computing the {@link IValueUncertainty} for the elements of a
@@ -21,6 +21,6 @@ import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertain
  * <code>v + u * v</code>. When the uncertainties are absolute, then the actual
  * value may be <code>v + u</code>.
  */
-public interface ITimeSeriesMultivariateValueUncertainty
-		extends ITimeSeriesValueUncertainty<List<IValueUncertainty>> {
+public interface ITimeSeriesMultivariateValueUncertaintyCalculationResult
+		extends ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> {
 }

@@ -1,7 +1,7 @@
 package com.github.TKnudsen.timeseries.data.uncertainty.univariate;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 
 /**
  * The result of computing the {@link IValueUncertainty} for the elements of a
@@ -21,5 +21,5 @@ import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertain
  * 
  * @param <V>
  */
-public interface ITimeSeriesUnivariateValueUncertainty extends ITimeSeriesValueUncertainty<IValueUncertainty> {
+public interface ITimeSeriesUnivariateValueUncertaintyCalculationResult extends ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> {
 }

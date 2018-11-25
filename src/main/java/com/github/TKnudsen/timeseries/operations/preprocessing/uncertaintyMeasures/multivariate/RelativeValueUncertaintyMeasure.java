@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.ValueUncertaintyDistribution;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertainty;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyMultivariateTimeSeries;
 
@@ -44,17 +44,17 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 	}
 
 	@Override
-	public ITimeSeriesValueUncertainty<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
+	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
 			ITimeSeriesMultivariate processedTimeSeries) {
 
 		uncertaintiesOverTime = new TreeMap<>();
 
 		// create composition of univariate value uncertainties
-		Map<String, ITimeSeriesValueUncertainty<IValueUncertainty>> valueUncertaintyMeasuresPerDimension = new LinkedHashMap<>();
+		Map<String, ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty>> valueUncertaintyMeasuresPerDimension = new LinkedHashMap<>();
 
 		for (String dimension : originalTimeSeries.getAttributeNames()) {
 			com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate.RelativeValueUncertaintyMeasure measure = new com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate.RelativeValueUncertaintyMeasure();
-			ITimeSeriesValueUncertainty<IValueUncertainty> vuOneDimension = measure
+			ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> vuOneDimension = measure
 					.compute(originalTimeSeries.getTimeSeries(dimension), processedTimeSeries.getTimeSeries(dimension));
 
 			valueUncertaintyMeasuresPerDimension.put(dimension, vuOneDimension);
@@ -77,7 +77,7 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 //				processedTimeSeries.getValue(timeStamp, false);
 
 				for (String dimension : originalTimeSeries.getAttributeNames()) {
-					ITimeSeriesValueUncertainty<IValueUncertainty> uncertainties = valueUncertaintyMeasuresPerDimension
+					ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> uncertainties = valueUncertaintyMeasuresPerDimension
 							.get(dimension);
 
 					// speedup

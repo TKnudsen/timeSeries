@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.ITimeSeriesMultivariateValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.ITimeSeriesMultivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesUncertaintyMeasure;
 
 /**
@@ -28,7 +28,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasur
 public abstract class TimeSeriesMultivariateUncertaintyMeasure
 		extends TimeSeriesUncertaintyMeasure<ITimeSeriesMultivariate, IValueUncertainty, List<IValueUncertainty>> {
 
-	public ITimeSeriesMultivariateValueUncertainty getTimeSeriesValueUncertainty() {
-		return (ITimeSeriesMultivariateValueUncertainty) timeSeriesValueUncertainty;
+	public ITimeSeriesMultivariateValueUncertaintyCalculationResult getTimeSeriesValueUncertainty() {
+		return (ITimeSeriesMultivariateValueUncertaintyCalculationResult) timeSeriesValueUncertainty;
 	}
 }

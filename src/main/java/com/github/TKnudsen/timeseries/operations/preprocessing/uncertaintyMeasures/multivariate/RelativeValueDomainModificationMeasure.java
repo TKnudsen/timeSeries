@@ -14,7 +14,7 @@ import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncert
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.ValueUncertaintyDistribution;
 import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertainty;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyMultivariateTimeSeries;
 
@@ -58,7 +58,7 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 	}
 
 	@Override
-	public ITimeSeriesValueUncertainty<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
+	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
 			ITimeSeriesMultivariate processedTimeSeries) {
 		uncertaintiesOverTime = new TreeMap<>();
 

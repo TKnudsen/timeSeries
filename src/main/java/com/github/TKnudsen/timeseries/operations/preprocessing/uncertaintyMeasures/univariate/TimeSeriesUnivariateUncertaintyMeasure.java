@@ -1,7 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.timeseries.data.uncertainty.univariate.ITimeSeriesUnivariateValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.univariate.ITimeSeriesUnivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesUncertaintyMeasure;
 
@@ -26,9 +26,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasur
 public abstract class TimeSeriesUnivariateUncertaintyMeasure
 		extends TimeSeriesUncertaintyMeasure<ITimeSeriesUnivariate, IValueUncertainty, IValueUncertainty> {
 
-	protected ITimeSeriesUnivariateValueUncertainty timeSeriesValueUncertainty;
+	protected ITimeSeriesUnivariateValueUncertaintyCalculationResult timeSeriesValueUncertainty;
 
-	public ITimeSeriesUnivariateValueUncertainty getTimeSeriesValueUncertainty() {
+	public ITimeSeriesUnivariateValueUncertaintyCalculationResult getTimeSeriesValueUncertainty() {
 		return timeSeriesValueUncertainty;
 	}
 }
