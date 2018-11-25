@@ -181,9 +181,7 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 		}
 
 		timeSeriesValueUncertainty = new TimeSeriesMultivariateValueUncertainty(
-				new UncertaintyMultivariateTimeSeries<IValueUncertainty>(timeStamps,
-						valueUncertaintiesAllDimensionsOverTime),
-				true);
+				new UncertaintyMultivariateTimeSeries(timeStamps, valueUncertaintiesAllDimensionsOverTime), true);
 
 		return timeSeriesValueUncertainty;
 	}

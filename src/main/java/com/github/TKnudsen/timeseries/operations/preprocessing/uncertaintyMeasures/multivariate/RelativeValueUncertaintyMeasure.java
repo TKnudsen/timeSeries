@@ -92,9 +92,7 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 		}
 
 		this.timeSeriesValueUncertainty = new TimeSeriesMultivariateValueUncertainty(
-				new UncertaintyMultivariateTimeSeries<IValueUncertainty>(timeStamps,
-						valueUncertaintiesAllDimensionsOverTime),
-				true);
+				new UncertaintyMultivariateTimeSeries(timeStamps, valueUncertaintiesAllDimensionsOverTime), true);
 
 		return timeSeriesValueUncertainty;
 	}
