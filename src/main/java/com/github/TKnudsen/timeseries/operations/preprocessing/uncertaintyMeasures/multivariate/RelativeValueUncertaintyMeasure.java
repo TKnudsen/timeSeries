@@ -69,15 +69,24 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 			List<Double> relatives = new ArrayList<>();
 			List<IValueUncertainty> valueUncertainties = new ArrayList<>();
 
+			// requires interpolation search from long to int (index)
+			int timeSeriesIndexToSpeedupAccess = originalTimeSeries.findByDate(timeStamp, true);
+
 			try {
-				// dummy access
-				processedTimeSeries.getValue(timeStamp, false);
+//				// dummy access
+//				processedTimeSeries.getValue(timeStamp, false);
 
 				for (String dimension : originalTimeSeries.getAttributeNames()) {
 					ITimeSeriesValueUncertainty<IValueUncertainty> uncertainties = valueUncertaintyMeasuresPerDimension
 							.get(dimension);
 
-					IValueUncertainty vu = uncertainties.getValueUncertainties().getValue(timeStamp, false);
+					// speedup
+					IValueUncertainty vu = null;
+					if (uncertainties.getValueUncertainties().getTimestamp(timeSeriesIndexToSpeedupAccess) == timeStamp)
+						vu = uncertainties.getValueUncertainties().getValue(timeSeriesIndexToSpeedupAccess);
+					else
+						vu = uncertainties.getValueUncertainties().getValue(timeStamp, false);
+
 					relatives.add(vu.getAmount());
 					valueUncertainties.add(vu);
 				}
