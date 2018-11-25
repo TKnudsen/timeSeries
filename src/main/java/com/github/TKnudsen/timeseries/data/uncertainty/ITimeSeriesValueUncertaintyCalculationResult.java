@@ -19,7 +19,7 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * <code>v + u * v</code>. When the uncertainties are absolute, then the
  * actual value may be <code>v + u</code>. 
  */
-public interface ITimeSeriesValueUncertainty<U>
+public interface ITimeSeriesValueUncertaintyCalculationResult<U>
 {
 	/**
 	 * Returns a time series that contains a {@link IValueUncertainty} for

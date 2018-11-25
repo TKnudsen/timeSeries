@@ -8,7 +8,7 @@ import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncer
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeSeriesListener;
 import com.github.TKnudsen.timeseries.data.TimeSeriesEvent;
-import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.IUncertaintyAtTimeStamp;
 
 /**
@@ -43,7 +43,7 @@ public abstract class TimeSeriesUncertaintyMeasure<TS extends ITimeSeries<?>, U 
 	 */
 	protected SortedMap<Long, U> uncertaintiesOverTime;
 
-	protected ITimeSeriesValueUncertainty<VU> timeSeriesValueUncertainty;
+	protected ITimeSeriesValueUncertaintyCalculationResult<VU> timeSeriesValueUncertainty;
 
 	@Override
 	public U getUncertainty(Long timeStamp) {
@@ -81,7 +81,7 @@ public abstract class TimeSeriesUncertaintyMeasure<TS extends ITimeSeries<?>, U 
 		this.uncertaintiesOverTime = uncertainties;
 	}
 
-	public ITimeSeriesValueUncertainty<?> getTimeSeriesValueUncertainty() {
+	public ITimeSeriesValueUncertaintyCalculationResult<?> getTimeSeriesValueUncertainty() {
 		return timeSeriesValueUncertainty;
 	}
 

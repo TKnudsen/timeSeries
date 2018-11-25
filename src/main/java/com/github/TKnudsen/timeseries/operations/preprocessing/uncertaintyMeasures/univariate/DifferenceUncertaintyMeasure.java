@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
-import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.univariate.TimeSeriesUnivariateValueUncertainty;
 import com.github.TKnudsen.timeseries.data.uncertainty.univariate.UncertaintyTimeSeries;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
@@ -23,7 +23,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 public class DifferenceUncertaintyMeasure extends TimeSeriesUnivariateUncertaintyMeasure {
 
 	@Override
-	public ITimeSeriesValueUncertainty<IValueUncertainty> compute(ITimeSeriesUnivariate originalTimeSeries,
+	public ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> compute(ITimeSeriesUnivariate originalTimeSeries,
 			ITimeSeriesUnivariate processedTimeSeries) {
 
 		uncertaintiesOverTime = new TreeMap<>();
