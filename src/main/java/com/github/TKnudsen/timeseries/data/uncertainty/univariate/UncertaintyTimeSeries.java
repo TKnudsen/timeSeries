@@ -7,6 +7,11 @@ import com.github.TKnudsen.timeseries.data.TimeSeries;
 
 public class UncertaintyTimeSeries<U extends IValueUncertainty> extends TimeSeries<U> {
 
+	@SuppressWarnings("unused")
+	private UncertaintyTimeSeries() {
+		super();
+	}
+
 	public UncertaintyTimeSeries(List<Long> timeStamps, List<U> valueUncertainties) {
 		super(timeStamps, valueUncertainties);
 	}

@@ -15,7 +15,7 @@ import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.Value
 import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
-import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyMultivariateTimeSeries;
 
 /**
@@ -180,7 +180,7 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 			valueUncertaintiesAllDimensionsOverTime.add(valueUncertainties);
 		}
 
-		timeSeriesValueUncertainty = new TimeSeriesMultivariateValueUncertainty(
+		timeSeriesValueUncertainty = new TimeSeriesMultivariateValueUncertaintyCalculationResult(
 				new UncertaintyMultivariateTimeSeries(timeStamps, valueUncertaintiesAllDimensionsOverTime), true);
 
 		return timeSeriesValueUncertainty;

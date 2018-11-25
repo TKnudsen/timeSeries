@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
-import com.github.TKnudsen.timeseries.data.uncertainty.univariate.TimeSeriesUnivariateValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.univariate.TimeSeriesUnivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.univariate.UncertaintyTimeSeries;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
@@ -48,7 +48,7 @@ public class DifferenceUncertaintyMeasure extends TimeSeriesUnivariateUncertaint
 			}
 		}
 
-		timeSeriesValueUncertainty = new TimeSeriesUnivariateValueUncertainty(
+		timeSeriesValueUncertainty = new TimeSeriesUnivariateValueUncertaintyCalculationResult(
 				new UncertaintyTimeSeries<IValueUncertainty>(timeStamps, valueUncertainties), false);
 
 		return timeSeriesValueUncertainty;

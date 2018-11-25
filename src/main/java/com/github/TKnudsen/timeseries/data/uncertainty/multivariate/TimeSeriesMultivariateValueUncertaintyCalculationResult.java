@@ -5,18 +5,19 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
-public class TimeSeriesMultivariateValueUncertainty implements ITimeSeriesMultivariateValueUncertaintyCalculationResult {
+public class TimeSeriesMultivariateValueUncertaintyCalculationResult
+		implements ITimeSeriesMultivariateValueUncertaintyCalculationResult {
 
 	private ITimeSeries<List<IValueUncertainty>> valueUncertainties;
 
 	private boolean relative;
 
 	@SuppressWarnings("unused")
-	private TimeSeriesMultivariateValueUncertainty() {
+	private TimeSeriesMultivariateValueUncertaintyCalculationResult() {
 	}
 
-	public TimeSeriesMultivariateValueUncertainty(ITimeSeries<List<IValueUncertainty>> valueUncertainties,
-			boolean relative) {
+	public TimeSeriesMultivariateValueUncertaintyCalculationResult(
+			ITimeSeries<List<IValueUncertainty>> valueUncertainties, boolean relative) {
 		this.valueUncertainties = valueUncertainties;
 		this.relative = relative;
 	}

@@ -10,7 +10,7 @@ import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncer
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.ValueUncertaintyDistribution;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
-import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyMultivariateTimeSeries;
 
 /**
@@ -100,7 +100,7 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 			}
 		}
 
-		this.timeSeriesValueUncertainty = new TimeSeriesMultivariateValueUncertainty(
+		this.timeSeriesValueUncertainty = new TimeSeriesMultivariateValueUncertaintyCalculationResult(
 				new UncertaintyMultivariateTimeSeries(timeStamps, valueUncertaintiesAllDimensionsOverTime), true);
 
 		return timeSeriesValueUncertainty;

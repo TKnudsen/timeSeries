@@ -43,7 +43,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	private V missingValueIndicator;
 
 	protected int hashCode;
-
+	
 	protected TimeSeries() {
 		this.id = MathFunctions.randomLong();
 		this.timeStamps = new ArrayList<>();
