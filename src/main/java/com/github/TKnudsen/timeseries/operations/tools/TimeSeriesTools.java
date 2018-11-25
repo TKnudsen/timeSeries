@@ -129,7 +129,9 @@ public final class TimeSeriesTools {
 				localLength += Math.abs(ts.getTimestamp(i + 1) - ts.getTimestamp(i)) / 2.0;
 			// missing values handle
 			globalLength += localLength; // TODO before or after the continue?
-			if (compareDoubles(ts.getValue(i), ts.getMissingValueIndicator()))
+			if (ts.getValue(i) == null)
+				continue;
+			if (ts.getMissingValueIndicator() != null && compareDoubles(ts.getValue(i), ts.getMissingValueIndicator()))
 				continue;
 			means += (ts.getValue(i) * localLength);
 		}
