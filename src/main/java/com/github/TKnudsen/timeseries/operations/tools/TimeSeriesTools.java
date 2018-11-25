@@ -326,7 +326,7 @@ public final class TimeSeriesTools {
 		return pairs;
 	}
 
-	public static ITimeSeries<Double> createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs,
+	public static TimeSeriesUnivariate createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs,
 			Double missingValueIndicator) {
 		if (timeValuePairs == null)
 			return null;
