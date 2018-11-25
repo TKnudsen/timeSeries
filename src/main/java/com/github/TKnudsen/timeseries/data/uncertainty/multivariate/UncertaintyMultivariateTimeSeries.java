@@ -5,19 +5,20 @@ import java.util.List;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.timeseries.data.TimeSeries;
 
-public class UncertaintyMultivariateTimeSeries<U extends IValueUncertainty> extends TimeSeries<List<U>> {
+public class UncertaintyMultivariateTimeSeries extends TimeSeries<List<IValueUncertainty>> {
 
-	public UncertaintyMultivariateTimeSeries(List<Long> timeStamps, List<List<U>> valueUncertainties) {
+	public UncertaintyMultivariateTimeSeries(List<Long> timeStamps, List<List<IValueUncertainty>> valueUncertainties) {
 		super(timeStamps, valueUncertainties);
 	}
 
 	@Override
-	protected long valueToHash(List<U> value) {
+	protected long valueToHash(List<IValueUncertainty> value) {
 		return value.hashCode();
 	}
 
 	@Override
-	protected List<U> interpolateValue(long timeStamp, long lBefore, long lAfter, List<U> vBefore, List<U> vAfter) {
+	protected List<IValueUncertainty> interpolateValue(long timeStamp, long lBefore, long lAfter,
+			List<IValueUncertainty> vBefore, List<IValueUncertainty> vAfter) {
 		return vBefore;
 	}
 

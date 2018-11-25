@@ -7,11 +7,13 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 public class TimeSeriesMultivariateValueUncertainty implements ITimeSeriesMultivariateValueUncertainty {
 
-//	private final ITimeSeries<List<Double>> timeSeries;
+	private ITimeSeries<List<IValueUncertainty>> valueUncertainties;
 
-	private final ITimeSeries<List<IValueUncertainty>> valueUncertainties;
+	private boolean relative;
 
-	private final boolean relative;
+	@SuppressWarnings("unused")
+	private TimeSeriesMultivariateValueUncertainty() {
+	}
 
 	public TimeSeriesMultivariateValueUncertainty(ITimeSeries<List<IValueUncertainty>> valueUncertainties,
 			boolean relative) {
@@ -23,11 +25,6 @@ public class TimeSeriesMultivariateValueUncertainty implements ITimeSeriesMultiv
 	public ITimeSeries<List<IValueUncertainty>> getValueUncertainties() {
 		return valueUncertainties;
 	}
-
-//	@Override
-//	public ITimeSeries<List<Double>> getTimeSeries() {
-//		return timeSeries;
-//	}
 
 	@Override
 	public boolean isRelative() {
