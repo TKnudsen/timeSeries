@@ -1,7 +1,4 @@
-package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.uncertainty.processing;
-
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.NumericalDistributionUncertainty;
-import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
+package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.multivariate;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,8 +9,14 @@ import java.util.TreeMap;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.ValueUncertaintyDistribution;
+import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesProcessingUncertaintyMeasure;
+import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyMultivariateTimeSeries;
 
 /**
  * <p>
@@ -29,10 +32,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasur
  * </p>
  * 
  * @author Juergen Bernard, Christian Bors
- * @version 1.04
+ * @version 1.07
  */
-public class RelativeValueDomainModificationMeasure
-		extends TimeSeriesProcessingUncertaintyMeasure<ITimeSeriesMultivariate> {
+public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivariateUncertaintyMeasure {
 
 	private static Double epsilon = 0.000000001;
 	private Double samplingRate = 0.4;
@@ -56,10 +58,11 @@ public class RelativeValueDomainModificationMeasure
 	}
 
 	@Override
-	public void calculateUncertainty(ITimeSeriesMultivariate originalData, ITimeSeriesMultivariate processedData) {
+	public ITimeSeriesValueUncertainty<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
+			ITimeSeriesMultivariate processedTimeSeries) {
 		uncertaintiesOverTime = new TreeMap<>();
 
-		int maxSampleSize = originalData.getTimestamps().size();
+		int maxSampleSize = originalTimeSeries.getTimestamps().size();
 		Random samplingGenerator = new Random();
 		List<StatisticsSupport> samplingStatsList = new ArrayList<>();
 		List<NormalDistribution> normalDistributions = new ArrayList<>();
@@ -68,13 +71,13 @@ public class RelativeValueDomainModificationMeasure
 		List<Double> modifiedValues;
 
 		Iterator<Long> tsIt;
-		if (originalData.getTimestamps().size() > processedData.getTimestamps().size()) {
-			tsIt = originalData.getTimestamps().iterator();
+		if (originalTimeSeries.getTimestamps().size() > processedTimeSeries.getTimestamps().size()) {
+			tsIt = originalTimeSeries.getTimestamps().iterator();
 		} else {
-			tsIt = processedData.getTimestamps().iterator();
+			tsIt = processedTimeSeries.getTimestamps().iterator();
 		}
 
-		for (int i = 0; i < processedData.getDimensionality(); ++i)
+		for (int i = 0; i < processedTimeSeries.getDimensionality(); ++i)
 			samplingStatsList.add(new StatisticsSupport(new ArrayList<>()));
 
 		int samplesNeeded = (int) (maxSampleSize * this.samplingRate);
@@ -85,10 +88,10 @@ public class RelativeValueDomainModificationMeasure
 			// only add value if it is below the samples needed value
 			if (rand < samplesNeeded) {
 				Long timeStamp = tsIt.next();
-				originalValues = originalData.getValue(timeStamp, false);
+				originalValues = originalTimeSeries.getValue(timeStamp, false);
 
 				try {
-					modifiedValues = processedData.getValue(timeStamp, false);
+					modifiedValues = processedTimeSeries.getValue(timeStamp, false);
 				} catch (Exception e) {
 					continue;
 				}
@@ -118,12 +121,15 @@ public class RelativeValueDomainModificationMeasure
 				normalDistributions.add(null);
 		}
 
-		for (Long timeStamp : originalData.getTimestamps()) {
-			originalValues = originalData.getValue(timeStamp, false);
+		List<Long> timeStamps = new ArrayList<>();
+		List<List<IValueUncertainty>> valueUncertaintiesAllDimensionsOverTime = new ArrayList<>();
+
+		for (Long timeStamp : originalTimeSeries.getTimestamps()) {
+			originalValues = originalTimeSeries.getValue(timeStamp, false);
 			modifiedValues = null;
 
 			try {
-				modifiedValues = processedData.getValue(timeStamp, false);
+				modifiedValues = processedTimeSeries.getValue(timeStamp, false);
 			} catch (Exception e) {
 				// System.err.println(
 				// getName() + ": unable to retrieve time stamp of original time series in
@@ -133,8 +139,12 @@ public class RelativeValueDomainModificationMeasure
 			}
 
 			List<Double> deviations = new ArrayList<>(originalValues.size());
+			List<IValueUncertainty> valueUncertainties = new ArrayList<>();
+
 			// // TODO please validate
 			for (int i = 0; i < originalValues.size(); i++) {
+
+				double vu = 0;
 				// we assume that our relative deviation is normally distributed
 				if (samplingStatsList.get(i).getVariance() > 0) {
 					Double originalValue = originalValues.get(i);
@@ -156,13 +166,26 @@ public class RelativeValueDomainModificationMeasure
 
 					// absolute value of difference between cumulative prob. of relative difference,
 					// normalized by mean
-					deviations.add(Math.abs(cumProb));
-				} else {
-					deviations.add(0.0);
+					vu = Math.abs(cumProb);
 				}
+
+				deviations.add(vu); // cumProb or 0.0
+
+				valueUncertainties.add(new ValueUncertainty(vu));
 			}
-			uncertaintiesOverTime.put(timeStamp, new NumericalDistributionUncertainty(deviations));
+
+			uncertaintiesOverTime.put(timeStamp, new ValueUncertaintyDistribution(deviations));
+
+			timeStamps.add(timeStamp);
+			valueUncertaintiesAllDimensionsOverTime.add(valueUncertainties);
 		}
+
+		timeSeriesValueUncertainty = new TimeSeriesMultivariateValueUncertainty(
+				new UncertaintyMultivariateTimeSeries<IValueUncertainty>(timeStamps,
+						valueUncertaintiesAllDimensionsOverTime),
+				true);
+
+		return timeSeriesValueUncertainty;
 	}
 
 	private double getRelativeValue(double originalValue, double modifiedValue) {
@@ -182,4 +205,5 @@ public class RelativeValueDomainModificationMeasure
 			return relativeValue;
 		}
 	}
+
 }

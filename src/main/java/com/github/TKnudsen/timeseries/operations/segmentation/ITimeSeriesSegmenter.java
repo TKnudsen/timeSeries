@@ -1,9 +1,8 @@
 package com.github.TKnudsen.timeseries.operations.segmentation;
 
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
-
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**

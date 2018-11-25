@@ -1,13 +1,12 @@
 package com.github.TKnudsen.timeseries.data.univariate.symbolic;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.string.LabelUncertainty;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.github.TKnudsen.timeseries.data.IUncertaintyAtTimeStamp;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.string.LabelUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.IUncertaintyAtTimeStamp;
 
 /**
  * <p>

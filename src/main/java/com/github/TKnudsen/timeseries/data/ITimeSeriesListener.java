@@ -24,15 +24,15 @@ public interface ITimeSeriesListener<TS extends ITimeSeries<?>> extends EventLis
 	/**
 	 * Will be called when the values of a time series have been changed.
 	 * 
-	 * @param learningDataEvent
+	 * @param timeSeriesEvent
 	 */
-	void valueDomainChanged(TimeSeriesEvent<TS> learningDataEvent);
+	void valueDomainChanged(TimeSeriesEvent<TS> timeSeriesEvent);
 
 	/**
 	 * Will be called when the time / temporal information of a time series have
 	 * been changed.
 	 * 
-	 * @param learningDataEvent
+	 * @param timeSeriesEvent
 	 */
-	void temporalDomainChanged(TimeSeriesEvent<TS> learningDataEvent);
+	void temporalDomainChanged(TimeSeriesEvent<TS> timeSeriesEvent);
 }
