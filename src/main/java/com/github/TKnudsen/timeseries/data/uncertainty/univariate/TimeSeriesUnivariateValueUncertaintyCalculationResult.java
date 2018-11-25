@@ -3,13 +3,18 @@ package com.github.TKnudsen.timeseries.data.uncertainty.univariate;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
-public class TimeSeriesUnivariateValueUncertainty implements ITimeSeriesUnivariateValueUncertaintyCalculationResult {
+public class TimeSeriesUnivariateValueUncertaintyCalculationResult
+		implements ITimeSeriesUnivariateValueUncertaintyCalculationResult {
 
-//	private final ITimeSeries<Double> timeSeries;
-	private final ITimeSeries<IValueUncertainty> uncertaintyValues;
-	private final boolean relative;
+	private ITimeSeries<IValueUncertainty> uncertaintyValues;
+	private boolean relative;
 
-	public TimeSeriesUnivariateValueUncertainty(ITimeSeries<IValueUncertainty> uncertaintyValues, boolean relative) {
+	@SuppressWarnings("unused")
+	private TimeSeriesUnivariateValueUncertaintyCalculationResult() {
+	}
+
+	public TimeSeriesUnivariateValueUncertaintyCalculationResult(ITimeSeries<IValueUncertainty> uncertaintyValues,
+			boolean relative) {
 		this.uncertaintyValues = uncertaintyValues;
 		this.relative = relative;
 	}
@@ -18,11 +23,6 @@ public class TimeSeriesUnivariateValueUncertainty implements ITimeSeriesUnivaria
 	public ITimeSeries<IValueUncertainty> getValueUncertainties() {
 		return uncertaintyValues;
 	}
-
-//	@Override
-//	public ITimeSeries<Double> getTimeSeries() {
-//		return timeSeries;
-//	}
 
 	@Override
 	public boolean isRelative() {

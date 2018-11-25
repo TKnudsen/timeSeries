@@ -8,7 +8,7 @@ import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncer
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.LinearNormalizationFunction;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
-import com.github.TKnudsen.timeseries.data.uncertainty.univariate.TimeSeriesUnivariateValueUncertainty;
+import com.github.TKnudsen.timeseries.data.uncertainty.univariate.TimeSeriesUnivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.univariate.UncertaintyTimeSeries;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -76,7 +76,7 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncerta
 			}
 		}
 
-		timeSeriesValueUncertainty = new TimeSeriesUnivariateValueUncertainty(
+		timeSeriesValueUncertainty = new TimeSeriesUnivariateValueUncertaintyCalculationResult(
 				new UncertaintyTimeSeries<IValueUncertainty>(timeStamps, valueUncertainties), true);
 
 		return timeSeriesValueUncertainty;
