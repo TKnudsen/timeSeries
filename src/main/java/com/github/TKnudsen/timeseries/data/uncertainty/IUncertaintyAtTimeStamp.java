@@ -1,4 +1,4 @@
-package com.github.TKnudsen.timeseries.data;
+package com.github.TKnudsen.timeseries.data.uncertainty;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.IUncertainty;
 

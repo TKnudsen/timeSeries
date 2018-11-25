@@ -1,14 +1,13 @@
 package com.github.TKnudsen.timeseries.operations.workflow.univariate;
 
+import java.util.List;
+
 import com.github.TKnudsen.ComplexDataObject.data.enums.NormalizationType;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.numericalData.INumericalFeatureVectorProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.features.numericalData.NormalizationRoutineFactory;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
-
-import java.util.List;
-
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.ITimeSeriesPreprocessor;
 

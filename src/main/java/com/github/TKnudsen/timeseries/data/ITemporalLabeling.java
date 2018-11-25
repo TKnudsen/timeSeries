@@ -1,9 +1,8 @@
 package com.github.TKnudsen.timeseries.data;
 
-import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
-
 import java.util.SortedMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
 import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;

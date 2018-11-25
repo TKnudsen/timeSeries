@@ -1,7 +1,5 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,7 +10,9 @@ import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeValuePairMultivariate;
@@ -25,20 +25,20 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
 /**
  * <p>
- * Title: TimeSeriesTools
+ * timeSeries
  * </p>
  * 
  * <p>
- * Description: tools class for general statistical operations and routines
- * applied on univariate time series
+ * Tools class for general statistical operations and routines applied on
+ * univariate time series
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2017
+ * Copyright: Copyright (c) 2015-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.08
+ * @version 1.09
  */
 public final class TimeSeriesTools {
 
@@ -54,7 +54,7 @@ public final class TimeSeriesTools {
 	public static long getMinStart(List<ITimeSeriesUnivariate> timeSeries) {
 		long min = Long.MAX_VALUE - 1;
 
-		for (ITimeSeriesUnivariate ts : timeSeries)
+		for (ITimeSeries<Double> ts : timeSeries)
 			if (ts != null)
 				min = Math.min(min, ts.getFirstTimestamp());
 
@@ -73,7 +73,7 @@ public final class TimeSeriesTools {
 	public static long getMaxEnd(List<ITimeSeriesUnivariate> timeSeries) {
 		long max = Long.MIN_VALUE + 1;
 
-		for (ITimeSeriesUnivariate ts : timeSeries)
+		for (ITimeSeries<Double> ts : timeSeries)
 			if (ts != null)
 				max = Math.max(max, ts.getLastTimestamp());
 
@@ -83,7 +83,7 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
-	public static double getMinValue(ITimeSeriesUnivariate ts) {
+	public static double getMinValue(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -98,7 +98,7 @@ public final class TimeSeriesTools {
 		return min;
 	}
 
-	public static double getMaxValue(ITimeSeriesUnivariate ts) {
+	public static double getMaxValue(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -113,7 +113,7 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
-	public static double getMean(ITimeSeriesUnivariate ts) {
+	public static double getMean(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -138,7 +138,7 @@ public final class TimeSeriesTools {
 		return means;
 	}
 
-	public static double getVariance(ITimeSeriesUnivariate ts) {
+	public static double getVariance(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -161,7 +161,7 @@ public final class TimeSeriesTools {
 		return variance;
 	}
 
-	public static double getStdDeviation(ITimeSeriesUnivariate ts) {
+	public static double getStdDeviation(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -170,7 +170,7 @@ public final class TimeSeriesTools {
 		return Math.sqrt(getVariance(ts));
 	}
 
-	public static double getLinearTrend(ITimeSeriesUnivariate ts) {
+	public static double getLinearTrend(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -223,7 +223,7 @@ public final class TimeSeriesTools {
 		return mean;
 	}
 
-	public static void calculateMovingAverageTimeSensitive(ITimeSeriesUnivariate ts, long window) {
+	public static void calculateMovingAverageTimeSensitive(ITimeSeries<Double> ts, long window) {
 		for (int i = 0; i < ts.size(); i++) {
 			double d = 0;
 			double w = 0;
@@ -290,7 +290,7 @@ public final class TimeSeriesTools {
 		return ret;
 	}
 
-	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeriesUnivariate ts, int index) {
+	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeries<Double> ts, int index) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.size() - 1 < index)
@@ -298,7 +298,7 @@ public final class TimeSeriesTools {
 		return new TimeValuePairUnivariate(ts.getTimestamp(index), ts.getValue(index));
 	}
 
-	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeriesUnivariate ts) {
+	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		List<ITimeValuePair<Double>> list = new ArrayList<ITimeValuePair<Double>>();
@@ -326,7 +326,7 @@ public final class TimeSeriesTools {
 		return pairs;
 	}
 
-	public static ITimeSeriesUnivariate createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs,
+	public static ITimeSeries<Double> createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs,
 			Double missingValueIndicator) {
 		if (timeValuePairs == null)
 			return null;
@@ -342,7 +342,7 @@ public final class TimeSeriesTools {
 		return new TimeSeriesUnivariate(timeStamps, values, missingValueIndicator);
 	}
 
-	public static long[] getQuantizationsAsLong(ITimeSeriesUnivariate ts) {
+	public static long[] getQuantizationsAsLong(ITimeSeries<Double> ts) {
 		long[] quantization = new long[ts.size() - 1];
 		for (int i = 0; i < quantization.length; i++) {
 			quantization[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
@@ -350,7 +350,7 @@ public final class TimeSeriesTools {
 		return quantization;
 	}
 
-	public static double[] getQuantizationAsDouble(ITimeSeriesUnivariate ts) {
+	public static double[] getQuantizationAsDouble(ITimeSeries<Double> ts) {
 		double[] quantisation = new double[ts.size() - 1];
 		for (int i = 0; i < quantisation.length; i++) {
 			quantisation[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
@@ -494,7 +494,7 @@ public final class TimeSeriesTools {
 	 * @param time
 	 * @return
 	 */
-	public static List<Long> getNearestTimeStampNeighbors(ITimeSeriesUnivariate timeSeries, Long time) {
+	public static List<Long> getNearestTimeStampNeighbors(ITimeSeries<Double> timeSeries, Long time) {
 
 		List<Long> nearestNeighbors = new ArrayList<Long>();
 		long timeStampLower = timeSeries.getFirstTimestamp();
@@ -523,7 +523,7 @@ public final class TimeSeriesTools {
 	 * @throws IllegalArgumentException
 	 * @throws IndexOutOfBoundsException
 	 */
-	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, long leftTimeStamp, long rightTimeStamp,
+	public static double getInterpolatedValue(ITimeSeries<Double> timeSeries, long leftTimeStamp, long rightTimeStamp,
 			long timeStamp) throws IllegalArgumentException, IndexOutOfBoundsException {
 
 		Objects.requireNonNull(timeSeries);
@@ -557,7 +557,7 @@ public final class TimeSeriesTools {
 	 * @param timeStamp
 	 * @return
 	 */
-	public static double getInterpolatedValue(ITimeSeriesUnivariate timeSeries, long timeStamp) {
+	public static double getInterpolatedValue(ITimeSeries<Double> timeSeries, long timeStamp) {
 
 		Objects.requireNonNull(timeSeries);
 
@@ -586,11 +586,12 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist
-	 *            whether or not the identification of the subsequence is sort of
-	 *            sophisticated in case of NOT exact matches. If not a subsequence
-	 *            is returned with start/end time stamps larger than the defined
-	 *            interval.
+	 * @param requireStartEndTimestampsExist whether or not the identification of
+	 *                                       the subsequence is sort of
+	 *                                       sophisticated in case of NOT exact
+	 *                                       matches. If not a subsequence is
+	 *                                       returned with start/end time stamps
+	 *                                       larger than the defined interval.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -637,14 +638,16 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist
-	 *            whether or not the identification of the subsequence is sort of
-	 *            sophisticated in case of NOT exact matches. If not a subsequence
-	 *            is returned with start/end time stamps larger than the defined
-	 *            interval.
-	 * @param cropIfTimeStampsDontExist
-	 *            if no exact match is needed this routine provides the opportunity
-	 *            to crop start and end time stamp by linear interpolation.
+	 * @param requireStartEndTimestampsExist whether or not the identification of
+	 *                                       the subsequence is sort of
+	 *                                       sophisticated in case of NOT exact
+	 *                                       matches. If not a subsequence is
+	 *                                       returned with start/end time stamps
+	 *                                       larger than the defined interval.
+	 * @param cropIfTimeStampsDontExist      if no exact match is needed this
+	 *                                       routine provides the opportunity to
+	 *                                       crop start and end time stamp by linear
+	 *                                       interpolation.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -754,7 +757,7 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @return
 	 */
-	public static boolean isEquidistant(ITimeSeriesUnivariate timeSeries) {
+	public static boolean isEquidistant(ITimeSeries<Double> timeSeries) {
 		long[] quantizations = getQuantizationsAsLong(timeSeries);
 
 		if (quantizations == null)

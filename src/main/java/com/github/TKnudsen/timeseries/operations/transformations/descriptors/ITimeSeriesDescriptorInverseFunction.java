@@ -1,7 +1,6 @@
 package com.github.TKnudsen.timeseries.operations.transformations.descriptors;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**

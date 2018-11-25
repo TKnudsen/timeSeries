@@ -1,11 +1,10 @@
 package com.github.TKnudsen.timeseries.data.multivariate;
 
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
@@ -118,7 +117,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			missingValueIndicators.add(timeSeriesUnivariateList.get(i).getMissingValueIndicator());
 
-		// init names
+		// initialize names
 		getAttributeNames();
 	}
 
@@ -221,12 +220,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	public void removeTimeValue(int index) {
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			timeSeriesUnivariateList.get(i).removeTimeValue(index);
-	}
-
-	@Override
-	public void replaceTimeValue(int index, long timestamp) {
-		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
-			timeSeriesUnivariateList.get(i).replaceTimeValue(index, timestamp);
 	}
 
 	@Override
@@ -374,7 +367,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 			return false;
 
 		for (int i = 0; i < getDimensionality(); i++)
-			if (!getTimeSeries(i).equals(otherTimeSeries.getTimestamp(i)))
+			if (!getTimeSeries(i).equals(otherTimeSeries.getTimeSeries(i)))
 				return false;
 
 		return true;

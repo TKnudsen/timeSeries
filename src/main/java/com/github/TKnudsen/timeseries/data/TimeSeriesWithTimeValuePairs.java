@@ -1,8 +1,5 @@
 package com.github.TKnudsen.timeseries.data;
 
-import com.github.TKnudsen.ComplexDataObject.data.interfaces.IKeyValueProvider;
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -13,6 +10,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.interfaces.IKeyValueProvider;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.primitives.TimeValuePairTools;
 
 /**
@@ -30,7 +29,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeValuePairTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>, IKeyValueProvider<Object> {
 
@@ -279,17 +278,6 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 		resetHash();
 	}
 	
-	@Override
-	public void replaceTimeValue(int index, long timestamp) throws IllegalArgumentException {
-		
-		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
-		
-		timeStamps.set(index, timestamp);
-		
-		resetHash();
-	}
-
 	@Override
 	public void replaceValue(int index, T value) throws IllegalArgumentException {
 		if (index < 0 || index >= timeStamps.size())
