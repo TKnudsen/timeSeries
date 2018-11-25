@@ -14,9 +14,9 @@ import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMu
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyMultivariateTimeSeries;
 
 /**
- * Computes the relative change of every timestamp and dimension. Relative
+ * Computes the relative change of every timeStamp and dimension. Relative
  * change is assessed by the bounds of the value domains of the individual
- * (original) time series. For every timestamp the relative changes in every
+ * (original) time series. For every timeStamp the relative changes in every
  * dimension are collected and represented as a
  * {@link NumericalDistributionUncertainty}.
  * 
@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyM
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.06
+ * @version 1.07
  */
 public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncertaintyMeasure {
 
