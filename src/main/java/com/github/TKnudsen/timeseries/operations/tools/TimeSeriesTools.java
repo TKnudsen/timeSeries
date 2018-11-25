@@ -83,7 +83,7 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
-	public static double getMinValue(ITimeSeries<Double> ts) {
+	public static double getMinValue(ITimeSeries<? extends Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -98,7 +98,7 @@ public final class TimeSeriesTools {
 		return min;
 	}
 
-	public static double getMaxValue(ITimeSeries<Double> ts) {
+	public static double getMaxValue(ITimeSeries<? extends Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
@@ -113,7 +113,7 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
-	public static double getMean(ITimeSeries<Double> ts) {
+	public static double getMean(ITimeSeries<? extends Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
 		if (ts.isEmpty())
