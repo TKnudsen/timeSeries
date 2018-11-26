@@ -31,7 +31,7 @@ public class TimeSeriesMultivariateFactory {
 	 * @param missingValueIndicator
 	 * @return
 	 */
-	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs,
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<? extends Entry<Long, Double[]>> pairs,
 			double missingValueIndicator) {
 		List<List<Double>> values = new ArrayList<List<Double>>();
 		List<Long> timestamps = new ArrayList<Long>();
@@ -58,7 +58,7 @@ public class TimeSeriesMultivariateFactory {
 	 * @param timeSeriesNames
 	 * @return
 	 */
-	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Entry<Long, Double[]>> pairs,
+	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<? extends Entry<Long, Double[]>> pairs,
 			double missingValueIndicator, List<String> timeSeriesNames) {
 		List<List<Double>> values = new ArrayList<List<Double>>();
 		List<Long> timestamps = new ArrayList<Long>();
@@ -82,8 +82,7 @@ public class TimeSeriesMultivariateFactory {
 	 * Creates a new TimeSeriesMultivariate object from the given data input.
 	 * 
 	 * @param timestamps
-	 * @param values
-	 *            List of univariate "Timeseries" Data
+	 * @param values                List of univariate "Timeseries" Data
 	 * @param missingValueIndicator
 	 * @return
 	 */
@@ -212,8 +211,7 @@ public class TimeSeriesMultivariateFactory {
 	 * Creates a new TimeSeriesMultivariate object from the given data input.
 	 * 
 	 * @param timestamps
-	 * @param values
-	 *            List of univariate "Timeseries" Data
+	 * @param values                List of univariate "Timeseries" Data
 	 * @param missingValueIndicator
 	 * @return
 	 */
