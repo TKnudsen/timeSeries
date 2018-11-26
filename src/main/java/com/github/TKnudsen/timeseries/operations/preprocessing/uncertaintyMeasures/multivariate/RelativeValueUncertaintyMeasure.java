@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.ValueUncertaintyDistribution;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertaintyCalculationResult;
@@ -47,7 +45,7 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
 			ITimeSeriesMultivariate processedTimeSeries) {
 
-		uncertaintiesOverTime = new TreeMap<>();
+//		uncertaintiesOverTime = new TreeMap<>();
 
 		// create composition of univariate value uncertainties
 		Map<String, ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty>> valueUncertaintyMeasuresPerDimension = new LinkedHashMap<>();
@@ -91,7 +89,7 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 					valueUncertainties.add(vu);
 				}
 
-				uncertaintiesOverTime.put(timeStamp, new ValueUncertaintyDistribution(relatives));
+//				uncertaintiesOverTime.put(timeStamp, new ValueUncertaintyDistribution(relatives));
 
 				timeStamps.add(timeStamp);
 				valueUncertaintiesAllDimensionsOverTime.add(valueUncertainties);

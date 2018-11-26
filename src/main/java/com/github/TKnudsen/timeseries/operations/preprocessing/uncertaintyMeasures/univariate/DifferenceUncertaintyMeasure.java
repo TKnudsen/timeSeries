@@ -2,7 +2,6 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasu
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
@@ -26,7 +25,7 @@ public class DifferenceUncertaintyMeasure extends TimeSeriesUnivariateUncertaint
 	public ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> compute(ITimeSeriesUnivariate originalTimeSeries,
 			ITimeSeriesUnivariate processedTimeSeries) {
 
-		uncertaintiesOverTime = new TreeMap<>();
+//		uncertaintiesOverTime = new TreeMap<>();
 		List<Long> timeStamps = new ArrayList<>();
 		List<IValueUncertainty> valueUncertainties = new ArrayList<>();
 
@@ -39,7 +38,7 @@ public class DifferenceUncertaintyMeasure extends TimeSeriesUnivariateUncertaint
 
 				ValueUncertainty valueUncertainty = new ValueUncertainty(Math.abs(originalV - processedV));
 
-				uncertaintiesOverTime.put(timeStamp, valueUncertainty);
+//				uncertaintiesOverTime.put(timeStamp, valueUncertainty);
 
 				timeStamps.add(timeStamp);
 				valueUncertainties.add(valueUncertainty);

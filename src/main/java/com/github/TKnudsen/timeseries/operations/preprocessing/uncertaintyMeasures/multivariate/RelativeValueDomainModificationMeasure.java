@@ -5,13 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
-import java.util.TreeMap;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.ValueUncertaintyDistribution;
 import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
@@ -60,7 +58,7 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 	@Override
 	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
 			ITimeSeriesMultivariate processedTimeSeries) {
-		uncertaintiesOverTime = new TreeMap<>();
+//		uncertaintiesOverTime = new TreeMap<>();
 
 		int maxSampleSize = originalTimeSeries.getTimestamps().size();
 		Random samplingGenerator = new Random();
@@ -174,7 +172,7 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 				valueUncertainties.add(new ValueUncertainty(vu));
 			}
 
-			uncertaintiesOverTime.put(timeStamp, new ValueUncertaintyDistribution(deviations));
+//			uncertaintiesOverTime.put(timeStamp, new ValueUncertaintyDistribution(deviations));
 
 			timeStamps.add(timeStamp);
 			valueUncertaintiesAllDimensionsOverTime.add(valueUncertainties);
