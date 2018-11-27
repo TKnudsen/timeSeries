@@ -1,12 +1,18 @@
 package com.github.TKnudsen.timeseries.data.uncertainty;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
+import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
+import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
+import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateFactory;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
@@ -103,5 +109,50 @@ public class ValueUncertaintyConversionTools {
 
 		return new TimeSeriesUnivariate(timeStamps, values);
 
+	}
+
+	/**
+	 * transforms value uncertainty information for every time stamp and dimension
+	 * into a MultivariateTimeSeries with Double values.
+	 * 
+	 * @param uncertainties
+	 * @return
+	 */
+	public static ITimeSeriesMultivariate computeAmountsForEachDimension(
+			ITimeSeries<List<IValueUncertainty>> uncertainties) {
+
+		List<Entry<Long, Double[]>> pairs = new ArrayList<>();
+
+		List<Long> timeStamps = uncertainties.getTimestamps();
+		for (Long timeStamp : timeStamps) {
+			List<? extends IValueUncertainty> vus = uncertainties.getValue(timeStamp, false);
+			List<Double> v = new ArrayList<>();
+			for (IValueUncertainty vu : vus)
+				v.add(vu.getAmount());
+			Double[] array = DataConversion.listToArray(v, Double.class);
+			pairs.add(new AbstractMap.SimpleEntry<Long, Double[]>(timeStamp, array));
+		}
+
+		return TimeSeriesMultivariateFactory.createTimeSeriesMultivatiate(pairs, Double.NaN);
+	}
+
+	/**
+	 * Converts a multivariate uncertainty time series into an double
+	 * representation. Either each dimension is treated individually or an aggregate
+	 * of all dimensions is calculated.
+	 * 
+	 * @param uncertainties
+	 * @return
+	 */
+	public static List<ITimeSeries<Double>> computeAmountsTimeSeriesList(
+			ITimeSeries<List<IValueUncertainty>> uncertainties, boolean aggregateDimensions) {
+
+		List<ITimeSeries<Double>> uncertaintyTimeSeriesList = new ArrayList<>();
+		if (aggregateDimensions)
+			uncertaintyTimeSeriesList.add(computeAggregationWithAmounts(uncertainties));
+		else
+			uncertaintyTimeSeriesList.addAll(computeAmountsForEachDimension(uncertainties).getTimeSeriesList());
+
+		return uncertaintyTimeSeriesList;
 	}
 }
