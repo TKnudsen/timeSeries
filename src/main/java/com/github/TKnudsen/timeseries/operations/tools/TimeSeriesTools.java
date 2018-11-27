@@ -1,5 +1,8 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,9 +11,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
@@ -588,12 +592,11 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist whether or not the identification of
-	 *                                       the subsequence is sort of
-	 *                                       sophisticated in case of NOT exact
-	 *                                       matches. If not a subsequence is
-	 *                                       returned with start/end time stamps
-	 *                                       larger than the defined interval.
+	 * @param requireStartEndTimestampsExist
+	 *            whether or not the identification of the subsequence is sort of
+	 *            sophisticated in case of NOT exact matches. If not a subsequence
+	 *            is returned with start/end time stamps larger than the defined
+	 *            interval.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -640,16 +643,14 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist whether or not the identification of
-	 *                                       the subsequence is sort of
-	 *                                       sophisticated in case of NOT exact
-	 *                                       matches. If not a subsequence is
-	 *                                       returned with start/end time stamps
-	 *                                       larger than the defined interval.
-	 * @param cropIfTimeStampsDontExist      if no exact match is needed this
-	 *                                       routine provides the opportunity to
-	 *                                       crop start and end time stamp by linear
-	 *                                       interpolation.
+	 * @param requireStartEndTimestampsExist
+	 *            whether or not the identification of the subsequence is sort of
+	 *            sophisticated in case of NOT exact matches. If not a subsequence
+	 *            is returned with start/end time stamps larger than the defined
+	 *            interval.
+	 * @param cropIfTimeStampsDontExist
+	 *            if no exact match is needed this routine provides the opportunity
+	 *            to crop start and end time stamp by linear interpolation.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -722,7 +723,7 @@ public final class TimeSeriesTools {
 	 * @param timeSeriesList
 	 * @return
 	 */
-	public static ITimeSeriesUnivariate mergeTimeSeries(List<ITimeSeriesUnivariate> timeSeriesList) {
+	public static ITimeSeriesUnivariate getMeanTimeSeries(List<ITimeSeriesUnivariate> timeSeriesList) {
 		SortedMap<Long, List<Double>> rawValues = new TreeMap<>();
 
 		for (ITimeSeriesUnivariate ts : timeSeriesList)
@@ -750,6 +751,67 @@ public final class TimeSeriesTools {
 		ITimeSeriesUnivariate tsMean = new TimeSeriesUnivariate(timeStamps, means, Double.NaN);
 
 		return tsMean;
+	}
+
+	/**
+	 * returns six time series for a list of time series
+	 * 
+	 * <p>
+	 * [0] lower quantile [1] lower quartile [2] mean [3] median [4] upper quartile
+	 * [5] upper quantile
+	 * </p>
+	 * 
+	 * @param timeSeriesList
+	 * @param quantil
+	 *            between [0-100]
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate[] createQuantilesQuartilesMeanTimeSeries(
+			List<ITimeSeriesUnivariate> timeSeriesList, double quantil) {
+
+		// gather all available time stamps
+		SortedSet<Long> timeStamps = new TreeSet<>();
+		for (ITimeSeries<? extends Double> timeSeries : timeSeriesList)
+			for (long l : timeSeries.getTimestamps())
+				timeStamps.add(l);
+
+		List<Double> lowerQuantil = new ArrayList<>();
+		List<Double> lowerQuartil = new ArrayList<>();
+		List<Double> mean = new ArrayList<>();
+		List<Double> median = new ArrayList<>();
+		List<Double> upperQuartil = new ArrayList<>();
+		List<Double> upperQuantil = new ArrayList<>();
+
+		// calculate statistical information
+		for (Long timeStamp : timeStamps) {
+			List<Double> values = new ArrayList<>();
+			for (ITimeSeries<? extends Double> timeSeries : timeSeriesList) {
+				double v = timeSeries.getValue(timeStamp, false);
+				if (!Double.isNaN(v))
+					values.add(v);
+			}
+
+			StatisticsSupport statistics = new StatisticsSupport(values);
+
+			lowerQuantil.add(statistics.getPercentile(quantil));
+			lowerQuartil.add(statistics.getPercentile(25));
+			mean.add(statistics.getMean());
+			median.add(statistics.getMedian());
+			upperQuartil.add(statistics.getPercentile(75));
+			upperQuantil.add(statistics.getPercentile(100 - quantil));
+		}
+
+		// create output time series
+		ITimeSeriesUnivariate[] timeSeriesArray = new TimeSeriesUnivariate[6];
+
+		timeSeriesArray[0] = new TimeSeriesUnivariate(new ArrayList<>(timeStamps), lowerQuantil);
+		timeSeriesArray[1] = new TimeSeriesUnivariate(new ArrayList<>(timeStamps), lowerQuartil);
+		timeSeriesArray[2] = new TimeSeriesUnivariate(new ArrayList<>(timeStamps), mean);
+		timeSeriesArray[3] = new TimeSeriesUnivariate(new ArrayList<>(timeStamps), median);
+		timeSeriesArray[4] = new TimeSeriesUnivariate(new ArrayList<>(timeStamps), upperQuartil);
+		timeSeriesArray[5] = new TimeSeriesUnivariate(new ArrayList<>(timeStamps), upperQuantil);
+
+		return timeSeriesArray;
 	}
 
 	/**

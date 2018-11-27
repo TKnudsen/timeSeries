@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.data.dataGeneration;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -27,7 +28,8 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * @version 1.01
  */
 public class TimeSeriesGenerator {
-	public static ITimeSeriesUnivariate generateSyntheticTimeSeriesUnivariate(long startDate, long endDate, TimeDuration quantization, boolean equidistant) {
+	public static ITimeSeriesUnivariate generateSyntheticTimeSeriesUnivariate(long startDate, long endDate,
+			TimeDuration quantization, boolean equidistant) {
 
 		List<Long> timeStamps = new ArrayList<>();
 		List<Double> values = new ArrayList<>();
@@ -51,7 +53,27 @@ public class TimeSeriesGenerator {
 		return new TimeSeriesUnivariate(timeStamps, values, Double.NaN);
 	}
 
-	public static ITimeSeriesMultivariate generateSyntheticTimeSeriesMultivariate(long startDate, long endDate, int dimensionality, TimeDuration quantization, boolean equidistant) {
+	public static ITimeSeriesUnivariate generateSyntheticTimeSeriesUnivariateRandomWalk(double startValue) {
+
+		List<Long> timeStamps = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		@SuppressWarnings("deprecation")
+		Date start = new Date(2016 - 1900, 04, 01);
+		@SuppressWarnings("deprecation")
+		Date end = new Date(2016 - 1900, 04, 20);
+		double d = startValue;
+		for (long l = start.getTime(); l < end.getTime(); l += 1000 * 60 * 60) {
+			d = Math.min(100, Math.max(0, d + (Math.random() - 0.5) * 10));
+			timeStamps.add(l);
+			values.add(d);
+		}
+
+		return new TimeSeriesUnivariate(timeStamps, values, Double.NaN);
+	}
+
+	public static ITimeSeriesMultivariate generateSyntheticTimeSeriesMultivariate(long startDate, long endDate,
+			int dimensionality, TimeDuration quantization, boolean equidistant) {
 
 		List<Long> timeStamps = new ArrayList<>();
 		List<ITimeSeriesUnivariate> timeSeriesUnivariateList = new ArrayList<>();
@@ -70,10 +92,10 @@ public class TimeSeriesGenerator {
 		}
 
 		for (int i = 0; i < dimensionality; i++) {
-			
+
 			List<Long> timeStampsCopy = new ArrayList<>();
 			timeStampsCopy.addAll(timeStamps);
-			
+
 			List<Double> values = new ArrayList<>();
 			double lastValue = 0.5;
 
