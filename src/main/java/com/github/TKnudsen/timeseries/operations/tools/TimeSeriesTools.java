@@ -1,8 +1,5 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +12,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;

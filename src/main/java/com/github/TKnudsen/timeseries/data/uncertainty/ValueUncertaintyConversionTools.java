@@ -1,18 +1,14 @@
 package com.github.TKnudsen.timeseries.data.uncertainty;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
-import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.ValueUncertaintyCharacteristics;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateFactory;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
@@ -86,7 +82,8 @@ public class ValueUncertaintyConversionTools {
 		return new TimeSeriesUnivariate(timeStamps, values);
 	}
 
-	// MULTIVARIATE OPERATIONS
+	// MULTIVARIATE OPERATIONS - UNCERTAINTY AMOUNT
+
 	/**
 	 * Converts a multivariate uncertainty time series into an 1D general time
 	 * series. The default uncertainty values are used (getAmount()).
@@ -121,19 +118,8 @@ public class ValueUncertaintyConversionTools {
 	public static ITimeSeriesMultivariate computeAmountsForEachDimension(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
 
-		List<Entry<Long, Double[]>> pairs = new ArrayList<>();
-
-		List<Long> timeStamps = uncertainties.getTimestamps();
-		for (Long timeStamp : timeStamps) {
-			List<? extends IValueUncertainty> vus = uncertainties.getValue(timeStamp, false);
-			List<Double> v = new ArrayList<>();
-			for (IValueUncertainty vu : vus)
-				v.add(vu.getAmount());
-			Double[] array = DataConversion.listToArray(v, Double.class);
-			pairs.add(new AbstractMap.SimpleEntry<Long, Double[]>(timeStamp, array));
-		}
-
-		return TimeSeriesMultivariateFactory.createTimeSeriesMultivatiate(pairs, Double.NaN);
+		return ValueUncertaintyConversionToolsSupport.computeCharacteristicsForEachDimension(uncertainties,
+				ValueUncertaintyCharacteristics.AMOUNT);
 	}
 
 	/**
@@ -154,5 +140,62 @@ public class ValueUncertaintyConversionTools {
 			uncertaintyTimeSeriesList.addAll(computeAmountsForEachDimension(uncertainties).getTimeSeriesList());
 
 		return uncertaintyTimeSeriesList;
+	}
+
+	// MULTIVARIATE OPERATIONS - UNCERTAINTY RANGE
+
+	/**
+	 * transforms value uncertainty information for every time stamp and dimension
+	 * into a MultivariateTimeSeries with Double values.
+	 * 
+	 * @param uncertainties
+	 * @return
+	 */
+	public static ITimeSeriesMultivariate computeLowerBoundForEachDimension(
+			ITimeSeries<List<IValueUncertainty>> uncertainties) {
+
+		return ValueUncertaintyConversionToolsSupport.computeCharacteristicsForEachDimension(uncertainties,
+				ValueUncertaintyCharacteristics.LOWERBOUND);
+	}
+
+	/**
+	 * transforms value uncertainty information for every time stamp and dimension
+	 * into a MultivariateTimeSeries with Double values.
+	 * 
+	 * @param uncertainties
+	 * @return
+	 */
+	public static ITimeSeriesMultivariate computeUpperBoundForEachDimension(
+			ITimeSeries<List<IValueUncertainty>> uncertainties) {
+
+		return ValueUncertaintyConversionToolsSupport.computeCharacteristicsForEachDimension(uncertainties,
+				ValueUncertaintyCharacteristics.UPPERBOUND);
+	}
+
+	/**
+	 * returns three time series (lower bound, amount, upper bound) for each
+	 * dimension. The outer list contains the dimensions (multivariate time series),
+	 * i.e., the list of the input time series.
+	 * 
+	 * @return
+	 */
+	public static List<ITimeSeriesMultivariate> computeRangeUncertaintyTimeSeries(
+			ITimeSeries<List<IValueUncertainty>> uncertainties) {
+
+		List<ITimeSeriesMultivariate> output = new ArrayList<>();
+
+		ITimeSeriesMultivariate lowerBound = computeLowerBoundForEachDimension(uncertainties);
+		lowerBound.setName(ValueUncertaintyCharacteristics.LOWERBOUND.name());
+		output.add(lowerBound);
+
+		ITimeSeriesMultivariate amount = computeAmountsForEachDimension(uncertainties);
+		amount.setName(ValueUncertaintyCharacteristics.AMOUNT.name());
+		output.add(amount);
+
+		ITimeSeriesMultivariate upperBound = computeUpperBoundForEachDimension(uncertainties);
+		upperBound.setName(ValueUncertaintyCharacteristics.UPPERBOUND.name());
+		output.add(upperBound);
+
+		return output;
 	}
 }

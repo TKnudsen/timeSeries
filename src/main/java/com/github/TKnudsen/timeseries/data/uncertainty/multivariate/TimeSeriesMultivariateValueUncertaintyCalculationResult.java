@@ -9,7 +9,7 @@ public class TimeSeriesMultivariateValueUncertaintyCalculationResult
 		implements ITimeSeriesMultivariateValueUncertaintyCalculationResult {
 
 	private ITimeSeries<List<IValueUncertainty>> valueUncertainties;
-
+	
 	private boolean relative;
 
 	@SuppressWarnings("unused")
