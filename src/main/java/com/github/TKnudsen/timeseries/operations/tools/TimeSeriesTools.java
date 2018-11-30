@@ -86,6 +86,28 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
+	public static Double getMinValue(List<ITimeSeriesUnivariate> timeSeriesList) {
+		Double min = Double.MAX_VALUE - 1;
+
+		if (timeSeriesList != null)
+			for (ITimeSeriesUnivariate timeSeries : timeSeriesList)
+				if (timeSeries != null && !timeSeries.isEmpty())
+					min = Math.min(min, getMinValue(timeSeries));
+
+		return min;
+	}
+
+	public static Double getMaxValue(List<ITimeSeriesUnivariate> timeSeriesList) {
+		Double max = Double.MIN_VALUE + 1;
+
+		if (timeSeriesList != null)
+			for (ITimeSeriesUnivariate timeSeries : timeSeriesList)
+				if (timeSeries != null && !timeSeries.isEmpty())
+					max = Math.max(max, getMaxValue(timeSeries));
+
+		return max;
+	}
+
 	public static double getMinValue(ITimeSeries<? extends Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
@@ -591,11 +613,12 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist
-	 *            whether or not the identification of the subsequence is sort of
-	 *            sophisticated in case of NOT exact matches. If not a subsequence
-	 *            is returned with start/end time stamps larger than the defined
-	 *            interval.
+	 * @param requireStartEndTimestampsExist whether or not the identification of
+	 *                                       the subsequence is sort of
+	 *                                       sophisticated in case of NOT exact
+	 *                                       matches. If not a subsequence is
+	 *                                       returned with start/end time stamps
+	 *                                       larger than the defined interval.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -642,14 +665,16 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist
-	 *            whether or not the identification of the subsequence is sort of
-	 *            sophisticated in case of NOT exact matches. If not a subsequence
-	 *            is returned with start/end time stamps larger than the defined
-	 *            interval.
-	 * @param cropIfTimeStampsDontExist
-	 *            if no exact match is needed this routine provides the opportunity
-	 *            to crop start and end time stamp by linear interpolation.
+	 * @param requireStartEndTimestampsExist whether or not the identification of
+	 *                                       the subsequence is sort of
+	 *                                       sophisticated in case of NOT exact
+	 *                                       matches. If not a subsequence is
+	 *                                       returned with start/end time stamps
+	 *                                       larger than the defined interval.
+	 * @param cropIfTimeStampsDontExist      if no exact match is needed this
+	 *                                       routine provides the opportunity to
+	 *                                       crop start and end time stamp by linear
+	 *                                       interpolation.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -761,8 +786,7 @@ public final class TimeSeriesTools {
 	 * </p>
 	 * 
 	 * @param timeSeriesList
-	 * @param quantil
-	 *            between [0-100]
+	 * @param quantil        between [0-100]
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate[] createQuantilesQuartilesMeanTimeSeries(
@@ -837,5 +861,62 @@ public final class TimeSeriesTools {
 				last = quantizations[i];
 
 		return true;
+	}
+
+	/**
+	 * gathers the average value within a given interval.
+	 * 
+	 * @param ts
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static double getValueFromInterval(ITimeSeries<? extends Double> timeSeries, long start, long end) {
+		if (start > timeSeries.getLastTimestamp() || end < timeSeries.getFirstTimestamp())
+			throw new IllegalArgumentException("Interval out of range");
+
+		if (end < start)
+			throw new IllegalArgumentException("end < start");
+
+		if (end == start)
+			return timeSeries.getValue(start, true);
+
+		double areaUnderCurve = 0;
+
+		int indexStart = timeSeries.findByDate(Math.max(start, timeSeries.getFirstTimestamp()), false);
+		Long leftTimeStamp = timeSeries.getTimestamp(indexStart);
+
+		// if first index is outside the range
+		if (start > leftTimeStamp)
+			indexStart++;
+
+		int indexEnd = timeSeries.findByDate(Math.min(end, timeSeries.getLastTimestamp()), false);
+
+		// if indexEnd is later than end
+		if (timeSeries.getTimestamp(indexEnd) > end)
+			indexEnd--;
+
+		// iterate over valid indices
+		double sum = 0;
+		for (int i = indexStart; i <= indexEnd; i++) {
+			if (i > 0) {
+				Long l1 = timeSeries.getTimestamp(i - 1);
+				Long l2 = timeSeries.getTimestamp(i);
+				double deltaT = (l2 - l1) * 0.5;
+				double v = timeSeries.getValue(i);
+				areaUnderCurve += (v * deltaT);
+				sum += deltaT;
+			}
+			if (i < timeSeries.size() - 1) {
+				Long l1 = timeSeries.getTimestamp(i);
+				Long l2 = timeSeries.getTimestamp(i + 1);
+				double deltaT = (l2 - l1) * 0.5;
+				double v = timeSeries.getValue(i);
+				areaUnderCurve += (v * deltaT);
+				sum += deltaT;
+			}
+		}
+
+		return areaUnderCurve / sum;
 	}
 }
