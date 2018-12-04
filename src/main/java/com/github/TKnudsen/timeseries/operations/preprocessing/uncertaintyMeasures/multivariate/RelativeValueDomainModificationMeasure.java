@@ -182,7 +182,8 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 				deviations.add(vu); // cumProb or 0.0
 
 				if (calculateDistributionUncertainty)
-					new ValueUncertainty(DataConversion.doublePrimitivesToList(samplingStatsList.get(i).getValues()));
+					valueUncertainties.add(new ValueUncertainty(
+							DataConversion.doublePrimitivesToList(samplingStatsList.get(i).getValues())));
 				else
 					valueUncertainties.add(new ValueUncertainty(vu));
 			}
