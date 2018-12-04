@@ -872,8 +872,13 @@ public final class TimeSeriesTools {
 	 * @return
 	 */
 	public static double getValueFromInterval(ITimeSeries<? extends Double> timeSeries, long start, long end) {
-		if (start > timeSeries.getLastTimestamp() || end < timeSeries.getFirstTimestamp())
-			throw new IllegalArgumentException("Interval out of range");
+		if (start > timeSeries.getLastTimestamp())
+			throw new IllegalArgumentException(
+					"start time > time series end time (" + start + " vs. " + timeSeries.getLastTimestamp() + ")");
+
+		if (end < timeSeries.getFirstTimestamp())
+			throw new IllegalArgumentException(
+					"end time < time series start time (" + end + " vs. " + timeSeries.getFirstTimestamp() + ")");
 
 		if (end < start)
 			throw new IllegalArgumentException("end < start");
