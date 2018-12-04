@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasu
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.ValueUncertaintyDistribution;
 import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
 import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 
@@ -40,8 +41,8 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 	private Double samplingRate = 0.4;
 
 	/**
-	 * representation of value uncertainty with a distribution uncertainty for every
-	 * time stamp and dimension
+	 * representation of value uncertainty with a ValueUncertaintyDistribution for
+	 * every time stamp and dimension
 	 */
 	private boolean calculateDistributionUncertainty;
 
@@ -182,7 +183,7 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 				deviations.add(vu); // cumProb or 0.0
 
 				if (calculateDistributionUncertainty)
-					valueUncertainties.add(new ValueUncertainty(
+					valueUncertainties.add(new ValueUncertaintyDistribution(
 							DataConversion.doublePrimitivesToList(samplingStatsList.get(i).getValues())));
 				else
 					valueUncertainties.add(new ValueUncertainty(vu));
