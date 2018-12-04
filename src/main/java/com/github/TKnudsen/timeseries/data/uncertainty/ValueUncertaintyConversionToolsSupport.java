@@ -53,6 +53,10 @@ class ValueUncertaintyConversionToolsSupport {
 			for (IValueUncertainty vu : vus) {
 				if (acceptsCharacteristics(vu, valueUncertaintyCharacteristics))
 					v.add(getCharacteristics(vu, valueUncertaintyCharacteristics));
+				else
+					throw new IllegalArgumentException(
+							"ValueUncertaintyConversionToolsSupport.computeCharacteristicsForEachDimension: uncertainty data do not contain "
+									+ valueUncertaintyCharacteristics + " information");
 			}
 			Double[] array = DataConversion.listToArray(v, Double.class);
 			pairs.add(new AbstractMap.SimpleEntry<Long, Double[]>(timeStamp, array));
