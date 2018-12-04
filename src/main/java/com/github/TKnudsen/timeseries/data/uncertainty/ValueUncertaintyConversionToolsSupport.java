@@ -1,16 +1,17 @@
 package com.github.TKnudsen.timeseries.data.uncertainty;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.ValueUncertaintyCharacteristics;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.IValueUncertaintyDistribution;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
+import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.ValueUncertaintyCharacteristics;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.IValueUncertaintyDistribution;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
-import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateFactory;
@@ -39,7 +40,8 @@ class ValueUncertaintyConversionToolsSupport {
 	 * @return
 	 */
 	static ITimeSeriesMultivariate computeCharacteristicsForEachDimension(
-			ITimeSeries<List<IValueUncertainty>> uncertainties, ValueUncertaintyCharacteristics valueUncertaintyCharacteristics) {
+			ITimeSeries<List<IValueUncertainty>> uncertainties,
+			ValueUncertaintyCharacteristics valueUncertaintyCharacteristics) {
 
 		List<Entry<Long, Double[]>> pairs = new ArrayList<>();
 
@@ -56,7 +58,11 @@ class ValueUncertaintyConversionToolsSupport {
 			pairs.add(new AbstractMap.SimpleEntry<Long, Double[]>(timeStamp, array));
 		}
 
-		return TimeSeriesMultivariateFactory.createTimeSeriesMultivatiate(pairs, Double.NaN);
+		ITimeSeriesMultivariate mvts = TimeSeriesMultivariateFactory.createTimeSeriesMultivatiate(pairs, Double.NaN);
+
+		mvts.setName(valueUncertaintyCharacteristics.name());
+
+		return mvts;
 	}
 
 	private static boolean acceptsCharacteristics(IValueUncertainty valueUncertaintyType,
