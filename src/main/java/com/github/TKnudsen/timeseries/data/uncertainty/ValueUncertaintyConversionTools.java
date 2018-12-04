@@ -1,12 +1,13 @@
 package com.github.TKnudsen.timeseries.data.uncertainty;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.ValueUncertaintyCharacteristics;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
@@ -173,9 +174,8 @@ public class ValueUncertaintyConversionTools {
 	}
 
 	/**
-	 * returns three time series (lower bound, amount, upper bound) for each
-	 * dimension. The outer list contains the dimensions (multivariate time series),
-	 * i.e., the list of the input time series.
+	 * returns a list of three ITimeSeriesMultivariate. The time series contain
+	 * lower bound, amount, upper bound for each dimension.
 	 * 
 	 * @return
 	 */
@@ -185,15 +185,68 @@ public class ValueUncertaintyConversionTools {
 		List<ITimeSeriesMultivariate> output = new ArrayList<>();
 
 		ITimeSeriesMultivariate lowerBound = computeLowerBoundForEachDimension(uncertainties);
-		lowerBound.setName(ValueUncertaintyCharacteristics.LOWERBOUND.name());
 		output.add(lowerBound);
 
 		ITimeSeriesMultivariate amount = computeAmountsForEachDimension(uncertainties);
-		amount.setName(ValueUncertaintyCharacteristics.AMOUNT.name());
 		output.add(amount);
 
 		ITimeSeriesMultivariate upperBound = computeUpperBoundForEachDimension(uncertainties);
-		upperBound.setName(ValueUncertaintyCharacteristics.UPPERBOUND.name());
+		output.add(upperBound);
+
+		return output;
+	}
+
+	// DISTRIBUTION UNCERTAINTY
+
+	/**
+	 * 
+	 * @param uncertainties
+	 * @return
+	 */
+	public static ITimeSeriesMultivariate computeLowerQuartileForEachDimension(
+			ITimeSeries<List<IValueUncertainty>> uncertainties) {
+
+		return ValueUncertaintyConversionToolsSupport.computeCharacteristicsForEachDimension(uncertainties,
+				ValueUncertaintyCharacteristics.LOWERQUARTILE);
+	}
+
+	/**
+	 * 
+	 * @param uncertainties
+	 * @return
+	 */
+	public static ITimeSeriesMultivariate computeUpperQuartileForEachDimension(
+			ITimeSeries<List<IValueUncertainty>> uncertainties) {
+
+		return ValueUncertaintyConversionToolsSupport.computeCharacteristicsForEachDimension(uncertainties,
+				ValueUncertaintyCharacteristics.UPPERQUARTILE);
+	}
+
+	/**
+	 * 
+	 * returns a list of five ITimeSeriesMultivariate. The time series contain lower
+	 * bound, 25% quartile, amount, 75% quartile, upper bound for each dimension.
+	 * 
+	 * @return
+	 */
+	public static List<ITimeSeriesMultivariate> computeDistributionUncertaintiesTimeSeriesForEachDimension(
+			ITimeSeries<List<IValueUncertainty>> uncertainties) {
+
+		List<ITimeSeriesMultivariate> output = new ArrayList<>();
+
+		ITimeSeriesMultivariate lowerBound = computeLowerBoundForEachDimension(uncertainties);
+		output.add(lowerBound);
+
+		ITimeSeriesMultivariate lowerQ = computeLowerQuartileForEachDimension(uncertainties);
+		output.add(lowerQ);
+
+		ITimeSeriesMultivariate amount = computeAmountsForEachDimension(uncertainties);
+		output.add(amount);
+
+		ITimeSeriesMultivariate upperQ = computeUpperQuartileForEachDimension(uncertainties);
+		output.add(upperQ);
+
+		ITimeSeriesMultivariate upperBound = computeUpperBoundForEachDimension(uncertainties);
 		output.add(upperBound);
 
 		return output;
