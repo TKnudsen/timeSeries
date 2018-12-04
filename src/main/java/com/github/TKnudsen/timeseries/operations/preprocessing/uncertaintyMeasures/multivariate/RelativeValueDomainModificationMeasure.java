@@ -1,5 +1,10 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.multivariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
+import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,9 +13,6 @@ import java.util.Random;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertaintyCalculationResult;
@@ -29,7 +31,7 @@ import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyM
  * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
- * @author Juergen Bernard, Christian Bors
+ * @author Christian Bors
  * @version 1.07
  */
 public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivariateUncertaintyMeasure {
@@ -37,12 +39,22 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 	private static Double epsilon = 0.000000001;
 	private Double samplingRate = 0.4;
 
+	/**
+	 * representation of value uncertainty with a distribution uncertainty for every
+	 * time stamp and dimension
+	 */
+	private boolean calculateDistributionUncertainty;
+
 	public RelativeValueDomainModificationMeasure() {
 		super();
 	}
 
 	public RelativeValueDomainModificationMeasure(Double samplingRate) {
 		this.samplingRate = samplingRate;
+	}
+
+	public RelativeValueDomainModificationMeasure(boolean calculateDistributionUncertainty) {
+		this.calculateDistributionUncertainty = calculateDistributionUncertainty;
 	}
 
 	@Override
@@ -56,9 +68,9 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 	}
 
 	@Override
-	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
-			ITimeSeriesMultivariate processedTimeSeries) {
-//		uncertaintiesOverTime = new TreeMap<>();
+	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(
+			ITimeSeriesMultivariate originalTimeSeries, ITimeSeriesMultivariate processedTimeSeries) {
+		// uncertaintiesOverTime = new TreeMap<>();
 
 		int maxSampleSize = originalTimeSeries.getTimestamps().size();
 		Random samplingGenerator = new Random();
@@ -169,10 +181,14 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 
 				deviations.add(vu); // cumProb or 0.0
 
-				valueUncertainties.add(new ValueUncertainty(vu));
+				if (calculateDistributionUncertainty)
+					new ValueUncertainty(DataConversion.doublePrimitivesToList(samplingStatsList.get(i).getValues()));
+				else
+					valueUncertainties.add(new ValueUncertainty(vu));
 			}
 
-//			uncertaintiesOverTime.put(timeStamp, new ValueUncertaintyDistribution(deviations));
+			// uncertaintiesOverTime.put(timeStamp, new
+			// ValueUncertaintyDistribution(deviations));
 
 			timeStamps.add(timeStamp);
 			valueUncertaintiesAllDimensionsOverTime.add(valueUncertainties);
@@ -200,6 +216,14 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 				return 0.0;
 			return relativeValue;
 		}
+	}
+
+	public boolean isCalculateDistributionUncertainty() {
+		return calculateDistributionUncertainty;
+	}
+
+	public void setCalculateDistributionUncertainty(boolean calculateDistributionUncertainty) {
+		this.calculateDistributionUncertainty = calculateDistributionUncertainty;
 	}
 
 }
