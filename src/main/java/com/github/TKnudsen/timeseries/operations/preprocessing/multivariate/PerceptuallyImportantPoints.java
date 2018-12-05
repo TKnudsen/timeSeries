@@ -84,7 +84,7 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 		pipTimeStamps.add(data.getLastTimestamp());
 
 		// identify additional pips until pipCount is reached
-		for (int index = 0; index < getPipCount() - 2; index++) {
+		for (int index = 0; index < pipCount - 2; index++) {
 
 			Map<Long, Integer> electionCounts = new HashMap<>();
 
@@ -160,7 +160,7 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 
 	public void setPipCount(int pipCount) {
 		if (pipCount < 2)
-			throw new IllegalArgumentException("PIP: parameter value <2");
+			throw new IllegalArgumentException("PIP: parameter value < 2");
 
 		this.pipCount = pipCount;
 	}
