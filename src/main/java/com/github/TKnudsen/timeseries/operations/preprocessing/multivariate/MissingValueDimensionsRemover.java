@@ -102,4 +102,12 @@ public class MissingValueDimensionsRemover extends TimeSeriesProcessor<ITimeSeri
 	public void setMissingValueRate(double missingValueRate) {
 		this.missingValueRate = missingValueRate;
 	}
+
+	public double getMissingValueIndicator() {
+		return missingValueIndicator;
+	}
+
+	public void setMissingValueIndicator(double missingValueIndicator) {
+		this.missingValueIndicator = missingValueIndicator;
+	}
 }
