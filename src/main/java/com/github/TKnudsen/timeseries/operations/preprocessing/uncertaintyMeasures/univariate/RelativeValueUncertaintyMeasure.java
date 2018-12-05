@@ -19,12 +19,14 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * timestamp the relative changes are collected and represented as a
  * {@link ValueUncertainty}.
  * 
+ * Can handle time stamps that are removed.
+ * 
  * <p>
  * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.06
+ * @version 1.07
  */
 public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncertaintyMeasure {
 
@@ -70,14 +72,12 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncerta
 					deltaV = Math.abs(originalV - processedV);
 				} catch (Exception e) {
 					// time stamp does not exist in processed time series
-					double processedV = TimeSeriesTools.getInterpolatedValue(processedTimeSeries, timeStamp);
+					// min max to limit time interval to the bounts of the output
+					long l = Math.max(processedTimeSeries.getFirstTimestamp(),
+							Math.min(processedTimeSeries.getLastTimestamp(), timeStamp));
+					double processedV = TimeSeriesTools.getInterpolatedValue(processedTimeSeries, l);
 
 					if (!Double.isNaN(processedV)) {
-						// retrieve index of last existing time stamp of processed time series
-						// use the time stamp at this index to retrieve value in original time series
-//						int indexLastValue = processedTimeSeries.findByDate(timeStamp, false);
-//						long timestamp2 = processedTimeSeries.getTimestamp(indexLastValue);
-//						originalV = originalTimeSeries.getValue(timestamp2, true);
 						deltaV = Math.abs(originalV - processedV);
 					}
 				}

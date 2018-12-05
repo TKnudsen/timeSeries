@@ -18,12 +18,14 @@ import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyM
  * dimension are collected and represented as a
  * {@link NumericalDistributionUncertainty}.
  * 
+ * Can handle time stamps that are removed.
+ * 
  * <p>
  * Copyright: Copyright (c) 2017-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.07
+ * @version 1.08
  */
 public class DifferenceUncertaintyMeasure extends TimeSeriesMultivariateUncertaintyMeasure {
 
