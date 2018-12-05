@@ -94,6 +94,7 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 			int rankCount = data.size() - pipTimeStamps.size();
 			if (speedUpFactor > 1.0)
 				rankCount /= speedUpFactor;
+			rankCount = Math.max(rankCount, 3);
 
 			for (int dim = 0; dim < data.getDimensionality(); dim++) {
 				Ranking<EntryWithComparableKey<Double, Long>> dimensionRanking = com.github.TKnudsen.timeseries.operations.preprocessing.univariate.PerceptuallyImportantPoints
