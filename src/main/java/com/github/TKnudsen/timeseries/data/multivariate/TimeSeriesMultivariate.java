@@ -34,8 +34,6 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 	private List<ITimeSeriesUnivariate> timeSeriesUnivariateList;
 	private List<Double> missingValueIndicators;
 
-	private int dimensionality;
-
 	protected TimeSeriesMultivariate() {
 		this.id = MathFunctions.randomLong();
 		this.timeSeriesUnivariateList = new ArrayList<>();
@@ -112,7 +110,7 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 				throw new IllegalArgumentException("TimeSeriesMultivariate: time series have different sizes");
 
 		// dimensionality = getFirstTimeseriesUnivariate().size();
-		dimensionality = timeSeriesUnivariateList.size();
+		// dimensionality = timeSeriesUnivariateList.size();
 
 		missingValueIndicators = new ArrayList<>();
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
@@ -267,7 +265,10 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 
 	@Override
 	public int getDimensionality() {
-		return dimensionality;
+		if (timeSeriesUnivariateList == null || timeSeriesUnivariateList.isEmpty())
+			return 0;
+
+		return timeSeriesUnivariateList.size();
 	}
 
 	@Override
