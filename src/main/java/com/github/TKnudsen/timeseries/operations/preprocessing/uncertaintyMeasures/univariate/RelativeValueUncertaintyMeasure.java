@@ -1,11 +1,12 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.LinearNormalizationFunction;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.univariate.TimeSeriesUnivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.univariate.UncertaintyTimeSeries;
@@ -23,7 +24,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
 public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncertaintyMeasure {
 
@@ -42,10 +43,10 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncerta
 	}
 
 	@Override
-	public ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> compute(ITimeSeriesUnivariate originalTimeSeries,
-			ITimeSeriesUnivariate processedTimeSeries) {
+	public ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> compute(
+			ITimeSeriesUnivariate originalTimeSeries, ITimeSeriesUnivariate processedTimeSeries) {
 
-//		uncertaintiesOverTime = new TreeMap<>();
+		// uncertaintiesOverTime = new TreeMap<>();
 		List<Long> timeStamps = new ArrayList<>();
 		List<IValueUncertainty> valueUncertainties = new ArrayList<>();
 
@@ -57,22 +58,30 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncerta
 				true);
 
 		for (Long timeStamp : originalTimeSeries.getTimestamps()) {
+
+			ValueUncertainty valueUncertainty = null;
+			double originalV = originalTimeSeries.getValue(timeStamp, false);
+			double processedV = Double.NaN;
+
 			try {
-				double originalV = originalTimeSeries.getValue(timeStamp, false);
-
 				// access may fail
-				double processedV = processedTimeSeries.getValue(timeStamp, false);
-
-				ValueUncertainty valueUncertainty = new ValueUncertainty(
-						valueDeltaNormalizationFunction.apply(Math.abs(originalV - processedV)).doubleValue());
-
-//				uncertaintiesOverTime.put(timeStamp, valueUncertainty);
-
-				timeStamps.add(timeStamp);
-				valueUncertainties.add(valueUncertainty);
+				processedV = processedTimeSeries.getValue(timeStamp, false);
 			} catch (Exception e) {
 				// time stamp does not exist in processed time series
+				processedV = TimeSeriesTools.getInterpolatedValue(processedTimeSeries, timeStamp);
+				
+				int indexLastValue = processedTimeSeries.findByDate(timeStamp, false);
+				originalV = processedTimeSeries.getValue(indexLastValue);
 			}
+
+			if (Double.isNaN(processedV))
+				continue;
+
+			valueUncertainty = new ValueUncertainty(
+					valueDeltaNormalizationFunction.apply(Math.abs(originalV - processedV)).doubleValue());
+
+			timeStamps.add(timeStamp);
+			valueUncertainties.add(valueUncertainty);
 		}
 
 		timeSeriesValueUncertainty = new TimeSeriesUnivariateValueUncertaintyCalculationResult(
