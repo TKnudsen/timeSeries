@@ -6,20 +6,17 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
- * <p>
- * Title: TimeSeriesMultivariate
- * </p>
  * 
- * <p>
- * Description: TimeSeriesMultivariate interface
- * </p>
+ * TimeSeries
+ *
+ * Copyright: (c) 2016-2018 Juergen Bernard,
+ * https://github.com/TKnudsen/TimeSeries<br>
  * 
- * <p>
- * Copyright: Copyright (c) 2016
+ * TimeSeriesMultivariate interface
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public interface ITimeSeriesMultivariate extends ITimeSeries<List<Double>> {
 
@@ -30,6 +27,10 @@ public interface ITimeSeriesMultivariate extends ITimeSeries<List<Double>> {
 	public ITimeSeriesUnivariate getTimeSeries(String attributeName);
 
 	public ITimeSeriesUnivariate getTimeSeries(int attributeIndex);
+
+	public ITimeSeriesUnivariate removeTimeSeries(String attributeName);
+
+	public ITimeSeriesUnivariate removeTimeSeries(int attributeIndex);
 
 	public List<String> getAttributeNames();
 

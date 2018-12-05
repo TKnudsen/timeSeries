@@ -1,10 +1,11 @@
 package com.github.TKnudsen.timeseries.data.multivariate;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**
@@ -289,6 +290,26 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 			throw new IndexOutOfBoundsException("TimeSeriesMultivariate: dimension out of bounds");
 
 		return timeSeriesUnivariateList.get(attributeIndex);
+	}
+
+	@Override
+	public ITimeSeriesUnivariate removeTimeSeries(String attributeName) {
+		ITimeSeriesUnivariate timeSeries = getTimeSeries(attributeName);
+
+		if (timeSeries != null)
+			this.timeSeriesUnivariateList.remove(timeSeries);
+
+		return timeSeries;
+	}
+
+	@Override
+	public ITimeSeriesUnivariate removeTimeSeries(int attributeIndex) {
+		ITimeSeriesUnivariate timeSeries = getTimeSeries(attributeIndex);
+
+		if (timeSeries != null)
+			this.timeSeriesUnivariateList.remove(timeSeries);
+
+		return timeSeries;
 	}
 
 	@Override
