@@ -1,11 +1,13 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.multivariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertaintyCalculationResult;
@@ -42,10 +44,10 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 	}
 
 	@Override
-	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(ITimeSeriesMultivariate originalTimeSeries,
-			ITimeSeriesMultivariate processedTimeSeries) {
+	public ITimeSeriesValueUncertaintyCalculationResult<List<IValueUncertainty>> compute(
+			ITimeSeriesMultivariate originalTimeSeries, ITimeSeriesMultivariate processedTimeSeries) {
 
-//		uncertaintiesOverTime = new TreeMap<>();
+		// uncertaintiesOverTime = new TreeMap<>();
 
 		// create composition of univariate value uncertainties
 		Map<String, ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty>> valueUncertaintyMeasuresPerDimension = new LinkedHashMap<>();
@@ -71,8 +73,8 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 			int timeSeriesIndexToSpeedupAccess = originalTimeSeries.findByDate(timeStamp, true);
 
 			try {
-//				// dummy access
-//				processedTimeSeries.getValue(timeStamp, false);
+				// // dummy access
+				// processedTimeSeries.getValue(timeStamp, false);
 
 				for (String dimension : originalTimeSeries.getAttributeNames()) {
 					ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> uncertainties = valueUncertaintyMeasuresPerDimension
@@ -80,21 +82,33 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesMultivariateUncer
 
 					// speedup
 					IValueUncertainty vu = null;
-					if (uncertainties.getValueUncertainties().getTimestamp(timeSeriesIndexToSpeedupAccess) == timeStamp)
-						vu = uncertainties.getValueUncertainties().getValue(timeSeriesIndexToSpeedupAccess);
-					else
+
+					if (originalTimeSeries.size() == uncertainties.getValueUncertainties().size() && uncertainties
+							.getValueUncertainties().getTimestamp(timeSeriesIndexToSpeedupAccess) == timeStamp)
 						vu = uncertainties.getValueUncertainties().getValue(timeStamp, false);
+					else
+						try {
+							vu = uncertainties.getValueUncertainties().getValue(timeStamp, false);
+						} catch (Exception e) {
+							// dirty way to handle missing value uncertainties (this happens if original
+							// time series is NaN at a particular point in time
+						}
+
+					if (vu == null)
+						vu = new ValueUncertainty(Double.MAX_VALUE);
 
 					relatives.add(vu.getAmount());
 					valueUncertainties.add(vu);
 				}
 
-//				uncertaintiesOverTime.put(timeStamp, new ValueUncertaintyDistribution(relatives));
+				// uncertaintiesOverTime.put(timeStamp, new
+				// ValueUncertaintyDistribution(relatives));
 
 				timeStamps.add(timeStamp);
 				valueUncertaintiesAllDimensionsOverTime.add(valueUncertainties);
 			} catch (Exception e) {
 				// time stamp does not exist in processed time series
+				e.printStackTrace();
 			}
 		}
 
