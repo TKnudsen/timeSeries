@@ -73,8 +73,11 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncerta
 					double processedV = TimeSeriesTools.getInterpolatedValue(processedTimeSeries, timeStamp);
 
 					if (!Double.isNaN(processedV)) {
-						int indexLastValue = processedTimeSeries.findByDate(timeStamp, false);
-						originalV = processedTimeSeries.getValue(indexLastValue);
+						// retrieve index of last existing time stamp of processed time series
+						// use the time stamp at this index to retrieve value in original time series
+//						int indexLastValue = processedTimeSeries.findByDate(timeStamp, false);
+//						long timestamp2 = processedTimeSeries.getTimestamp(indexLastValue);
+//						originalV = originalTimeSeries.getValue(timestamp2, true);
 						deltaV = Math.abs(originalV - processedV);
 					}
 				}
