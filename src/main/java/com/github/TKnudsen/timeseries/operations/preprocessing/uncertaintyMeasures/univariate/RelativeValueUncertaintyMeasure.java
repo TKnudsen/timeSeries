@@ -61,24 +61,25 @@ public class RelativeValueUncertaintyMeasure extends TimeSeriesUnivariateUncerta
 
 			ValueUncertainty valueUncertainty = null;
 			double originalV = originalTimeSeries.getValue(timeStamp, false);
-			double processedV = Double.NaN;
+			double deltaV = Double.MAX_VALUE;
 
-			try {
-				// access may fail
-				processedV = processedTimeSeries.getValue(timeStamp, false);
-			} catch (Exception e) {
-				// time stamp does not exist in processed time series
-				processedV = TimeSeriesTools.getInterpolatedValue(processedTimeSeries, timeStamp);
-				
-				int indexLastValue = processedTimeSeries.findByDate(timeStamp, false);
-				originalV = processedTimeSeries.getValue(indexLastValue);
-			}
+			if (!Double.isNaN(originalV))
+				try {
+					// access may fail
+					double processedV = processedTimeSeries.getValue(timeStamp, false);
+					deltaV = Math.abs(originalV - processedV);
+				} catch (Exception e) {
+					// time stamp does not exist in processed time series
+					double processedV = TimeSeriesTools.getInterpolatedValue(processedTimeSeries, timeStamp);
 
-			if (Double.isNaN(processedV))
-				continue;
+					if (!Double.isNaN(processedV)) {
+						int indexLastValue = processedTimeSeries.findByDate(timeStamp, false);
+						originalV = processedTimeSeries.getValue(indexLastValue);
+						deltaV = Math.abs(originalV - processedV);
+					}
+				}
 
-			valueUncertainty = new ValueUncertainty(
-					valueDeltaNormalizationFunction.apply(Math.abs(originalV - processedV)).doubleValue());
+			valueUncertainty = new ValueUncertainty(valueDeltaNormalizationFunction.apply(deltaV).doubleValue());
 
 			timeStamps.add(timeStamp);
 			valueUncertainties.add(valueUncertainty);
