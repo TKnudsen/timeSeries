@@ -1,12 +1,13 @@
 package com.github.TKnudsen.timeseries.operations.degreeOfInterest;
 
-import java.util.Map;
-
 import com.github.TKnudsen.ComplexDataObject.data.entry.EntryWithComparableKey;
 import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
 import com.github.TKnudsen.ComplexDataObject.model.degreeOfInterest.IDegreeOfInterestFunction;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.LinearNormalizationFunction;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.NormalizationFunction;
+
+import java.util.Map;
+
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 

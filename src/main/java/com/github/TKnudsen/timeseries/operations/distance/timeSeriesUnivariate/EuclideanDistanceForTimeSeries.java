@@ -1,8 +1,9 @@
 package com.github.TKnudsen.timeseries.operations.distance.timeSeriesUnivariate;
 
+import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
+
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.distanceMeasure.IDistanceMeasure;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
 /**

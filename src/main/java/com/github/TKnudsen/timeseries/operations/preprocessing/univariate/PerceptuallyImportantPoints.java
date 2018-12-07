@@ -1,16 +1,17 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.entry.EntryWithComparableKey;
+import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.github.TKnudsen.ComplexDataObject.data.entry.EntryWithComparableKey;
-import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
-import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 

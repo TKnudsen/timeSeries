@@ -1,10 +1,11 @@
 package com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
 /**

@@ -1,9 +1,10 @@
 package com.github.TKnudsen.timeseries.test.operations.transformations.descriptors.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate.FourierTransformDescriptor;

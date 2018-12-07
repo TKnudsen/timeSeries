@@ -1,9 +1,9 @@
 package com.github.TKnudsen.timeseries.data;
 
-import java.util.List;
-
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.IDObject;
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
+
+import java.util.List;
 
 /**
  * <p>
