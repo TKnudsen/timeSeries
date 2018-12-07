@@ -1,10 +1,11 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
+
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;

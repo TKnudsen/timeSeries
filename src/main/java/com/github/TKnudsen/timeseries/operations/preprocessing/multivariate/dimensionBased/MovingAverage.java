@@ -1,12 +1,13 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dimensionBased;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.IIntegerWeightingKernel;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Integer.LinearIndexWeightingKernel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 
 /**

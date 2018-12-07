@@ -1,8 +1,8 @@
 package com.github.TKnudsen.timeseries.data.primitives;
 
-import java.util.Date;
-
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
+
+import java.util.Date;
 
 /**
  * <p>

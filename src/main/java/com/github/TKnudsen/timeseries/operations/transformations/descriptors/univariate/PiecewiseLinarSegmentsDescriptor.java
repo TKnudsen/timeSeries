@@ -1,11 +1,12 @@
 package com.github.TKnudsen.timeseries.operations.transformations.descriptors.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
+import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
-import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;

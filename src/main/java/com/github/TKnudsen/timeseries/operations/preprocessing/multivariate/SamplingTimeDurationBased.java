@@ -1,10 +1,11 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;

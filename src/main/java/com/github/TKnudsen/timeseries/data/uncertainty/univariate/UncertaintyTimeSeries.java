@@ -1,8 +1,9 @@
 package com.github.TKnudsen.timeseries.data.uncertainty.univariate;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+
 import java.util.List;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.timeseries.data.TimeSeries;
 
 public class UncertaintyTimeSeries<U extends IValueUncertainty> extends TimeSeries<U> {

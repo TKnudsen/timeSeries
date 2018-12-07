@@ -1,13 +1,14 @@
 package com.github.TKnudsen.timeseries.operations.transformations.descriptors.multivariate;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataTransformationCategory;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.IDescriptor;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.descriptors.numericalFeatures.INumericFeatureVectorDescriptor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeled;
 

@@ -1,5 +1,7 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
+import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -7,7 +9,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
