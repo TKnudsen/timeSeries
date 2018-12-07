@@ -20,7 +20,7 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
  * @author Juergen Bernard
  * @version 1.02
  */
-public class TimeInterval implements ISelfDescription{
+public class TimeInterval implements ISelfDescription {
 
 	protected Long startTime;
 	protected Long endTime;
@@ -30,11 +30,11 @@ public class TimeInterval implements ISelfDescription{
 	protected TimeInterval() {
 
 	}
-	
+
 	public TimeInterval(long startTime, long endTime) {
 		this(startTime, endTime, "", "");
 	}
-	
+
 	public TimeInterval(long startTime, long endTime, String name, String description) {
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -69,8 +69,20 @@ public class TimeInterval implements ISelfDescription{
 	public int hashCode() {
 		int hash = 17;
 		hash += (39 * hash + startTime);
-		hash += (39 * hash + endTime);
+		hash *= (39 * hash + endTime);
 		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+
+		if (!(obj instanceof TimeInterval))
+			return false;
+
+		TimeInterval that = (TimeInterval) obj;
+		return this.hashCode() == that.hashCode();
 	}
 
 	@Override
@@ -87,4 +99,5 @@ public class TimeInterval implements ISelfDescription{
 	public String getDescription() {
 		return description;
 	}
+
 }
