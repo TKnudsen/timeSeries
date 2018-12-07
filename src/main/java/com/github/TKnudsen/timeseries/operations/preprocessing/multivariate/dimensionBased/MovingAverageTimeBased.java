@@ -64,7 +64,8 @@ public class MovingAverageTimeBased extends DimensionBasedTimeSeriesMultivariate
 
 		List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
 		for (Long i : longs)
-			processors.add(new MovingAverageTimeBased(i, considerFutureValues));
+			if (i > 0)
+				processors.add(new MovingAverageTimeBased(i, considerFutureValues));
 
 		return processors;
 	}

@@ -65,7 +65,8 @@ public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor
 
 		List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
 		for (Integer i : integers)
-			processors.add(new MovingAverage(i, considerFutureValues));
+			if (i > 0)
+				processors.add(new MovingAverage(i, considerFutureValues));
 
 		return processors;
 	}
