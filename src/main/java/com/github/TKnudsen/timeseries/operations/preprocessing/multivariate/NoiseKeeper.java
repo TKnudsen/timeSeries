@@ -18,8 +18,8 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dime
  * https://github.com/TKnudsen/timeSeries<br>
  * <br>
  * 
- * Moving average with a temporal kernel function. Presumes that the time series
- * is ordered.
+ * removes the signal of a time series and preserves the noise. the signal is
+ * calculated with a moving average routine.
  * </p>
  * 
  * @author Juergen Bernard
@@ -54,9 +54,8 @@ public class NoiseKeeper extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		this.setTimeSeriesProcessor(
-				new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.MovingAverageTimeBased(kernel,
-						considerFutureValues));
+		this.setTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.NoiseKeeper(
+				kernel, considerFutureValues));
 	}
 
 	@Override
