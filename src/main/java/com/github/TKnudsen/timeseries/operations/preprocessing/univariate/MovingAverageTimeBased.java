@@ -1,14 +1,13 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
-import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
-import com.github.TKnudsen.ComplexDataObject.model.weighting.Long.LinearLongWeightingKernel;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.weighting.Long.LinearLongWeightingKernel;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -66,40 +65,6 @@ public class MovingAverageTimeBased extends TimeSeriesProcessor<ITimeSeriesUniva
 
 		for (ITimeSeriesUnivariate timeSeries : data) {
 			TimeSeriesTools.calculateMovingAverageTimeSensitive(timeSeries, getKernelInterval(), considerFutureValues);
-			// List<Double> retValues = new ArrayList<>();
-			//
-			// for (int i = 0; i < timeSeries.size(); i++) {
-			//
-			// Long referenceTimeStamp = timeSeries.getTimestamp(i);
-			// kernel.setReference(referenceTimeStamp);
-			//
-			// int firstIndex = timeSeries.findByDate(referenceTimeStamp -
-			// kernel.getInterval(), false);
-			// int lastIndex = timeSeries.findByDate(referenceTimeStamp +
-			// kernel.getInterval(), false);
-			//
-			// double values = 0;
-			// double weights = 0;
-			//
-			// for (int k = firstIndex; k <= lastIndex; k++)
-			// if (!considerFutureValues && k > i)
-			// break;
-			// else if (!Double.isNaN(timeSeries.getValue(k))) {
-			// double w = kernel.getWeight(timeSeries.getTimestamp(k));
-			// values += timeSeries.getValue(k) * w;
-			// weights += w;
-			// }
-			//
-			// if (weights <= 0)
-			// retValues.add(Double.NaN);
-			// else {
-			// values /= weights;
-			// retValues.add(values);
-			// }
-			// }
-			//
-			// for (int i = 0; i < timeSeries.size(); i++)
-			// timeSeries.replaceValue(i, retValues.get(i));
 		}
 	}
 
@@ -125,7 +90,8 @@ public class MovingAverageTimeBased extends TimeSeriesProcessor<ITimeSeriesUniva
 
 		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
 		for (Long i : longs)
-			processors.add(new MovingAverageTimeBased(i, considerFutureValues));
+			if (i > 0)
+				processors.add(new MovingAverageTimeBased(i, considerFutureValues));
 
 		return processors;
 	}

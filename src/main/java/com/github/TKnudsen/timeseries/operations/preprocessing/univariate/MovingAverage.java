@@ -117,7 +117,8 @@ public class MovingAverage extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
 		for (Integer i : integers)
-			processors.add(new MovingAverage(i, considerFutureValues));
+			if (i > 0)
+				processors.add(new MovingAverage(i, considerFutureValues));
 
 		return processors;
 	}
