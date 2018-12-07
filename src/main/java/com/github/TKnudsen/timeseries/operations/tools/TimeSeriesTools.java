@@ -1,5 +1,9 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
+import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
+import com.github.TKnudsen.ComplexDataObject.model.weighting.Long.LinearLongWeightingKernel;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,8 +16,6 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
@@ -251,53 +253,49 @@ public final class TimeSeriesTools {
 	}
 
 	public static void calculateMovingAverageTimeSensitive(ITimeSeries<Double> ts, long window) {
+		calculateMovingAverageTimeSensitive(ts, window, true);
+	}
+
+	public static void calculateMovingAverageTimeSensitive(ITimeSeries<Double> ts, long window,
+			boolean considerFutureValues) {
+		if (ts == null)
+			return;
+
+		LinearLongWeightingKernel kernel = new LinearLongWeightingKernel(window);
+
+		List<Double> retValues = new ArrayList<>();
+
 		for (int i = 0; i < ts.size(); i++) {
-			double d = 0;
-			double w = 0;
-			if (!Double.isNaN(ts.getValue(i))) {
-				d = ts.getValue(i);
-				w = 1.0;
-			}
-			long currentTime = ts.getTimestamp(i);
-			long movingTime = ts.getTimestamp(i);
-			int currentIndex = i - 1;
 
-			while (currentIndex >= 0 && ts.getTimestamp(currentIndex) >= currentTime - window) {
-				movingTime = ts.getTimestamp(currentIndex);
-				if (!Double.isNaN(ts.getValue(currentIndex))) {
-					if (1 - ((double) (currentTime - movingTime) / (double) window) < 0.000001) {
-						// we skip this index due to the fact of a division
-						// by a almost zero weight value
-					} else {
-						d += ts.getValue(currentIndex) * (1 - (double) (currentTime - movingTime) / (double) window);
-						w += 1 - ((double) (currentTime - movingTime) / (double) window);
-					}
+			Long referenceTimeStamp = ts.getTimestamp(i);
+			kernel.setReference(referenceTimeStamp);
+
+			int firstIndex = ts.findByDate(referenceTimeStamp - kernel.getInterval(), false);
+			int lastIndex = ts.findByDate(referenceTimeStamp + kernel.getInterval(), false);
+
+			double values = 0;
+			double weights = 0;
+
+			for (int k = firstIndex; k <= lastIndex; k++)
+				if (!considerFutureValues && k > i)
+					break;
+				else if (!Double.isNaN(ts.getValue(k))) {
+					double w = kernel.getWeight(ts.getTimestamp(k));
+					values += ts.getValue(k) * w;
+					weights += w;
 				}
-				currentIndex--;
+
+			if (weights <= 0)
+				retValues.add(Double.NaN);
+			else {
+				values /= weights;
+				retValues.add(values);
 			}
-
-			movingTime = ts.getTimestamp(i);
-			currentIndex = i + 1;
-
-			while (currentIndex < ts.size() && ts.getTimestamp(currentIndex) < currentTime + window) {
-				movingTime = ts.getTimestamp(currentIndex);
-				if (!Double.isNaN(ts.getValue(currentIndex))) {
-					if (1 - ((double) (movingTime - currentTime) / (double) window) < 0.000001) {
-						// we skip this index due to the fact of a division
-						// by a almost zero weight value
-					} else {
-						d += ts.getValue(currentIndex) * (1 - (double) (movingTime - currentTime) / (double) window);
-						w += 1 - ((double) (movingTime - currentTime) / (double) window);
-					}
-				}
-				currentIndex++;
-			}
-
-			if (d > 0 && d < 0.0000000001)
-				ts.replaceValue(i, 0.0);
-			else
-				ts.replaceValue(i, d / w);
 		}
+
+		for (int i = 0; i < ts.size(); i++)
+			ts.replaceValue(i, retValues.get(i));
+
 	}
 
 	public static boolean compareDoubles(double v1, double v2) {
@@ -613,12 +611,11 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist whether or not the identification of
-	 *                                       the subsequence is sort of
-	 *                                       sophisticated in case of NOT exact
-	 *                                       matches. If not a subsequence is
-	 *                                       returned with start/end time stamps
-	 *                                       larger than the defined interval.
+	 * @param requireStartEndTimestampsExist
+	 *            whether or not the identification of the subsequence is sort of
+	 *            sophisticated in case of NOT exact matches. If not a subsequence
+	 *            is returned with start/end time stamps larger than the defined
+	 *            interval.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -665,16 +662,14 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @param start
 	 * @param end
-	 * @param requireStartEndTimestampsExist whether or not the identification of
-	 *                                       the subsequence is sort of
-	 *                                       sophisticated in case of NOT exact
-	 *                                       matches. If not a subsequence is
-	 *                                       returned with start/end time stamps
-	 *                                       larger than the defined interval.
-	 * @param cropIfTimeStampsDontExist      if no exact match is needed this
-	 *                                       routine provides the opportunity to
-	 *                                       crop start and end time stamp by linear
-	 *                                       interpolation.
+	 * @param requireStartEndTimestampsExist
+	 *            whether or not the identification of the subsequence is sort of
+	 *            sophisticated in case of NOT exact matches. If not a subsequence
+	 *            is returned with start/end time stamps larger than the defined
+	 *            interval.
+	 * @param cropIfTimeStampsDontExist
+	 *            if no exact match is needed this routine provides the opportunity
+	 *            to crop start and end time stamp by linear interpolation.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -786,7 +781,8 @@ public final class TimeSeriesTools {
 	 * </p>
 	 * 
 	 * @param timeSeriesList
-	 * @param quantil        between [0-100]
+	 * @param quantil
+	 *            between [0-100]
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate[] createQuantilesQuartilesMeanTimeSeries(
