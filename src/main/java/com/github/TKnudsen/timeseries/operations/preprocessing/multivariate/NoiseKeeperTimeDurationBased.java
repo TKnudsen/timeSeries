@@ -24,9 +24,9 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dime
  * 
  * @author Juergen Bernard
  * 
- * @version 1.02
+ * @version 1.03
  */
-public class NoiseKeeper extends DimensionBasedTimeSeriesMultivariateProcessor {
+public class NoiseKeeperTimeDurationBased extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	final LinearLongWeightingKernel kernel;
 
@@ -36,15 +36,15 @@ public class NoiseKeeper extends DimensionBasedTimeSeriesMultivariateProcessor {
 	 * for serialization/reflection purposes.
 	 */
 	@SuppressWarnings("unused")
-	private NoiseKeeper() {
+	private NoiseKeeperTimeDurationBased() {
 		this(10L, true);
 	}
 
-	public NoiseKeeper(long kernelInterval, boolean considerFutureValues) {
+	public NoiseKeeperTimeDurationBased(long kernelInterval, boolean considerFutureValues) {
 		this(new LinearLongWeightingKernel(kernelInterval), considerFutureValues);
 	}
 
-	public NoiseKeeper(LinearLongWeightingKernel kernel, boolean considerFutureValues) {
+	public NoiseKeeperTimeDurationBased(LinearLongWeightingKernel kernel, boolean considerFutureValues) {
 		if (kernel == null)
 			throw new NullPointerException("MovingAverageTimeBased: kernel was null");
 
@@ -54,8 +54,9 @@ public class NoiseKeeper extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 	@Override
 	protected void initializeUnivariateTimeSeriesProcessor() {
-		this.setTimeSeriesProcessor(new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.NoiseKeeper(
-				kernel, considerFutureValues));
+		this.setTimeSeriesProcessor(
+				new com.github.TKnudsen.timeseries.operations.preprocessing.univariate.NoiseKeeperTimeBased(kernel,
+						considerFutureValues));
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class NoiseKeeper extends DimensionBasedTimeSeriesMultivariateProcessor {
 
 		List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
 		for (Long i : longs)
-			processors.add(new NoiseKeeper(i, considerFutureValues));
+			processors.add(new NoiseKeeperTimeDurationBased(i, considerFutureValues));
 
 		return processors;
 	}
