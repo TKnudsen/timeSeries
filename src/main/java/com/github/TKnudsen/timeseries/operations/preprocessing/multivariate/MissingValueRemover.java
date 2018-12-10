@@ -3,6 +3,7 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.multivariate;
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
@@ -23,7 +24,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class MissingValueRemover extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
@@ -71,6 +72,16 @@ public class MissingValueRemover extends TimeSeriesProcessor<ITimeSeriesMultivar
 
 	@Override
 	public List<IDataProcessor<ITimeSeriesMultivariate>> getAlternativeParameterizations(int count) {
-		return null;
+		List<IDataProcessor<ITimeSeriesMultivariate>> alternatives = new ArrayList<>();
+
+		return alternatives;
+	}
+
+	public double getMissingValueIndicator() {
+		return missingValueIndicator;
+	}
+
+	public void setMissingValueIndicator(double missingValueIndicator) {
+		this.missingValueIndicator = missingValueIndicator;
 	}
 }
