@@ -29,7 +29,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * 
  * @version 1.01
  */
-public class NoiseKeeper extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
+public class NoiseKeeperTimeBased extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 	private final MovingAverageTimeBased movingAverage;
 
@@ -37,15 +37,15 @@ public class NoiseKeeper extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 	 * for serialization purposes
 	 */
 	@SuppressWarnings("unused")
-	private NoiseKeeper() {
+	private NoiseKeeperTimeBased() {
 		this(10L, false);
 	}
 
-	public NoiseKeeper(long kernelInterval, boolean considerFutureValues) {
+	public NoiseKeeperTimeBased(long kernelInterval, boolean considerFutureValues) {
 		this(new LinearLongWeightingKernel(kernelInterval), considerFutureValues);
 	}
 
-	public NoiseKeeper(LinearLongWeightingKernel kernel, boolean considerFutureValues) {
+	public NoiseKeeperTimeBased(LinearLongWeightingKernel kernel, boolean considerFutureValues) {
 		Objects.requireNonNull(kernel);
 
 		this.movingAverage = new MovingAverageTimeBased(kernel, considerFutureValues);
@@ -98,7 +98,7 @@ public class NoiseKeeper extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
 		List<IDataProcessor<ITimeSeriesUnivariate>> processors = new ArrayList<>();
 		for (Long i : longs)
-			processors.add(new NoiseKeeper(i, isConsiderFutureValues()));
+			processors.add(new NoiseKeeperTimeBased(i, isConsiderFutureValues()));
 
 		return processors;
 	}
@@ -107,10 +107,10 @@ public class NoiseKeeper extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
-		if (!(o instanceof NoiseKeeper))
+		if (!(o instanceof NoiseKeeperTimeBased))
 			return false;
 
-		NoiseKeeper other = (NoiseKeeper) o;
+		NoiseKeeperTimeBased other = (NoiseKeeperTimeBased) o;
 
 		return other.getKernelInterval() == getKernelInterval()
 				&& other.isConsiderFutureValues() == isConsiderFutureValues();
