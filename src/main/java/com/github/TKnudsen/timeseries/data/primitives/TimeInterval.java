@@ -6,19 +6,15 @@ import java.util.Date;
 
 /**
  * <p>
- * Title: TimeInterval
+ * Stores a start and an end time stamp
  * </p>
  * 
  * <p>
- * Description: structure that stores a start and an end time stamp
- * </p>
- * 
- * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2018
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public class TimeInterval implements ISelfDescription {
 
@@ -47,6 +43,14 @@ public class TimeInterval implements ISelfDescription {
 			return true;
 		else
 			return false;
+	}
+
+	public TimeDuration getTimeDuration() {
+		return new TimeDuration(TimeQuantization.MILLISECONDS, Math.abs(getEndTime() - getStartTime()));
+	}
+
+	public long getDuration() {
+		return Math.abs(getEndTime() - getStartTime());
 	}
 
 	public long getStartTime() {
