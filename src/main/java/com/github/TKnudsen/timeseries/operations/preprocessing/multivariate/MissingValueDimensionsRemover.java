@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -49,7 +48,7 @@ public class MissingValueDimensionsRemover extends TimeSeriesProcessor<ITimeSeri
 
 	@Override
 	public void process(List<ITimeSeriesMultivariate> data) {
-		
+
 		if (data.isEmpty())
 			throw new IllegalStateException("List<TimeSeries> is empty");
 
@@ -58,33 +57,25 @@ public class MissingValueDimensionsRemover extends TimeSeriesProcessor<ITimeSeri
 				throw new IllegalStateException("TimeSeries is null");
 			if (data.get(i).isEmpty())
 				throw new IllegalStateException("TimeSeries is empty");
-			data.set(i, process(data.get(i)));
-		}			
+			process(data.get(i));
+		}
 	}
 
-	private ITimeSeriesMultivariate process(ITimeSeriesMultivariate data) {
-		List<ITimeSeriesUnivariate> keep = new ArrayList<>();
-		for (int d = 0; d < data.getDimensionality(); d++) {
-			ITimeSeriesUnivariate timeSeries = TimeSeriesTools.cloneTimeSeries(data.getTimeSeries(d));
+	private void process(ITimeSeriesMultivariate data) {
 
+		for (int d = data.getDimensionality() - 1; d >= 0; d--) {
 			int count = 0;
-			for (Double value : timeSeries.getValues()) {
+			for (Double value : data.getTimeSeries(d).getValues()) {
 				if (value != null && TimeSeriesTools.compareDoubles(value, missingValueIndicator)) {
-					count++;					
+					count++;
 				}
 			}
-					
-			double rate = count / (double) timeSeries.size();
-			if (rate < missingValueRate) {				
-				keep.add(timeSeries);				
-			} else {
-				System.out.println("Dimension removed: " + timeSeries.getName());
+
+			double rate = count / (double) data.getTimeSeries(d).size();
+			if (rate >= missingValueRate) {
+				data.removeTimeSeries(d);
 			}
-		}		
-		ITimeSeriesMultivariate tsm = new TimeSeriesMultivariate(keep);
-		tsm.setName(data.getName());
-		return tsm;	
-		
+		}
 	}
 
 	@Override
