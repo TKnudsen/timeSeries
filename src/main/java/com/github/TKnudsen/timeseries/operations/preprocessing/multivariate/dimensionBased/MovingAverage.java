@@ -25,7 +25,7 @@ import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
 public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor {
 
@@ -65,7 +65,7 @@ public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor
 
 		List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
 		for (Integer i : integers)
-			if (i > 0)
+			if (i > 1)
 				processors.add(new MovingAverage(i, considerFutureValues));
 
 		return processors;
