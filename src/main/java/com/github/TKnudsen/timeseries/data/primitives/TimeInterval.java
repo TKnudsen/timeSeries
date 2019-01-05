@@ -1,8 +1,8 @@
 package com.github.TKnudsen.timeseries.data.primitives;
 
-import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
-
 import java.util.Date;
+
+import com.github.TKnudsen.ComplexDataObject.data.interval.NumberInterval;
 
 /**
  * <p>
@@ -10,18 +10,13 @@ import java.util.Date;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2018
+ * Copyright (c) 2016-2019
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
-public class TimeInterval implements ISelfDescription {
-
-	protected Long startTime;
-	protected Long endTime;
-	protected String name;
-	protected String description;
+public class TimeInterval extends NumberInterval {
 
 	protected TimeInterval() {
 
@@ -32,76 +27,32 @@ public class TimeInterval implements ISelfDescription {
 	}
 
 	public TimeInterval(long startTime, long endTime, String name, String description) {
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.name = name;
-		this.description = description;
-	}
-
-	public boolean containsTime(long time) {
-		if (time >= startTime && time <= endTime)
-			return true;
-		else
-			return false;
+		super(startTime, endTime, name, description);
 	}
 
 	public TimeDuration getTimeDuration() {
 		return new TimeDuration(TimeQuantization.MILLISECONDS, Math.abs(getEndTime() - getStartTime()));
 	}
 
-	public long getDuration() {
-		return Math.abs(getEndTime() - getStartTime());
-	}
-
 	public long getStartTime() {
-		return startTime;
+		return getStart().longValue();
 	}
 
 	public void setStartTime(long startTime) {
-		this.startTime = startTime;
+		this.setStart(startTime);
 	}
 
 	public long getEndTime() {
-		return endTime;
+		return getEnd().longValue();
 	}
 
 	public void setEndTime(long endTime) {
-		this.endTime = endTime;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 17;
-		hash += (39 * hash + startTime);
-		hash *= (39 * hash + endTime);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-
-		if (!(obj instanceof TimeInterval))
-			return false;
-
-		TimeInterval that = (TimeInterval) obj;
-		return this.hashCode() == that.hashCode();
+		this.setEnd(endTime);
 	}
 
 	@Override
 	public String toString() {
-		return "TimeInterval: [" + new Date(startTime) + "-" + new Date(endTime) + "]";
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
+		return "TimeInterval: [" + new Date(getStartTime()) + "-" + new Date(getEndTime()) + "]";
 	}
 
 }

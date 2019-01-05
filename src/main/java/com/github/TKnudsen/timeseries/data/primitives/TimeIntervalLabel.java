@@ -49,11 +49,11 @@ public class TimeIntervalLabel<O extends Object> extends TimeInterval implements
 		if (o == null)
 			return -1;
 
-		return startTime.compareTo(o.getStartTime());
+		return Long.compare(getStartTime(), o.getStartTime());
 	}
 
 	@Override
 	public String toString() {
-		return "TimeInterval: [" + new Date(startTime) + "-" + new Date(endTime) + "] Label: " + label;
+		return super.toString() + " Label: " + label;
 	}
 }
