@@ -53,6 +53,22 @@ public class TimeSeriesGenerator {
 		return new TimeSeriesUnivariate(timeStamps, values, Double.NaN);
 	}
 
+	public static ITimeSeriesUnivariate generateSyntheticTimeSeriesUnivariateRandomWalk(double startValue,
+			int timeStampCount) {
+
+		List<Long> timeStamps = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		double d = startValue;
+		for (long l = 0; l < timeStampCount * 1000; l += 1000) {
+			d = Math.min(100, Math.max(0, d + (Math.random() - 0.5) * 10));
+			timeStamps.add(l);
+			values.add(d);
+		}
+
+		return new TimeSeriesUnivariate(timeStamps, values, Double.NaN);
+	}
+
 	public static ITimeSeriesUnivariate generateSyntheticTimeSeriesUnivariateRandomWalk(double startValue) {
 
 		List<Long> timeStamps = new ArrayList<>();
@@ -70,6 +86,15 @@ public class TimeSeriesGenerator {
 		}
 
 		return new TimeSeriesUnivariate(timeStamps, values, Double.NaN);
+	}
+
+	public static ITimeSeriesMultivariate generateSyntheticTimeSeriesMultivariate(int dimensions, int timeStamps) {
+		List<ITimeSeriesUnivariate> bundle = new ArrayList<>();
+
+		for (int i = 0; i < dimensions; i++)
+			bundle.add(TimeSeriesGenerator.generateSyntheticTimeSeriesUnivariateRandomWalk(150.0, timeStamps));
+
+		return new TimeSeriesMultivariate(bundle);
 	}
 
 	public static ITimeSeriesMultivariate generateSyntheticTimeSeriesMultivariate(long startDate, long endDate,
