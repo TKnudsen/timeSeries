@@ -9,19 +9,20 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
  * <p>
- * Title: TimeSeriesMultivariateFactory
+ * timeSeries
  * </p>
  * 
  * <p>
- * Description:
+ * Creates ITimeSeriesMultivariate instances for different types of compatible
+ * data.
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016-2017
+ * Copyright: Copyright (c) 2016-2019
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.03
+ * @version 1.04
  */
 public class TimeSeriesMultivariateFactory {
 
