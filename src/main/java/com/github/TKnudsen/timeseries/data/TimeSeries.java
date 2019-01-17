@@ -127,7 +127,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 		if (!(obj instanceof TimeSeriesUnivariate))
 			return false;
 
-		if (hashCode != obj.hashCode())
+		if (hashCode() != obj.hashCode())
 			return false;
 
 		TimeSeriesUnivariate otherTimeSeries = (TimeSeriesUnivariate) obj;
