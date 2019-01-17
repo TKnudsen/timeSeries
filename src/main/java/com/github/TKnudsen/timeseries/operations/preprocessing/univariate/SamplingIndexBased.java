@@ -41,7 +41,7 @@ public class SamplingIndexBased extends TimeSeriesProcessor<ITimeSeriesUnivariat
 	}
 
 	public SamplingIndexBased(int timeStampsToBeRemoved) {
-		if (timeStampsToBeRemoved >= 0)
+		if (timeStampsToBeRemoved <= 0)
 			throw new IllegalArgumentException("SamplingIndexBased: timeStampsToBeRemoved needs to be > 0");
 
 		this.timeStampsToBeRemoved = timeStampsToBeRemoved;
