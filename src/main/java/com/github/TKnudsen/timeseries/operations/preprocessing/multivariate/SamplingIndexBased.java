@@ -29,6 +29,10 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcess
  */
 public class SamplingIndexBased extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
+	/**
+	 * every xth time stamp is to be removed. value range is from 1 (half) to n
+	 * (almost no removal)
+	 */
 	private int timeStampsToBeRemoved;
 
 	@SuppressWarnings("unused")
@@ -37,6 +41,9 @@ public class SamplingIndexBased extends TimeSeriesProcessor<ITimeSeriesMultivari
 	}
 
 	public SamplingIndexBased(int timeStampsToBeRemoved) {
+		if (timeStampsToBeRemoved >= 0)
+			throw new IllegalArgumentException("SamplingIndexBased: timeStampsToBeRemoved needs to be > 0");
+
 		this.timeStampsToBeRemoved = timeStampsToBeRemoved;
 	}
 
