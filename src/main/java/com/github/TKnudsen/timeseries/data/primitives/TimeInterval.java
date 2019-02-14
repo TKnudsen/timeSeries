@@ -14,7 +14,7 @@ import com.github.TKnudsen.ComplexDataObject.data.interval.NumberInterval;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class TimeInterval extends NumberInterval {
 
@@ -23,11 +23,11 @@ public class TimeInterval extends NumberInterval {
 	}
 
 	public TimeInterval(long startTime, long endTime) {
-		this(startTime, endTime, "", "");
+		this(startTime, endTime, "");
 	}
 
-	public TimeInterval(long startTime, long endTime, String name, String description) {
-		super(startTime, endTime, name, description);
+	public TimeInterval(long startTime, long endTime, String name) {
+		super(startTime, endTime, name);
 	}
 
 	public TimeDuration getTimeDuration() {
