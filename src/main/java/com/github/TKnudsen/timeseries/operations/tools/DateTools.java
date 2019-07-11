@@ -45,7 +45,7 @@ public class DateTools {
 	 * @return
 	 */
 	public static Date createDate(int year, int month, int day) {
-		return createDate(year, month, day);
+		return createDate(year, month, day, 0, 0, 0, 0);
 	}
 
 	/**
