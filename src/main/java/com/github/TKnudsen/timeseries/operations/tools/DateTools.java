@@ -38,18 +38,26 @@ public class DateTools {
 	 * Creates a Date object with the given arguments. Please consider argument
 	 * constraints.
 	 * 
-	 * @param year
-	 *            the actual year. no -1900 needed.
-	 * @param month
-	 *            from 0-11
-	 * @param day
-	 *            from 1-31
-	 * @param hour
-	 *            from 0-23
-	 * @param minute
-	 *            from 0-59
-	 * @param second
-	 *            from 0-59
+	 * @param year  the actual year. no -1900 needed.
+	 * @param month from 0-11
+	 * @param day   from 1-31
+	 * 
+	 * @return
+	 */
+	public static Date createDate(int year, int month, int day) {
+		return createDate(year, month, day);
+	}
+
+	/**
+	 * Creates a Date object with the given arguments. Please consider argument
+	 * constraints.
+	 * 
+	 * @param year   the actual year. no -1900 needed.
+	 * @param month  from 0-11
+	 * @param day    from 1-31
+	 * @param hour   from 0-23
+	 * @param minute from 0-59
+	 * @param second from 0-59
 	 * @return
 	 */
 	public static Date createDate(int year, int month, int day, int hour, int minute, int second, int milliSecond) {
@@ -69,11 +77,9 @@ public class DateTools {
 	/**
 	 * 
 	 * @param date
-	 * @param CalendarField
-	 *            with respect to the Calendar Enum. Example: Calendar.DATE
-	 *            refers to the date within the month[1-31].
-	 * @param value
-	 *            number of days +-
+	 * @param CalendarField with respect to the Calendar Enum. Example:
+	 *                      Calendar.DATE refers to the date within the month[1-31].
+	 * @param value         number of days +-
 	 * @return new adapted date
 	 */
 	public static Date addDateOrTime(Date date, int CalendarEnum, int value) {
@@ -134,8 +140,8 @@ public class DateTools {
 	}
 
 	/**
-	 * Rounds up a date object with respect to a given time quantization.
-	 * Attention: weeks is an anomaly in the calendar an is not supported.
+	 * Rounds up a date object with respect to a given time quantization. Attention:
+	 * weeks is an anomaly in the calendar an is not supported.
 	 * 
 	 * @param date
 	 * @param timeQuantization
