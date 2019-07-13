@@ -1,7 +1,6 @@
 package com.github.TKnudsen.timeseries.data.uncertainty;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**

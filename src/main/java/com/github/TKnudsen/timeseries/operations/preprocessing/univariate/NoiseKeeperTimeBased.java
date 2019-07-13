@@ -1,14 +1,13 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate;
 
-import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
-import com.github.TKnudsen.ComplexDataObject.model.weighting.Long.LinearLongWeightingKernel;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.weighting.Long.LinearLongWeightingKernel;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;

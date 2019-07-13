@@ -1,8 +1,5 @@
 package com.github.TKnudsen.timeseries.data;
 
-import com.github.TKnudsen.ComplexDataObject.data.interfaces.IKeyValueProvider;
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -13,6 +10,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.interfaces.IKeyValueProvider;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.primitives.TimeValuePairTools;
 
 /**

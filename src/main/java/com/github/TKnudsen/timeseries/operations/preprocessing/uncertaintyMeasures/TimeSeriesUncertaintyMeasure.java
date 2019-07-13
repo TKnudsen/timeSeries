@@ -3,7 +3,6 @@ package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasu
 import com.github.TKnudsen.ComplexDataObject.data.complexDataObject.ComplexDataObject;
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.ITimeSeriesListener;
 import com.github.TKnudsen.timeseries.data.TimeSeriesEvent;

@@ -1,10 +1,9 @@
 package com.github.TKnudsen.timeseries.data.univariate.symbolic;
 
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.TimeSeriesWithTimeValuePairs;
 
 /**

@@ -1,12 +1,11 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization;
 
-import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
-import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
-import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
 import java.util.Arrays;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
+import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;

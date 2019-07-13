@@ -1,7 +1,6 @@
 package com.github.TKnudsen.timeseries.operations.workflow.univariate;
 
 import com.github.TKnudsen.ComplexDataObject.data.enums.NormalizationType;
-
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
 import com.github.TKnudsen.timeseries.operations.preprocessing.univariate.normalization.MinMaxNormalization;

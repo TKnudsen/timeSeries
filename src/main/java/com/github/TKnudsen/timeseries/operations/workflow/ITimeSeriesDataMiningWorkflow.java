@@ -2,7 +2,6 @@ package com.github.TKnudsen.timeseries.operations.workflow;
 
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.workflow.IDataMiningWorkflow;
-
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**

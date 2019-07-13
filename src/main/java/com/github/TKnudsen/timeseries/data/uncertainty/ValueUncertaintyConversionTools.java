@@ -1,13 +1,12 @@
 package com.github.TKnudsen.timeseries.data.uncertainty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.ValueUncertaintyCharacteristics;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
