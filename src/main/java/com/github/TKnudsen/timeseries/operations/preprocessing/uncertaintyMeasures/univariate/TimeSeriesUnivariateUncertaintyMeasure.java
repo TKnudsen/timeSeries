@@ -1,7 +1,6 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.univariate;
 
 import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-
 import com.github.TKnudsen.timeseries.data.uncertainty.univariate.ITimeSeriesUnivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesUncertaintyMeasure;

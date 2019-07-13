@@ -1,9 +1,8 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.multivariate;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.ITimeSeriesMultivariateValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.TimeSeriesUncertaintyMeasure;

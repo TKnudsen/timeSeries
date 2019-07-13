@@ -1,13 +1,12 @@
 package com.github.TKnudsen.timeseries.operations.preprocessing.uncertaintyMeasures.multivariate;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.ValueUncertainty;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertaintyCalculationResult;
 import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.TimeSeriesMultivariateValueUncertaintyCalculationResult;

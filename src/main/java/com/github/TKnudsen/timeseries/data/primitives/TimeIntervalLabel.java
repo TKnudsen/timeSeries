@@ -1,7 +1,5 @@
 package com.github.TKnudsen.timeseries.data.primitives;
 
-import java.util.Date;
-
 /**
  * <p>
  * Title: TimeIntervalLabel

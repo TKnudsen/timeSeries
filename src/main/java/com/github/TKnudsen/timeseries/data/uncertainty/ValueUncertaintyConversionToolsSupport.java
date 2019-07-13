@@ -1,17 +1,16 @@
 package com.github.TKnudsen.timeseries.data.uncertainty;
 
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.ValueUncertaintyCharacteristics;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.IValueUncertaintyDistribution;
-import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
-import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.ValueUncertaintyCharacteristics;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.Double.IValueUncertainty;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.distribution.IValueUncertaintyDistribution;
+import com.github.TKnudsen.ComplexDataObject.data.uncertainty.range.IValueUncertaintyRange;
+import com.github.TKnudsen.ComplexDataObject.model.tools.DataConversion;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateFactory;
