@@ -139,6 +139,12 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
+	/**
+	 * ignores Double.NaN leading to results even with NaN values.
+	 * 
+	 * @param ts
+	 * @return
+	 */
 	public static double getMean(ITimeSeries<? extends Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
@@ -156,6 +162,8 @@ public final class TimeSeriesTools {
 			// missing values handle
 			globalLength += localLength; // TODO before or after the continue?
 			if (ts.getValue(i) == null)
+				continue;
+			if (Double.isNaN(ts.getValue(i)))
 				continue;
 			if (ts.getMissingValueIndicator() != null && compareDoubles(ts.getValue(i), ts.getMissingValueIndicator()))
 				continue;
@@ -269,10 +277,10 @@ public final class TimeSeriesTools {
 			Long referenceTimeStamp = timeSeries.getTimestamp(i);
 			kernel.setReference(referenceTimeStamp);
 
-			int firstIndex = timeSeries.findByDate(Math.max(referenceTimeStamp - kernel.getInterval(), timeSeries.getFirstTimestamp()),
-					false);
-			int lastIndex = timeSeries.findByDate(Math.min(referenceTimeStamp + kernel.getInterval(), timeSeries.getLastTimestamp()),
-					false);
+			int firstIndex = timeSeries.findByDate(
+					Math.max(referenceTimeStamp - kernel.getInterval(), timeSeries.getFirstTimestamp()), false);
+			int lastIndex = timeSeries.findByDate(
+					Math.min(referenceTimeStamp + kernel.getInterval(), timeSeries.getLastTimestamp()), false);
 
 			double values = 0;
 			double weights = 0;

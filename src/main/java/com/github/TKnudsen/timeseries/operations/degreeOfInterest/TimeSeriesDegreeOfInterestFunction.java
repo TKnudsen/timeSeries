@@ -6,7 +6,7 @@ import com.github.TKnudsen.ComplexDataObject.data.entry.EntryWithComparableKey;
 import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.LinearNormalizationFunction;
 import com.github.TKnudsen.ComplexDataObject.model.transformations.normalization.NormalizationFunction;
-import com.github.TKnudsen.DMandML.model.degreeOfInterest.IDegreeOfInterestFunction;
+import com.github.TKnudsen.degreeOfInterestFunctions.IDegreeOfInterestFunction;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 
