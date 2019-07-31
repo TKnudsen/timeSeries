@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.operations.tools;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
+import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateFactory;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
@@ -154,19 +156,21 @@ public final class TimeSeriesTools {
 		double globalLength = 0;
 		double means = 0;
 		for (int i = 0; i < ts.size(); i++) {
-			double localLength = 0;
-			if (i > 0)
-				localLength += Math.abs(ts.getTimestamp(i) - ts.getTimestamp(i - 1)) / 2.0;
-			if (i < ts.size() - 1)
-				localLength += Math.abs(ts.getTimestamp(i + 1) - ts.getTimestamp(i)) / 2.0;
 			// missing values handle
-			globalLength += localLength; // TODO before or after the continue?
 			if (ts.getValue(i) == null)
 				continue;
 			if (Double.isNaN(ts.getValue(i)))
 				continue;
 			if (ts.getMissingValueIndicator() != null && compareDoubles(ts.getValue(i), ts.getMissingValueIndicator()))
 				continue;
+
+			double localLength = 0;
+			if (i > 0)
+				localLength += Math.abs(ts.getTimestamp(i) - ts.getTimestamp(i - 1)) / 2.0;
+			if (i < ts.size() - 1)
+				localLength += Math.abs(ts.getTimestamp(i + 1) - ts.getTimestamp(i)) / 2.0;
+
+			globalLength += localLength;
 			means += (ts.getValue(i) * localLength);
 		}
 		means /= globalLength;
@@ -206,6 +210,18 @@ public final class TimeSeriesTools {
 		return Math.sqrt(getVariance(ts));
 	}
 
+	/**
+	 * provides the trend of a time series in value domain units per millisecond.
+	 * 
+	 * Multiplying the result by longer time intervals allows trend assessment,
+	 * e.g., per year (1000L * 60L * 60L * 24L* 365.2425);
+	 * 
+	 * Dividing the result by the mean value of the time series allows percentage
+	 * trend assessment.
+	 * 
+	 * @param ts
+	 * @return
+	 */
 	public static double getLinearTrend(ITimeSeries<Double> ts) {
 		if (ts == null)
 			throw new IllegalStateException("TimeSeries is null");
@@ -216,13 +232,19 @@ public final class TimeSeriesTools {
 		List<Double> values = new ArrayList<Double>();
 
 		for (int i = 0; i < ts.size(); i++)
-			if (!Double.isNaN(ts.getValue(i))) {
+			if (ts.getValue(i) != null && !Double.isNaN(ts.getValue(i))) {
 				timestamps.add((double) ts.getTimestamp(i));
 				values.add(ts.getValue(i));
 			}
 
-		double timeMean = getMean(timestamps);
-		double valueMean = getMean(values);
+		if (timestamps.size() == 0)
+			return Double.NaN;
+
+		if (timestamps.size() == 1)
+			return 0.0;
+
+		double timeMean = MathFunctions.getMean(timestamps);
+		double valueMean = MathFunctions.getMean(values);
 		double[] timeDeviation = new double[timestamps.size()];
 		double[] valueDeviation = new double[timestamps.size()];
 		double[] dxy = new double[timestamps.size()];
@@ -235,28 +257,50 @@ public final class TimeSeriesTools {
 			dxx[i] = timeDeviation[i] * timeDeviation[i];
 		}
 
-		double numerator = getMean(dxy);
-		double denominator = getMean(dxx);
+		double numerator = MathFunctions.getMean(dxy);
+		double denominator = MathFunctions.getMean(dxx);
 
 		return numerator / denominator;
 	}
 
 	private static double getMean(double[] x) {
-		double sum = 0;
-		for (int i = 0; i < x.length; i++) {
-			sum += x[i];
+		Objects.requireNonNull(x);
+
+		if (x.length == 0) {
+			System.err.println("TimeSeriesTools.getMean: data array length 0. returning Double.NaN");
+			return Double.NaN;
 		}
-		double d = sum / (double) x.length;
-		return d;
+
+		double sum = 0;
+		double count = 0;
+
+		for (int i = 0; i < x.length; i++)
+			if (!Double.isNaN(x[i])) {
+				sum += x[i];
+				count++;
+			}
+
+		return sum / count;
 	}
 
-	private static double getMean(List<Double> data) {
-		double sum = 0;
-		for (double d : data)
-			sum += d;
+	private static double getMean(Collection<Double> data) {
+		Objects.requireNonNull(data);
 
-		double mean = sum / (double) data.size();
-		return mean;
+		if (data.isEmpty()) {
+			System.err.println("TimeSeriesTools.getMean: data size 0. returning Double.NaN");
+			return Double.NaN;
+		}
+
+		double sum = 0;
+		double count = 0;
+
+		for (double d : data)
+			if (!Double.isNaN(d)) {
+				sum += d;
+				count++;
+			}
+
+		return sum / count;
 	}
 
 	public static void calculateMovingAverageTimeSensitive(ITimeSeries<Double> ts, long window) {
@@ -930,5 +974,42 @@ public final class TimeSeriesTools {
 		}
 
 		return areaUnderCurve / sum;
+	}
+
+	/**
+	 * calculates a time series that represents the delta of the value domain of the
+	 * original time series between any two neighboring time stamps. does not take
+	 * the duration between time stamps into account
+	 * 
+	 * @param inputTimeSeries
+	 * @param relativeValues  if percentage values of change is desired.
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate getChangeTimeSeries(ITimeSeriesUnivariate inputTimeSeries,
+			boolean relativeValues) {
+
+		Objects.requireNonNull(inputTimeSeries);
+
+		List<ITimeValuePair<Double>> timeValuePairs = new ArrayList<>();
+
+		Double lastValue = null;
+		for (Long timeStamp : inputTimeSeries.getTimestamps()) {
+			Double value = inputTimeSeries.getValue(timeStamp, false);
+
+			if (lastValue != null) {
+				if (relativeValues) {
+					if (lastValue == 0)
+						timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, 0.0));
+					else
+						timeValuePairs
+								.add(new TimeValuePairUnivariate(timeStamp, (value - lastValue) / Math.abs(lastValue)));
+				} else
+					timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, value - lastValue));
+			}
+
+			lastValue = value;
+		}
+
+		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
 	}
 }
