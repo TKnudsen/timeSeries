@@ -111,14 +111,14 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
-	public static double getMinValue(ITimeSeries<? extends Double> ts) {
-		if (ts == null)
+	public static double getMinValue(ITimeSeries<? extends Double> timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.isEmpty())
+		if (timeSeries.isEmpty())
 			throw new IllegalStateException("TimeSeries is empty");
 
 		double min = Double.POSITIVE_INFINITY;
-		for (double d : ts.getValues())
+		for (double d : timeSeries.getValues())
 			if (Double.isNaN(d))
 				continue;
 			else
@@ -126,14 +126,14 @@ public final class TimeSeriesTools {
 		return min;
 	}
 
-	public static double getMaxValue(ITimeSeries<? extends Double> ts) {
-		if (ts == null)
+	public static double getMaxValue(ITimeSeries<? extends Double> timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.isEmpty())
+		if (timeSeries.isEmpty())
 			throw new IllegalStateException("TimeSeries is empty");
 
 		double max = Double.NEGATIVE_INFINITY;
-		for (double d : ts.getValues())
+		for (double d : timeSeries.getValues())
 			if (Double.isNaN(d))
 				continue;
 			else
@@ -142,72 +142,131 @@ public final class TimeSeriesTools {
 	}
 
 	/**
-	 * ignores Double.NaN leading to results even with NaN values.
+	 * calculates the mean/average of a time series. With the flag
+	 * 'weightIncreaseOverTime', it is possible to weight later time stamps
+	 * stronger/weaker than earlier ones. In this way a trend-like tendency can be
+	 * inferred in a single value.
 	 * 
-	 * @param ts
+	 * Attention: ignores null and NaN values.
+	 * 
+	 * @param timeSeries
+	 * @param weightIncreaseOverTime weight multiplier over time. 1.0 for constant
+	 *                               weights over time. 2.0 for doubling the weight
+	 *                               of every consecutive time stamp (2.0 would lead
+	 *                               to a very high weight after only few time
+	 *                               stamps).
 	 * @return
 	 */
-	public static double getMean(ITimeSeries<? extends Double> ts) {
-		if (ts == null)
+	public static final double getMeanWeighted(ITimeSeries<? extends Double> timeSeries,
+			double weightIncreaseOverTime) {
+
+		Objects.requireNonNull(timeSeries);
+
+		if (Double.isNaN(weightIncreaseOverTime) || weightIncreaseOverTime < 0)
+			throw new IllegalArgumentException();
+
+		double w = 1.0;
+		double wSum = 0;
+		double sum = 0;
+
+		for (Long timeStamp : timeSeries.getTimestamps()) {
+			Double v = timeSeries.getValue(timeStamp, false);
+
+			if (v == null || Double.isNaN(v))
+				continue;
+
+			w *= weightIncreaseOverTime;
+
+			sum += (v * w);
+			wSum += w;
+		}
+
+		double value = MathFunctions.round(sum / wSum, 8);
+
+		return value;
+	}
+
+	/**
+	 * ignores Double.NaN leading to results even with NaN values.
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
+	public static double getMean(ITimeSeries<? extends Double> timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.isEmpty())
+		if (timeSeries.isEmpty())
 			throw new IllegalStateException("TimeSeries is empty");
 
 		double globalLength = 0;
 		double means = 0;
-		for (int i = 0; i < ts.size(); i++) {
-			// missing values handle
-			if (ts.getValue(i) == null)
+		for (int i = 0; i < timeSeries.size(); i++) {
+			// ignore missing values
+			if (timeSeries.getValue(i) == null)
 				continue;
-			if (Double.isNaN(ts.getValue(i)))
+			if (Double.isNaN(timeSeries.getValue(i)))
 				continue;
-			if (ts.getMissingValueIndicator() != null && compareDoubles(ts.getValue(i), ts.getMissingValueIndicator()))
+			if (timeSeries.getMissingValueIndicator() != null
+					&& compareDoubles(timeSeries.getValue(i), timeSeries.getMissingValueIndicator()))
 				continue;
 
 			double localLength = 0;
 			if (i > 0)
-				localLength += Math.abs(ts.getTimestamp(i) - ts.getTimestamp(i - 1)) / 2.0;
-			if (i < ts.size() - 1)
-				localLength += Math.abs(ts.getTimestamp(i + 1) - ts.getTimestamp(i)) / 2.0;
+				localLength += Math.abs(timeSeries.getTimestamp(i) - timeSeries.getTimestamp(i - 1)) / 2.0;
+			if (i < timeSeries.size() - 1)
+				localLength += Math.abs(timeSeries.getTimestamp(i + 1) - timeSeries.getTimestamp(i)) / 2.0;
 
 			globalLength += localLength;
-			means += (ts.getValue(i) * localLength);
+			means += (timeSeries.getValue(i) * localLength);
 		}
 		means /= globalLength;
 
 		return means;
 	}
 
-	public static double getVariance(ITimeSeries<Double> ts) {
-		if (ts == null)
+	public static double getVariance(ITimeSeries<Double> timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.isEmpty())
+		if (timeSeries.isEmpty())
 			throw new IllegalStateException("TimeSeries is empty");
 
 		double globalLength = 0;
 		double variance = 0;
-		double means = getMean(ts);
-		for (int i = 0; i < ts.size(); i++) {
+		double means = getMean(timeSeries);
+		for (int i = 0; i < timeSeries.size(); i++) {
+			// ignore missing values
+			if (timeSeries.getValue(i) == null)
+				continue;
+			if (Double.isNaN(timeSeries.getValue(i)))
+				continue;
+			if (timeSeries.getMissingValueIndicator() != null
+					&& compareDoubles(timeSeries.getValue(i), timeSeries.getMissingValueIndicator()))
+				continue;
+
 			double localLength = 0;
 			if (i > 0)
-				localLength += Math.abs(ts.getTimestamp(i) - ts.getTimestamp(i - 1)) / 2.0;
-			if (i < ts.size() - 1)
-				localLength += Math.abs(ts.getTimestamp(i + 1) - ts.getTimestamp(i)) / 2.0;
-			variance += Math.pow((ts.getValue(i) - means), 2) * localLength;
+				localLength += Math.abs(timeSeries.getTimestamp(i) - timeSeries.getTimestamp(i - 1)) / 2.0;
+			if (i < timeSeries.size() - 1)
+				localLength += Math.abs(timeSeries.getTimestamp(i + 1) - timeSeries.getTimestamp(i)) / 2.0;
+			variance += Math.pow((timeSeries.getValue(i) - means), 2) * localLength;
 			globalLength += localLength;
 		}
+
+		if (globalLength == 0)
+			return 0.0;
+
 		variance /= globalLength;
 
 		return variance;
 	}
 
-	public static double getStdDeviation(ITimeSeries<Double> ts) {
-		if (ts == null)
+	public static double getStdDeviation(ITimeSeries<Double> timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.isEmpty())
+		if (timeSeries.isEmpty())
 			throw new IllegalStateException("TimeSeries is empty");
 
-		return Math.sqrt(getVariance(ts));
+		return Math.sqrt(getVariance(timeSeries));
 	}
 
 	/**
@@ -219,22 +278,22 @@ public final class TimeSeriesTools {
 	 * Dividing the result by the mean value of the time series allows percentage
 	 * trend assessment.
 	 * 
-	 * @param ts
+	 * @param timeSeries
 	 * @return
 	 */
-	public static double getLinearTrend(ITimeSeries<Double> ts) {
-		if (ts == null)
+	public static double getLinearTrend(ITimeSeries<Double> timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.isEmpty())
+		if (timeSeries.isEmpty())
 			throw new IllegalStateException("TimeSeries is empty");
 
 		List<Double> timestamps = new ArrayList<Double>();
 		List<Double> values = new ArrayList<Double>();
 
-		for (int i = 0; i < ts.size(); i++)
-			if (ts.getValue(i) != null && !Double.isNaN(ts.getValue(i))) {
-				timestamps.add((double) ts.getTimestamp(i));
-				values.add(ts.getValue(i));
+		for (int i = 0; i < timeSeries.size(); i++)
+			if (timeSeries.getValue(i) != null && !Double.isNaN(timeSeries.getValue(i))) {
+				timestamps.add((double) timeSeries.getTimestamp(i));
+				values.add(timeSeries.getValue(i));
 			}
 
 		if (timestamps.size() == 0)
@@ -368,38 +427,39 @@ public final class TimeSeriesTools {
 		return ret;
 	}
 
-	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeries<Double> ts, int index) {
-		if (ts == null)
+	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeries<Double> timeSeries, int index) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.size() - 1 < index)
+		if (timeSeries.size() - 1 < index)
 			return null;
-		return new TimeValuePairUnivariate(ts.getTimestamp(index), ts.getValue(index));
+		return new TimeValuePairUnivariate(timeSeries.getTimestamp(index), timeSeries.getValue(index));
 	}
 
-	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeries<Double> ts) {
-		if (ts == null)
+	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeries<Double> timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
 		List<ITimeValuePair<Double>> list = new ArrayList<ITimeValuePair<Double>>();
-		for (int i = 0; i < ts.size(); i++)
-			list.add(new TimeValuePairUnivariate(ts.getTimestamp(i), ts.getValue(i)));
+		for (int i = 0; i < timeSeries.size(); i++)
+			list.add(new TimeValuePairUnivariate(timeSeries.getTimestamp(i), timeSeries.getValue(i)));
 		return list;
 	}
 
-	public static ITimeValuePair<List<Double>> getTimeValuePair(ITimeSeriesMultivariate ts, int index) {
-		if (ts == null)
+	public static ITimeValuePair<List<Double>> getTimeValuePair(ITimeSeriesMultivariate timeSeries, int index) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
-		if (ts.size() - 1 < index)
+		if (timeSeries.size() - 1 < index)
 			throw new IllegalArgumentException("given time series is shorter than required index " + index);
-		return new TimeValuePairMultivariate(ts.getTimestamp(index), ts.getValue(index));
+		return new TimeValuePairMultivariate(timeSeries.getTimestamp(index), timeSeries.getValue(index));
 	}
 
-	public static List<Entry<Long, List<Double>>> getTimeValueLists(ITimeSeriesMultivariate ts) {
-		if (ts == null)
+	public static List<Entry<Long, List<Double>>> getTimeValueLists(ITimeSeriesMultivariate timeSeries) {
+		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
 
 		List<Entry<Long, List<Double>>> pairs = new ArrayList<Map.Entry<Long, List<Double>>>();
-		for (int i = 0; i < ts.size(); i++)
-			pairs.add(new AbstractMap.SimpleEntry<Long, List<Double>>(ts.getTimestamp(i), ts.getValue(i)));
+		for (int i = 0; i < timeSeries.size(); i++)
+			pairs.add(new AbstractMap.SimpleEntry<Long, List<Double>>(timeSeries.getTimestamp(i),
+					timeSeries.getValue(i)));
 
 		return pairs;
 	}
@@ -420,18 +480,18 @@ public final class TimeSeriesTools {
 		return new TimeSeriesUnivariate(timeStamps, values, missingValueIndicator);
 	}
 
-	public static long[] getQuantizationsAsLong(ITimeSeries<Double> ts) {
-		long[] quantization = new long[ts.size() - 1];
+	public static long[] getQuantizationsAsLong(ITimeSeries<Double> timeSeries) {
+		long[] quantization = new long[timeSeries.size() - 1];
 		for (int i = 0; i < quantization.length; i++) {
-			quantization[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
+			quantization[i] = timeSeries.getTimestamp(i + 1) - timeSeries.getTimestamp(i);
 		}
 		return quantization;
 	}
 
-	public static double[] getQuantizationAsDouble(ITimeSeries<Double> ts) {
-		double[] quantisation = new double[ts.size() - 1];
+	public static double[] getQuantizationAsDouble(ITimeSeries<Double> timeSeries) {
+		double[] quantisation = new double[timeSeries.size() - 1];
 		for (int i = 0; i < quantisation.length; i++) {
-			quantisation[i] = ts.getTimestamp(i + 1) - ts.getTimestamp(i);
+			quantisation[i] = timeSeries.getTimestamp(i + 1) - timeSeries.getTimestamp(i);
 		}
 		return quantisation;
 	}
@@ -717,15 +777,13 @@ public final class TimeSeriesTools {
 	 * @param start
 	 * @param end
 	 * @param requireStartEndTimestampsExist whether or not the identification of
-	 *                                       the subsequence is sort of
-	 *                                       sophisticated in case of NOT exact
-	 *                                       matches. If not a subsequence is
-	 *                                       returned with start/end time stamps
+	 *                                       the subsequence requires exact matches
+	 *                                       at start and end. If not a subsequence
+	 *                                       is returned with start/end time stamps
 	 *                                       larger than the defined interval.
 	 * @param cropIfTimeStampsDontExist      if no exact match is needed this
-	 *                                       routine provides the opportunity to
-	 *                                       crop start and end time stamp by linear
-	 *                                       interpolation.
+	 *                                       routine crops start and end time stamps
+	 *                                       by linear interpolation.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
@@ -981,20 +1039,19 @@ public final class TimeSeriesTools {
 	 * original time series between any two neighboring time stamps. does not take
 	 * the duration between time stamps into account
 	 * 
-	 * @param inputTimeSeries
-	 * @param relativeValues  if percentage values of change is desired.
+	 * @param timeSeries
+	 * @param relativeValues if percentage values of change is desired.
 	 * @return
 	 */
-	public static ITimeSeriesUnivariate getChangeTimeSeries(ITimeSeriesUnivariate inputTimeSeries,
-			boolean relativeValues) {
+	public static ITimeSeriesUnivariate getChangeTimeSeries(ITimeSeriesUnivariate timeSeries, boolean relativeValues) {
 
-		Objects.requireNonNull(inputTimeSeries);
+		Objects.requireNonNull(timeSeries);
 
 		List<ITimeValuePair<Double>> timeValuePairs = new ArrayList<>();
 
 		Double lastValue = null;
-		for (Long timeStamp : inputTimeSeries.getTimestamps()) {
-			Double value = inputTimeSeries.getValue(timeStamp, false);
+		for (Long timeStamp : timeSeries.getTimestamps()) {
+			Double value = timeSeries.getValue(timeStamp, false);
 
 			if (lastValue != null) {
 				if (relativeValues) {
