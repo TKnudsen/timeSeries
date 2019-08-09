@@ -29,6 +29,8 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateFactor
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
+import sun.awt.TimedWindowEvent;
+
 /**
  * <p>
  * timeSeries
@@ -150,11 +152,8 @@ public final class TimeSeriesTools {
 	 * Attention: ignores null and NaN values.
 	 * 
 	 * @param timeSeries
-	 * @param weightIncreaseOverTime weight multiplier over time. 1.0 for constant
-	 *                               weights over time. 2.0 for doubling the weight
-	 *                               of every consecutive time stamp (2.0 would lead
-	 *                               to a very high weight after only few time
-	 *                               stamps).
+	 * @param weightIncreaseOverTime additive way to add more weight to later time
+	 *                               stamps
 	 * @return
 	 */
 	public static final double getMeanWeighted(ITimeSeries<? extends Double> timeSeries,
@@ -170,12 +169,13 @@ public final class TimeSeriesTools {
 		double sum = 0;
 
 		for (Long timeStamp : timeSeries.getTimestamps()) {
+			// always. even for NaN
+			w += weightIncreaseOverTime;
+
 			Double v = timeSeries.getValue(timeStamp, false);
 
 			if (v == null || Double.isNaN(v))
 				continue;
-
-			w *= weightIncreaseOverTime;
 
 			sum += (v * w);
 			wSum += w;
@@ -197,6 +197,9 @@ public final class TimeSeriesTools {
 			throw new IllegalStateException("TimeSeries is null");
 		if (timeSeries.isEmpty())
 			throw new IllegalStateException("TimeSeries is empty");
+
+		if (timeSeries.size() == 1) // to avoid a division by zero (time interval length)
+			return timeSeries.getValue(0);
 
 		double globalLength = 0;
 		double means = 0;
@@ -755,7 +758,9 @@ public final class TimeSeriesTools {
 		if (indexEnd < 0 && indexEnd >= timeSeries.size())
 			return null;
 
-		if (indexStart >= indexEnd)
+		// change made here from >= to >. A time series with a single time stamp is
+		// still a plausible time series
+		if (indexStart > indexEnd)
 			return null;
 
 		List<Long> timestamps = new ArrayList<>();
@@ -1040,7 +1045,9 @@ public final class TimeSeriesTools {
 	 * the duration between time stamps into account
 	 * 
 	 * @param timeSeries
-	 * @param relativeValues if percentage values of change is desired.
+	 * @param relativeValues if percentage values of change is desired. be aware
+	 *                       that relative time series may produce infinite values
+	 *                       due to the division-by-zero problem.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getChangeTimeSeries(ITimeSeriesUnivariate timeSeries, boolean relativeValues) {
@@ -1051,7 +1058,7 @@ public final class TimeSeriesTools {
 
 		Double lastValue = null;
 		for (Long timeStamp : timeSeries.getTimestamps()) {
-			Double value = timeSeries.getValue(timeStamp, false);
+			double value = timeSeries.getValue(timeStamp, false);
 
 			if (lastValue != null) {
 				if (relativeValues) {
@@ -1069,4 +1076,28 @@ public final class TimeSeriesTools {
 
 		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
 	}
+
+	/**
+	 * substrats a constant value and returns a new time series
+	 * 
+	 * @param timeSeries
+	 * @param relativeValues if percentage values of change is desired. be aware
+	 *                       that relative time series may produce infinite values
+	 *                       due to the division-by-zero problem.
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate getSubstractedValueTimeSeries(ITimeSeriesUnivariate timeSeries, double value) {
+
+		Objects.requireNonNull(timeSeries);
+
+		List<ITimeValuePair<Double>> timeValuePairs = new ArrayList<>();
+
+		for (int i = 0; i < timeSeries.size(); i++) {
+			double v = timeSeries.getValue(i);
+			timeValuePairs.add(new TimeValuePairUnivariate(timeSeries.getTimestamp(i), v - value));
+		}
+
+		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
+	}
+
 }
