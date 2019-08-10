@@ -43,7 +43,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	private V missingValueIndicator;
 
 	protected int hashCode;
-	
+
 	protected TimeSeries() {
 		this.id = MathFunctions.randomLong();
 		this.timeStamps = new ArrayList<>();
@@ -322,7 +322,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	@Override
 	public long getFirstTimestamp() {
 		if (timeStamps.size() == 0)
-			throw new NullPointerException("TimeSeriesUnivariate: access to a time stamp that doesn't exist");
+			throw new NullPointerException("TimeSeriesUnivariate: time series empty");
 
 		return timeStamps.get(0);
 	}
@@ -330,7 +330,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	@Override
 	public long getLastTimestamp() {
 		if (timeStamps.size() == 0)
-			throw new NullPointerException("TimeSeriesUnivariate: access to a time stamp that doesn't exist");
+			throw new NullPointerException("TimeSeriesUnivariate: time series empty");
 
 		return timeStamps.get(timeStamps.size() - 1);
 	}
