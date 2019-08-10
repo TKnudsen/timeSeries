@@ -188,7 +188,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	@Override
 	public long getTimestamp(int index) {
 		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
+			throw new IndexOutOfBoundsException("TimeSeries: index out of bounds");
 
 		return timeStamps.get(index);
 	}
@@ -196,7 +196,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	@Override
 	public V getValue(int index) {
 		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
+			throw new IndexOutOfBoundsException("TimeSeries: index out of bounds");
 
 		return values.get(index);
 	}
@@ -213,8 +213,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 				V vBefore = getValue(index);
 
 				if (timeStamps.size() - 1 < index + 1)
-					throw new IndexOutOfBoundsException(
-							"TimeSeriesUnivariate.getValue: given time stamp outside bouds");
+					throw new IndexOutOfBoundsException("TimeSeries.getValue: given time stamp outside bouds");
 				long lAfter = getTimestamp(index + 1);
 				V vAfter = getValue(index + 1);
 
@@ -230,7 +229,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 			}
 		}
 
-		throw new IllegalArgumentException("TimeSeriesUnivariate.getValue(long): time stamp does not exist");
+		throw new IllegalArgumentException("TimeSeries.getValue(long): time stamp does not exist");
 	}
 
 	protected abstract V interpolateValue(long timeStamp, long lBefore, long lAfter, V vBefore, V vAfter);
@@ -260,20 +259,23 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch)
 			throws IllegalArgumentException {
 		if (indexStart > indexEnd)
-			System.out.println("Debug: this must be fixed for the next release!");
+			throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
 
 		if (indexStart == indexEnd)
 			return indexStart;
 
 		if (indexEnd - indexStart == 1)
 			if (!requireExactMatch)
-				return indexStart;
+				if (getTimestamp(indexEnd) == timeStamp)
+					return indexEnd;
+				else
+					return indexStart;
 			else {
 				if (getTimestamp(indexStart) == timeStamp)
 					return indexStart;
 				else if (getTimestamp(indexEnd) == timeStamp)
 					return indexEnd;
-				throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
+				throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
 			}
 
 		// interpolate appropriate index
@@ -287,10 +289,10 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 			return indexEnd;
 
 		if (l1 > timeStamp && requireExactMatch)
-			throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
+			throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
 
 		if (l2 < timeStamp && requireExactMatch)
-			throw new IllegalArgumentException("TimeSeriesUnivariate: given time stamp does not exist");
+			throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
 
 		double deltaLStartToEnd = l2 - l1;
 		double deltaLStartToTime = timeStamp - l1;
@@ -322,7 +324,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	@Override
 	public long getFirstTimestamp() {
 		if (timeStamps.size() == 0)
-			throw new NullPointerException("TimeSeriesUnivariate: time series empty");
+			throw new NullPointerException("TimeSeries: time series empty");
 
 		return timeStamps.get(0);
 	}
@@ -330,7 +332,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	@Override
 	public long getLastTimestamp() {
 		if (timeStamps.size() == 0)
-			throw new NullPointerException("TimeSeriesUnivariate: time series empty");
+			throw new NullPointerException("TimeSeries: time series empty");
 
 		return timeStamps.get(timeStamps.size() - 1);
 	}
@@ -391,7 +393,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	@Override
 	public void replaceValue(int index, V value) throws IllegalArgumentException {
 		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: index out of bounds");
+			throw new IndexOutOfBoundsException("TimeSeries: index out of bounds");
 
 		values.set(index, value);
 
@@ -403,7 +405,7 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 		int index = findByDate(timeStamp, true);
 
 		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeriesUnivariate: timeStamp out of bounds");
+			throw new IndexOutOfBoundsException("TimeSeries: timeStamp out of bounds");
 
 		values.set(index, value);
 
