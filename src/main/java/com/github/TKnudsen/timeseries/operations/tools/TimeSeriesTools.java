@@ -826,6 +826,116 @@ public final class TimeSeriesTools {
 		return subsequence;
 	}
 
+	public enum TemporalCropStrategy {
+		NextOuter, NextInner, ExactInterplation;
+	}
+
+	/**
+	 * Creates a new time series with a temporal subset defined by method
+	 * parameters.
+	 * 
+	 * No extrapolation is applied if the existing temporal subset does not cover
+	 * the entire required interval (start end).
+	 * 
+	 * @param timeSeries
+	 * @param start
+	 * @param end
+	 * @param temporalCropStrategy
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate getSubsequence(ITimeSeries<Double> timeSeries, long start, long end,
+			TemporalCropStrategy temporalCropStrategy) {
+
+		Objects.requireNonNull(timeSeries);
+
+		if (timeSeries.isEmpty())
+			return null;
+
+		if (start > end)
+			throw new IllegalArgumentException(
+					"TimeSeriesTools.getSubsequence: start time " + start + " < end time " + end);
+
+		// interval not addressable?
+		if (start > timeSeries.getLastTimestamp())
+			return null;
+		if (end < timeSeries.getFirstTimestamp())
+			return null;
+
+		int indexStart = 0;
+		if (start > timeSeries.getFirstTimestamp())
+			indexStart = timeSeries.findByDate(start, false);
+		if (indexStart < 0 && indexStart >= timeSeries.size())
+			return null;
+
+		int indexEnd = timeSeries.size() - 1;
+		if (end < timeSeries.getLastTimestamp())
+			indexEnd = timeSeries.findByDate(end, false);
+		if (timeSeries.getTimestamp(indexEnd) != end && indexEnd < timeSeries.size() - 1)
+			indexEnd++;
+		if (indexEnd < 0 && indexEnd >= timeSeries.size())
+			return null;
+
+		if (indexStart > indexEnd)
+			return null;
+
+		List<Long> timestamps = new ArrayList<>();
+		List<Double> values = new ArrayList<>();
+
+		for (int i = indexStart; i <= indexEnd; i++) {
+			timestamps.add(timeSeries.getTimestamp(i));
+			values.add(timeSeries.getValue(i));
+		}
+
+		ITimeSeriesUnivariate returnTimeSeries = new TimeSeriesUnivariate(timestamps, values);
+
+		// check start
+		switch (temporalCropStrategy) {
+		case NextOuter:
+			// nothing to do
+			break;
+		case NextInner:
+			if (returnTimeSeries.getFirstTimestamp() < start)
+				returnTimeSeries.removeTimeValue(0);
+			break;
+		case ExactInterplation:
+			if (returnTimeSeries.size() > 1)
+				if (returnTimeSeries.getFirstTimestamp() < start) {
+					double value = getInterpolatedValue(returnTimeSeries, returnTimeSeries.getFirstTimestamp(),
+							returnTimeSeries.getTimestamp(1), start);
+					returnTimeSeries.insert(start, value);
+					returnTimeSeries.removeTimeValue(0);
+				}
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+
+		// check end
+		switch (temporalCropStrategy) {
+		case NextOuter:
+			// nothing to do
+			break;
+		case NextInner:
+			if (returnTimeSeries.getLastTimestamp() > end)
+				returnTimeSeries.removeTimeValue(returnTimeSeries.size() - 1);
+			break;
+		case ExactInterplation:
+			if (returnTimeSeries.size() > 1)
+				if (returnTimeSeries.getLastTimestamp() > end) {
+					double value = getInterpolatedValue(returnTimeSeries,
+							returnTimeSeries.getTimestamp(returnTimeSeries.size() - 2),
+							returnTimeSeries.getLastTimestamp(), start);
+					returnTimeSeries.insert(end, value);
+					returnTimeSeries.removeTimeValue(returnTimeSeries.size() - 1);
+				}
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+
+		return returnTimeSeries;
+	}
+
 	/**
 	 * segments a time series w.r.t. a given duration pattern.
 	 * 
