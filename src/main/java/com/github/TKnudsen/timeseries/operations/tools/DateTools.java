@@ -77,15 +77,16 @@ public class DateTools {
 	/**
 	 * 
 	 * @param date
-	 * @param CalendarField with respect to the Calendar Enum. Example:
-	 *                      Calendar.DATE refers to the date within the month[1-31].
-	 * @param value         number of days +-
+	 * @param Calendar with respect to the Calendar Enum. Example: Calendar.DATE
+	 *                 refers to the date within the month[1-31]. Example:
+	 *                 DateTools.addDateOrTime(new Date(), Calendar.DATE, -10);
+	 * @param value    number of days +-
 	 * @return new adapted date
 	 */
-	public static Date addDateOrTime(Date date, int CalendarEnum, int value) {
+	public static Date addDateOrTime(Date date, int calendar, int value) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		cal.add(CalendarEnum, value);
+		cal.add(calendar, value);
 		return cal.getTime();
 	}
 
