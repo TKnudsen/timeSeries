@@ -29,8 +29,6 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateFactor
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
-import sun.awt.TimedWindowEvent;
-
 /**
  * <p>
  * timeSeries
@@ -924,7 +922,7 @@ public final class TimeSeriesTools {
 				if (returnTimeSeries.getLastTimestamp() > end) {
 					double value = getInterpolatedValue(returnTimeSeries,
 							returnTimeSeries.getTimestamp(returnTimeSeries.size() - 2),
-							returnTimeSeries.getLastTimestamp(), start);
+							returnTimeSeries.getLastTimestamp(), end);
 					returnTimeSeries.insert(end, value);
 					returnTimeSeries.removeTimeValue(returnTimeSeries.size() - 1);
 				}

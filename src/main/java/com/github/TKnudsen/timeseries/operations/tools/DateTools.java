@@ -202,4 +202,12 @@ public class DateTools {
 
 		return year;
 	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static int getCurrentYear() {
+		return Calendar.getInstance().get(Calendar.YEAR);
+	}
 }

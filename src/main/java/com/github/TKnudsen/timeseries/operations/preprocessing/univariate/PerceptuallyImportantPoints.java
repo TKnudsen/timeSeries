@@ -117,7 +117,7 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 		Iterator<Long> pipTimeStampIterator = pipTimeStamps.iterator();
 		Long lastPiPTimeStamp = pipTimeStampIterator.next(); // first existing pip
 
-		Long nextPip = -1L;
+		Long nextPip = Long.MIN_VALUE + 1;
 		double pipYOffsetCurrent = Double.NEGATIVE_INFINITY;
 
 		while (pipTimeStampIterator.hasNext()) {
@@ -148,6 +148,10 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 			lastPiPTimeStamp = nextPiPTimeStamp;
 		}
 
+		if (nextPip == Long.MIN_VALUE + 1)
+			throw new IllegalArgumentException(
+					"PerceptuallyImportantPoints.calculateNextPip: next pip calculation failed");
+
 		return nextPip;
 	}
 
@@ -157,9 +161,8 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 	 * 
 	 * @param data
 	 * @param pipTimeStamps
-	 * @param rankCount
-	 *            parameter that limits the length of the ranking. Can be used to
-	 *            cope with scalability issues.
+	 * @param rankCount     parameter that limits the length of the ranking. Can be
+	 *                      used to cope with scalability issues.
 	 * 
 	 * @return ranking of timestamps
 	 */
