@@ -59,13 +59,19 @@ public class JsonWorkflowLoader {
 		return null;
 	}
 
+	/**
+	 * needs testing whether an interface can be defined as a type reference
+	 * 
+	 * @param file
+	 * @return
+	 */
 	public static List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate>> loadWorkflowListFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();
 
 		List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate>> readValue;
 		try {
 			readValue = mapper.readValue(new File(file),
-					new TypeReference<List<TimeSeriesUnivariateDataMiningWorkflow>>() {
+					new TypeReference<List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate>>>() {
 					});
 			return readValue;
 		} catch (IOException e) {
