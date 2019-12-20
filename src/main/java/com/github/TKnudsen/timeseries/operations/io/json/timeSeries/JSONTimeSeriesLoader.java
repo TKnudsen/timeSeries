@@ -72,12 +72,18 @@ public class JSONTimeSeriesLoader {
 		return null;
 	}
 
+	/**
+	 * needs testing whether an interface can be defined as a type reference
+	 * 
+	 * @param file
+	 * @return
+	 */
 	public static List<ITimeSeriesUnivariate> loadTSListFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
 		List<ITimeSeriesUnivariate> readValue;
 		try {
-			readValue = mapper.readValue(new File(file), new TypeReference<List<TimeSeriesUnivariate>>() {
+			readValue = mapper.readValue(new File(file), new TypeReference<List<ITimeSeriesUnivariate>>() {
 			});
 			return readValue;
 		} catch (IOException e) {
@@ -120,7 +126,8 @@ public class JSONTimeSeriesLoader {
 
 		TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations readValue;
 		try {
-			readValue = mapper.readValue(new File(file), TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations.class);
+			readValue = mapper.readValue(new File(file),
+					TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations.class);
 			return readValue;
 		} catch (IOException e) {
 			e.printStackTrace();
