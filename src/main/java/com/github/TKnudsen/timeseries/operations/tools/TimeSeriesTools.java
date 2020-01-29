@@ -29,6 +29,8 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateFactor
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
 import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
 
+import smile.math.Math;
+
 /**
  * <p>
  * timeSeries
@@ -40,11 +42,11 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeValuePairUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2018
+ * Copyright: Copyright (c) 2015-2020
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.09
+ * @version 1.10
  */
 public final class TimeSeriesTools {
 
@@ -1206,6 +1208,38 @@ public final class TimeSeriesTools {
 		}
 
 		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
+	}
+
+	public static long getFirstTimestamp(List<ITimeSeriesUnivariate> timeSeriesList) {
+		Objects.requireNonNull(timeSeriesList);
+
+		if (timeSeriesList.size() == 0)
+			throw new IllegalArgumentException(
+					"TimeSeriesTools: unable to retrieve first time stamp for empty list of time series");
+
+		long l = Long.MAX_VALUE;
+
+		for (ITimeSeriesUnivariate ts : timeSeriesList)
+			if (ts != null)
+				l = Math.min(l, ts.getFirstTimestamp());
+
+		return l;
+	}
+
+	public static long getLastTimestamp(List<ITimeSeriesUnivariate> timeSeriesList) {
+		Objects.requireNonNull(timeSeriesList);
+
+		if (timeSeriesList.size() == 0)
+			throw new IllegalArgumentException(
+					"TimeSeriesTools: unable to retrieve first time stamp for empty list of time series");
+
+		long l = Long.MIN_VALUE;
+
+		for (ITimeSeriesUnivariate ts : timeSeriesList)
+			if (ts != null)
+				l = Math.max(l, ts.getLastTimestamp());
+
+		return l;
 	}
 
 }
