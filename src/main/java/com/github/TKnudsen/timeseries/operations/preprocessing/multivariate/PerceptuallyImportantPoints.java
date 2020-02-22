@@ -145,13 +145,6 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 			if (i >= 2)
 				processors.add(new PerceptuallyImportantPoints(i, speedUpFactor));
 
-		// List<Float> floats =
-		// ParameterSupportTools.getAlternativeFloats(speedUpFactor, count);
-		//
-		// List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
-		// for (Float f : floats)
-		// processors.add(new PerceptuallyImportantPoints(pipCount, f));
-
 		return processors;
 	}
 
