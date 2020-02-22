@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.data.multivariate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
@@ -71,6 +72,21 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 				timeSeriesUnivariateList.get(i).setName("");
 	}
 
+	public TimeSeriesMultivariate(LinkedHashMap<String, ITimeSeriesUnivariate> timeSeriesUnivariatesWithNames) {
+		this.id = MathFunctions.randomLong();
+
+		this.timeSeriesUnivariateList = new ArrayList<>();
+		if (timeSeriesUnivariatesWithNames != null)
+			for (String name : timeSeriesUnivariatesWithNames.keySet())
+				timeSeriesUnivariateList.add(timeSeriesUnivariatesWithNames.get(name));
+
+		initialize();
+
+		int i = 0;
+		for (String name : timeSeriesUnivariatesWithNames.keySet())
+			timeSeriesUnivariateList.get(i++).setName(name);
+	}
+
 	public TimeSeriesMultivariate(long id, List<ITimeSeriesUnivariate> timeSeriesUnivariateList,
 			List<String> timeSeriesNames) {
 		this.id = id;
@@ -115,8 +131,8 @@ public class TimeSeriesMultivariate implements ITimeSeriesMultivariate {
 		for (int i = 0; i < timeSeriesUnivariateList.size(); i++)
 			missingValueIndicators.add(timeSeriesUnivariateList.get(i).getMissingValueIndicator());
 
-		// initialize names
-		getAttributeNames();
+		// initialize names - does not initialize anything
+		// getAttributeNames();
 	}
 
 	private ITimeSeriesUnivariate getFirstTimeseriesUnivariate() {

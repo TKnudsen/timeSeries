@@ -60,10 +60,10 @@ public class MovingAverage extends DimensionBasedTimeSeriesMultivariateProcessor
 
 	@Override
 	public List<IDataProcessor<ITimeSeriesMultivariate>> getAlternativeParameterizations(int count) {
-		List<Integer> integers = ParameterSupportTools.getAlternativeIntegers(kernel.getInterval(), count);
+		List<Integer> alternativeInts = ParameterSupportTools.getAlternativeIntegers(kernel.getInterval(), count);
 
 		List<IDataProcessor<ITimeSeriesMultivariate>> processors = new ArrayList<>();
-		for (Integer i : integers)
+		for (Integer i : alternativeInts)
 			if (i > 1)
 				processors.add(new MovingAverage(i, considerFutureValues));
 
