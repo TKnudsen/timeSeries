@@ -210,7 +210,7 @@ public final class TimeSeriesTools {
 			if (Double.isNaN(timeSeries.getValue(i)))
 				continue;
 			if (timeSeries.getMissingValueIndicator() != null
-					&& compareDoubles(timeSeries.getValue(i), timeSeries.getMissingValueIndicator()))
+					&& compareDoubleObjects(timeSeries.getValue(i), timeSeries.getMissingValueIndicator()))
 				continue;
 
 			double localLength = 0;
@@ -243,7 +243,7 @@ public final class TimeSeriesTools {
 			if (Double.isNaN(timeSeries.getValue(i)))
 				continue;
 			if (timeSeries.getMissingValueIndicator() != null
-					&& compareDoubles(timeSeries.getValue(i), timeSeries.getMissingValueIndicator()))
+					&& compareDoubleObjects(timeSeries.getValue(i), timeSeries.getMissingValueIndicator()))
 				continue;
 
 			double localLength = 0;
@@ -414,6 +414,20 @@ public final class TimeSeriesTools {
 	}
 
 	public static boolean compareDoubles(double v1, double v2) {
+		if (Double.isNaN(v1) && Double.isNaN(v2))
+			return true;
+		if (v1 == v2)
+			return true;
+		return false;
+	}
+
+	public static boolean compareDoubleObjects(Double v1, Double v2) {
+		if (v1 == null && v2 == null)
+			return true;
+		if (v1 == null)
+			return false;
+		if (v2 == null)
+			return false;
 		if (Double.isNaN(v1) && Double.isNaN(v2))
 			return true;
 		if (v1 == v2)

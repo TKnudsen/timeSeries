@@ -27,14 +27,14 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  */
 public class MissingValueRemover extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
-	private double missingValueIndicator;
+	private Double missingValueIndicator;
 
 	@SuppressWarnings("unused")
 	private MissingValueRemover() {
 		this.missingValueIndicator = Double.NaN;
 	}
 
-	public MissingValueRemover(double missingValueIndicator) {
+	public MissingValueRemover(Double missingValueIndicator) {
 		this.missingValueIndicator = missingValueIndicator;
 	}
 
@@ -55,7 +55,7 @@ public class MissingValueRemover extends TimeSeriesProcessor<ITimeSeriesMultivar
 	private void process(ITimeSeriesMultivariate data) {
 		for (int i = 0; i < data.size(); i++) {
 			for (Double d : data.getValue(i))
-				if (TimeSeriesTools.compareDoubles(missingValueIndicator, d)) {
+				if (TimeSeriesTools.compareDoubleObjects(missingValueIndicator, d)) {
 					data.removeTimeValue(i);
 					i--;
 
