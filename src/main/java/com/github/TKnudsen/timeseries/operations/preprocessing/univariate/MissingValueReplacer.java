@@ -19,7 +19,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  */
 public class MissingValueReplacer extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
-	private double missingValueIndicator;
+	private Double missingValueIndicator;
 	private double defaultValue;
 
 	@SuppressWarnings("unused")
@@ -27,7 +27,7 @@ public class MissingValueReplacer extends TimeSeriesProcessor<ITimeSeriesUnivari
 		this.missingValueIndicator = Double.NaN;
 	}
 
-	public MissingValueReplacer(double missingValueIndicator, double defaultValue) {
+	public MissingValueReplacer(Double missingValueIndicator, double defaultValue) {
 		this.missingValueIndicator = missingValueIndicator;
 		this.defaultValue = defaultValue;
 	}
@@ -48,7 +48,7 @@ public class MissingValueReplacer extends TimeSeriesProcessor<ITimeSeriesUnivari
 
 	private void process(ITimeSeriesUnivariate data) {
 		for (int i = 0; i < data.size(); i++) {
-			if (TimeSeriesTools.compareDoubles(missingValueIndicator, data.getValue(i))) {
+			if (TimeSeriesTools.compareDoubleObjects(missingValueIndicator, data.getValue(i))) {
 				data.replaceValue(i, defaultValue);
 				i--;
 			}

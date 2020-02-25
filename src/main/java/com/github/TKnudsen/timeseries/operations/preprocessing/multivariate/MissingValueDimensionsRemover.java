@@ -26,7 +26,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  */
 public class MissingValueDimensionsRemover extends TimeSeriesProcessor<ITimeSeriesMultivariate> {
 
-	private double missingValueIndicator;
+	private Double missingValueIndicator;
 
 	/**
 	 * rate of maximum missing values before a dimension is removed from
@@ -39,7 +39,7 @@ public class MissingValueDimensionsRemover extends TimeSeriesProcessor<ITimeSeri
 		this(Double.NaN, 0.75);
 	}
 
-	public MissingValueDimensionsRemover(double missingValueIndicator, double missingValueRate) {
+	public MissingValueDimensionsRemover(Double missingValueIndicator, double missingValueRate) {
 		this.missingValueIndicator = missingValueIndicator;
 		this.missingValueRate = missingValueRate;
 	}
@@ -64,7 +64,7 @@ public class MissingValueDimensionsRemover extends TimeSeriesProcessor<ITimeSeri
 		for (int d = data.getDimensionality() - 1; d >= 0; d--) {
 			int count = 0;
 			for (Double value : data.getTimeSeries(d).getValues()) {
-				if (value != null && TimeSeriesTools.compareDoubles(value, missingValueIndicator)) {
+				if (value != null && TimeSeriesTools.compareDoubleObjects(value, missingValueIndicator)) {
 					count++;
 				}
 			}
