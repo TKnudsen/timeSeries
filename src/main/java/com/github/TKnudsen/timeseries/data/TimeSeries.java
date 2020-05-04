@@ -25,12 +25,12 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: (c) 2016-2018 Juergen Bernard,
+ * Copyright: (c) 2016-2020 Juergen Bernard,
  * https://github.com/TKnudsen/timeSeries
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public abstract class TimeSeries<V> implements ITimeSeries<V> {
 

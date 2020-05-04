@@ -1256,4 +1256,18 @@ public final class TimeSeriesTools {
 		return l;
 	}
 
+	/**
+	 * checks whether a time series contains NaN.
+	 * 
+	 * @param timeSeries
+	 * @return
+	 */
+	public static boolean containsNaN(ITimeSeries<? extends Double> timeSeries) {
+		for (Double d : timeSeries.getValues())
+			if (Double.isNaN(d))
+				return true;
+
+		return false;
+	}
+
 }

@@ -3,6 +3,7 @@ package com.github.TKnudsen.timeseries.operations.tools;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
@@ -209,5 +210,20 @@ public class DateTools {
 	 */
 	public static int getCurrentYear() {
 		return Calendar.getInstance().get(Calendar.YEAR);
+	}
+
+	/**
+	 * calculates the absolute difference between two dates. the time quantization
+	 * can be chosen.
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @param timeUnit
+	 * @return
+	 */
+	public static long diff(Date date1, Date date2, TimeUnit timeUnit) {
+		long diff = Math.abs(date2.getTime() - date1.getTime());
+
+		return timeUnit.convert(diff, TimeUnit.MILLISECONDS);
 	}
 }

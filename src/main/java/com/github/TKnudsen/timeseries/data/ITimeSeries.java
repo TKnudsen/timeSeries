@@ -1,6 +1,8 @@
 package com.github.TKnudsen.timeseries.data;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.IDObject;
 import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
@@ -21,7 +23,7 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
  * @author Juergen Bernard
  * @version 1.04
  */
-public interface ITimeSeries<T> extends IDObject, ISelfDescription {
+public interface ITimeSeries<T> extends IDObject, ISelfDescription, Iterable<Entry<Long, T>> {
 
 	public int size();
 
@@ -103,4 +105,14 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription {
 	public void setName(String name);
 
 	public void setDescription(String description);
+
+	/**
+	 * iterates over timestamps and returns time value pairs. With this iterator,
+	 * traversing the time stamps but retrieving the values can be done with linear
+	 * time. Otherwise, values have to be looked up using timeStamps as primary
+	 * keys, runtime would be quadratic in the worst case.
+	 */
+	default Iterator<Entry<Long, T>> iterator() {
+		return new TimeSeriesIterator<T>(getTimestamps(), getValues());
+	}
 }

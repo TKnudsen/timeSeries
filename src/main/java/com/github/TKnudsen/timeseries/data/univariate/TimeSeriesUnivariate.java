@@ -125,4 +125,5 @@ public class TimeSeriesUnivariate extends TimeSeries<Double> implements ITimeSer
 		return value;
 	}
 
+
 }
