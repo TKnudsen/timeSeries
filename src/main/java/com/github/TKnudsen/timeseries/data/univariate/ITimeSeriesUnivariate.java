@@ -13,12 +13,13 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2017
+ * Copyright: Copyright (c) 2015-2020
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.05
+ * @version 1.06
  */
 public interface ITimeSeriesUnivariate extends ITimeSeries<Double>, IKeyValueProvider<Object> {
 
+	
 }
