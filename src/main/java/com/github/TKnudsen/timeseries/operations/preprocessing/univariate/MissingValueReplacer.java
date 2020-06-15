@@ -35,13 +35,13 @@ public class MissingValueReplacer extends TimeSeriesProcessor<ITimeSeriesUnivari
 	@Override
 	public void process(List<ITimeSeriesUnivariate> data) {
 		if (data.isEmpty())
-			throw new IllegalStateException("List<TimeSeries> is empty");
+			throw new IllegalStateException("List of time series is empty");
 
 		for (int i = 0; i < data.size(); i++) {
 			if (data.get(i) == null)
 				throw new IllegalStateException("TimeSeries is null");
 			if (data.get(i).isEmpty())
-				throw new IllegalStateException("TimeSeries is empty");
+				System.err.println(getClass().getSimpleName() + ": time series is empty, ignore");
 			process(data.get(i));
 		}
 	}

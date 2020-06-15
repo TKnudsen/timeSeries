@@ -145,32 +145,31 @@ public final class TimeSeriesTools {
 
 	/**
 	 * calculates the mean/average of a time series. With the flag
-	 * 'weightIncreaseOverTime', it is possible to weight later time stamps
-	 * stronger/weaker than earlier ones. In this way a trend-like tendency can be
-	 * inferred in a single value.
+	 * 'weightIncreaseOverTime', it is possible to weight later time stamps stronger
+	 * than earlier ones. In this way a trend-like tendency can be inferred in a
+	 * single value.
 	 * 
-	 * Attention: ignores null and NaN values.
+	 * Attention: ignores null and NaN values in the time series.
 	 * 
 	 * @param timeSeries
-	 * @param weightIncreaseOverTime additive way to add more weight to later time
-	 *                               stamps
+	 * @param weightIncreaseOverTimeAdditive additive way to add more weight to
+	 *                                       later time stamps
 	 * @return
 	 */
 	public static final double getMeanWeighted(ITimeSeries<? extends Double> timeSeries,
-			double weightIncreaseOverTime) {
+			double weightIncreaseOverTimeAdditive) {
 
 		Objects.requireNonNull(timeSeries);
 
-		if (Double.isNaN(weightIncreaseOverTime) || weightIncreaseOverTime < 0)
-			throw new IllegalArgumentException();
+		if (Double.isNaN(weightIncreaseOverTimeAdditive) || weightIncreaseOverTimeAdditive < 0)
+			throw new IllegalArgumentException("weightIncreaseOverTime was " + weightIncreaseOverTimeAdditive);
 
 		double w = 1.0;
 		double wSum = 0;
 		double sum = 0;
 
 		for (Long timeStamp : timeSeries.getTimestamps()) {
-			// always. even for NaN
-			w += weightIncreaseOverTime;
+			w += weightIncreaseOverTimeAdditive;
 
 			Double v = timeSeries.getValue(timeStamp, false);
 
@@ -181,9 +180,7 @@ public final class TimeSeriesTools {
 			wSum += w;
 		}
 
-		double value = MathFunctions.round(sum / wSum, 8);
-
-		return value;
+		return MathFunctions.round(sum / wSum, 8);
 	}
 
 	/**
@@ -1196,6 +1193,44 @@ public final class TimeSeriesTools {
 			}
 
 			lastValue = value;
+		}
+
+		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
+	}
+
+	/**
+	 * creates a time series with a value domain according to the LN where possible.
+	 * 
+	 * NOTE: Negative values can be computed using a negation trick.
+	 * 
+	 * NOTE: Values in the interval [-2...2] are handled with a linear function
+	 * (*0,345) to fit the overall ln curve of the function.
+	 * 
+	 * @param timeSeries
+	 * @param allowNegativeValues uses negation to produce numbers. if false NaN is
+	 *                            returned for particular time stamps.
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate getLogarithmLikeTimeSeries(ITimeSeriesUnivariate timeSeries,
+			boolean allowNegativeValues) {
+
+		Objects.requireNonNull(timeSeries);
+
+		List<ITimeValuePair<Double>> timeValuePairs = new ArrayList<>();
+
+		for (Long timeStamp : timeSeries.getTimestamps()) {
+			double value = timeSeries.getValue(timeStamp, false);
+			double lnValue = Double.NaN;
+			if (value < 0 && !allowNegativeValues)
+				lnValue = Double.NaN;
+			else if (value < 2 && value > -2)
+				lnValue = value * 0.345;
+			else {
+				lnValue = Math.log(Math.abs(value));
+				lnValue *= ((value < 0) ? -1 : 1);
+			}
+
+			timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, lnValue));
 		}
 
 		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
