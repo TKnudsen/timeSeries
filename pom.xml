@@ -55,12 +55,12 @@
 		<dependency>
 			<groupId>com.github.tknudsen</groupId>
 			<artifactId>complex-data-object</artifactId>
-			<version>0.2.3</version>
+			<version>0.2.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.tknudsen</groupId>
-			<artifactId>DMandML</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>dm-and-ml</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 
 	</dependencies>
