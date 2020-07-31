@@ -46,7 +46,7 @@ import smile.math.Math;
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.10
+ * @version 1.11
  */
 public final class TimeSeriesTools {
 
@@ -59,7 +59,7 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @return
 	 */
-	public static long getMinStart(List<ITimeSeriesUnivariate> timeSeries) {
+	public static long getMinStart(Collection<ITimeSeriesUnivariate> timeSeries) {
 		long min = Long.MAX_VALUE - 1;
 
 		for (ITimeSeries<Double> ts : timeSeries)
@@ -78,7 +78,7 @@ public final class TimeSeriesTools {
 	 * @param timeSeries
 	 * @return
 	 */
-	public static long getMaxEnd(List<ITimeSeriesUnivariate> timeSeries) {
+	public static long getMaxEnd(Collection<ITimeSeriesUnivariate> timeSeries) {
 		long max = Long.MIN_VALUE + 1;
 
 		for (ITimeSeries<Double> ts : timeSeries)
@@ -91,8 +91,8 @@ public final class TimeSeriesTools {
 		return max;
 	}
 
-	public static Double getMinValue(List<ITimeSeriesUnivariate> timeSeriesList) {
-		Double min = Double.MAX_VALUE - 1;
+	public static Double getMinValue(Collection<ITimeSeriesUnivariate> timeSeriesList) {
+		Double min = Double.POSITIVE_INFINITY;
 
 		if (timeSeriesList != null)
 			for (ITimeSeriesUnivariate timeSeries : timeSeriesList)
@@ -102,8 +102,8 @@ public final class TimeSeriesTools {
 		return min;
 	}
 
-	public static Double getMaxValue(List<ITimeSeriesUnivariate> timeSeriesList) {
-		Double max = Double.MIN_VALUE + 1;
+	public static Double getMaxValue(Collection<ITimeSeriesUnivariate> timeSeriesList) {
+		Double max = Double.NEGATIVE_INFINITY;
 
 		if (timeSeriesList != null)
 			for (ITimeSeriesUnivariate timeSeries : timeSeriesList)
@@ -121,9 +121,7 @@ public final class TimeSeriesTools {
 
 		double min = Double.POSITIVE_INFINITY;
 		for (double d : timeSeries.getValues())
-			if (Double.isNaN(d))
-				continue;
-			else
+			if (!Double.isNaN(d))
 				min = Math.min(min, d);
 		return min;
 	}
@@ -136,9 +134,7 @@ public final class TimeSeriesTools {
 
 		double max = Double.NEGATIVE_INFINITY;
 		for (double d : timeSeries.getValues())
-			if (Double.isNaN(d))
-				continue;
-			else
+			if (!Double.isNaN(d))
 				max = Math.max(max, d);
 		return max;
 	}
@@ -478,7 +474,7 @@ public final class TimeSeriesTools {
 		return pairs;
 	}
 
-	public static TimeSeriesUnivariate createTimeSeries(List<ITimeValuePair<Double>> timeValuePairs,
+	public static TimeSeriesUnivariate createTimeSeries(Collection<ITimeValuePair<Double>> timeValuePairs,
 			Double missingValueIndicator) {
 		if (timeValuePairs == null)
 			return null;
@@ -982,7 +978,7 @@ public final class TimeSeriesTools {
 	 * @param timeSeriesList
 	 * @return
 	 */
-	public static ITimeSeriesUnivariate getMeanTimeSeries(List<ITimeSeriesUnivariate> timeSeriesList) {
+	public static ITimeSeriesUnivariate getMeanTimeSeries(Collection<ITimeSeriesUnivariate> timeSeriesList) {
 		SortedMap<Long, List<Double>> rawValues = new TreeMap<>();
 
 		for (ITimeSeriesUnivariate ts : timeSeriesList)
@@ -1025,7 +1021,7 @@ public final class TimeSeriesTools {
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate[] createQuantilesQuartilesMeanTimeSeries(
-			List<ITimeSeriesUnivariate> timeSeriesList, double quantil) {
+			Collection<ITimeSeriesUnivariate> timeSeriesList, double quantil) {
 
 		// gather all available time stamps
 		SortedSet<Long> timeStamps = new TreeSet<>();
@@ -1259,7 +1255,7 @@ public final class TimeSeriesTools {
 		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
 	}
 
-	public static long getFirstTimestamp(List<ITimeSeriesUnivariate> timeSeriesList) {
+	public static long getFirstTimestamp(Collection<ITimeSeriesUnivariate> timeSeriesList) {
 		Objects.requireNonNull(timeSeriesList);
 
 		if (timeSeriesList.size() == 0)
@@ -1275,7 +1271,7 @@ public final class TimeSeriesTools {
 		return l;
 	}
 
-	public static long getLastTimestamp(List<ITimeSeriesUnivariate> timeSeriesList) {
+	public static long getLastTimestamp(Collection<ITimeSeriesUnivariate> timeSeriesList) {
 		Objects.requireNonNull(timeSeriesList);
 
 		if (timeSeriesList.size() == 0)
