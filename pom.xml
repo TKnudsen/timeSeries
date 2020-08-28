@@ -50,7 +50,6 @@
 		<commons-math3.version>3.4.1</commons-math3.version>
 	</properties>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -168,6 +167,23 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<id>local</id>
+			<properties>
+				<sourceDirectory>../src/main/java</sourceDirectory>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>local-mvn-repository</id>
+					<name>data</name>
+					<url>file://${basedir}/local-mvn-repository</url>
+				</repository>
+			</repositories>
+		</profile>
+
 		<profile>
 			<id>release</id>
 			<properties>
