@@ -45,7 +45,6 @@ public class PerceptuallyImporantPointsDescriptor
 	/**
 	 * for serialization purposes
 	 */
-	@SuppressWarnings("unused")
 	protected PerceptuallyImporantPointsDescriptor() {
 		this.pipCount = 5;
 
