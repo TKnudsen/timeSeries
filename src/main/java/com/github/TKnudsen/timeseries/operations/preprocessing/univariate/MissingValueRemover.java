@@ -10,19 +10,11 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
  * <p>
- * Title: MissingValueRemover
- * </p>
- * 
- * <p>
- * Description:
- * </p>
- * 
- * <p>
- * Copyright: Copyright (c) 2015-2018
+ * Copyright: Copyright (c) 2015-2020
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public class MissingValueRemover extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
@@ -49,8 +41,10 @@ public class MissingValueRemover extends TimeSeriesProcessor<ITimeSeriesUnivaria
 		for (int i = 0; i < data.size(); i++) {
 			if (data.get(i) == null)
 				throw new IllegalStateException("TimeSeries is null");
-			if (data.get(i).isEmpty())
-				throw new IllegalStateException("TimeSeries is empty");
+			if (data.get(i).isEmpty()) {
+//				throw new IllegalStateException("TimeSeries is empty");
+			}
+
 			process(data.get(i));
 		}
 	}

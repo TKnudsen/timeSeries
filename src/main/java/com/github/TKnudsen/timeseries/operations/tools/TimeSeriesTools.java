@@ -1233,7 +1233,7 @@ public final class TimeSeriesTools {
 	}
 
 	/**
-	 * substrats a constant value and returns a new time series
+	 * subtracts a constant value and returns a new time series
 	 * 
 	 * @param timeSeries
 	 * @param relativeValues if percentage values of change is desired. be aware
