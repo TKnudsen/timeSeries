@@ -212,6 +212,12 @@ public class DateTools {
 		return Calendar.getInstance().get(Calendar.YEAR);
 	}
 
+	public static int getYear(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.YEAR);
+	}
+
 	/**
 	 * calculates the absolute difference between two dates. the time quantization
 	 * can be chosen.
