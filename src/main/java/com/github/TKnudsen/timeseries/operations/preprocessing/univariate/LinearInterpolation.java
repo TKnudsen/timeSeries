@@ -19,7 +19,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcess
  * <p>
  * Description: interpolates a time series with a given quantization. If a local
  * observed quantization in the time series exceeds the range of the given time
- * interval, new timestamps are added (by means on interpolation).
+ * interval, new timestamps are added (by means of interpolation).
  * </p>
  * 
  * <p>
