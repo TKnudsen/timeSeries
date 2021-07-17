@@ -1,8 +1,12 @@
 package com.github.TKnudsen.timeseries.operations.tools;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
@@ -33,6 +37,28 @@ public class DateTools {
 	 */
 	public static boolean isLeapYear(int y) {
 		return ((y % 4 == 0) && ((y % 100 != 0) || (y % 400 == 0)));
+	}
+
+	/**
+	 * whether a date is on weekend.
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static boolean isWeekend(Date date) {
+		Objects.requireNonNull(date);
+
+		LocalDate ld = new java.sql.Date(date.getTime()).toLocalDate();
+
+		DayOfWeek dayOfWeek = DayOfWeek.of(ld.get(ChronoField.DAY_OF_WEEK));
+		switch (dayOfWeek) {
+		case SATURDAY:
+			return true;
+		case SUNDAY:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	/**
