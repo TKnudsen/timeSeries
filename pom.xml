@@ -5,7 +5,7 @@
 
 	<groupId>com.github.tknudsen</groupId>
 	<artifactId>time-series</artifactId>
-	<version>0.0.6</version>
+	<version>0.0.7</version>
 
 	<name>timeSeries</name>
 	<description>A library that provides data structures and algorithms for time series data</description>
