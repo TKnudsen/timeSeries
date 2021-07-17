@@ -5,7 +5,7 @@
 
 	<groupId>com.github.tknudsen</groupId>
 	<artifactId>time-series</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6</version>
 
 	<name>timeSeries</name>
 	<description>A library that provides data structures and algorithms for time series data</description>
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>com.github.tknudsen</groupId>
 			<artifactId>dm-and-ml</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.4</version>
 		</dependency>
 	</dependencies>
 
