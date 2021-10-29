@@ -10,7 +10,7 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
  * </p>
  * 
  * <p>
- * Description: loads a ITimeSeries<?> from file.
+ * Description: loads a ITimeSeries from file.
  * </p>
  * 
  * <p>

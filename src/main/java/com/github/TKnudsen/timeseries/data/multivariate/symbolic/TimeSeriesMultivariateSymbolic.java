@@ -14,7 +14,7 @@ import com.github.TKnudsen.timeseries.data.TimeSeriesWithTimeValuePairs;
  * 
  * <p>
  * Description: General implementation for symbolic multivariate time series
- * modeled with List<String>.
+ * modeled with List of Strings.
  * </p>
  * 
  * <p>

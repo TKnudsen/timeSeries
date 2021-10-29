@@ -49,7 +49,7 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	/**
 	 * NANs are removed!
 	 * 
-	 * @param vector
+	 * @param timeSeries
 	 */
 	public TimeSeriesStatistics(ITimeSeriesUnivariate timeSeries) {
 		if (timeSeries == null)

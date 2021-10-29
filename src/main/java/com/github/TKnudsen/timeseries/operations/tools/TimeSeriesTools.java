@@ -1097,7 +1097,7 @@ public final class TimeSeriesTools {
 	/**
 	 * gathers the average value within a given interval.
 	 * 
-	 * @param ts
+	 * @param timeSeries
 	 * @param start
 	 * @param end
 	 * @return
@@ -1236,7 +1236,7 @@ public final class TimeSeriesTools {
 	 * subtracts a constant value and returns a new time series
 	 * 
 	 * @param timeSeries
-	 * @param relativeValues if percentage values of change is desired. be aware
+	 * @param value if percentage values of change is desired. be aware
 	 *                       that relative time series may produce infinite values
 	 *                       due to the division-by-zero problem.
 	 * @return

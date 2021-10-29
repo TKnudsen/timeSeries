@@ -19,7 +19,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * 
  * MissingValueDimensionsRemover is a pre-processing routine that removes
  * dimensions with more % missing values as defined by a threshold
- * </p>
+ *
  * 
  * @author Juergen Bernard
  * @version 1.01

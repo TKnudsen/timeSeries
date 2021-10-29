@@ -13,7 +13,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * https://github.com/TKnudsen/TimeSeries<br>
  * 
  * TimeSeriesMultivariate interface
- * </p>
+ *
  * 
  * @author Juergen Bernard
  * @version 1.02

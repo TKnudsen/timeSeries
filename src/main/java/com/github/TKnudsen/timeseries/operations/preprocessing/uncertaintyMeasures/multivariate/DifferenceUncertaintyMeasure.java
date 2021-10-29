@@ -15,8 +15,7 @@ import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyM
  * Computes the absolute change of every timeStamp and dimension. Absolute
  * change is assessed by the bounds of the value domains of the individual
  * (original) time series. For every timeStamp the absolute changes in every
- * dimension are collected and represented as a
- * {@link NumericalDistributionUncertainty}.
+ * dimension are collected and represented as a NumericalDistributionUncertainty.
  * 
  * Can handle time stamps that are removed.
  * 

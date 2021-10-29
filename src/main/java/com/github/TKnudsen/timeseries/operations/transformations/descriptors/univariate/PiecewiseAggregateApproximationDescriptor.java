@@ -27,7 +27,7 @@ import com.github.TKnudsen.timeseries.operations.transformations.descriptors.ITi
  * Description: Piecewise Aggregate Approximation (PAA) was proposed by Keogh et
  * al. in the following publication:
  * 
- * Keogh, E,. Chakrabarti, K,. Pazzani, M. & Mehrotra.: Dimensionality Reduction
+ * Keogh, E,. Chakrabarti, K,. Pazzani, M. and Mehrotra.: Dimensionality Reduction
  * for Fast Similarity Search in Large Time Series Databases. Journal of
  * Knowledge and Information Systems, 2000.
  * 

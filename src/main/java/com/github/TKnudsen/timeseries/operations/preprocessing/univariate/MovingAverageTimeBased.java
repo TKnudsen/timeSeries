@@ -22,7 +22,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * 
  * Moving average with a temporal kernel function. Presumes that the time series
  * is ordered.
- * </p>
+ *
  * 
  * @author Juergen Bernard
  * 

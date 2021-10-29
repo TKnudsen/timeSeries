@@ -16,8 +16,7 @@ import com.github.TKnudsen.timeseries.data.uncertainty.multivariate.UncertaintyM
  * Computes the relative change of every timeStamp and dimension. Relative
  * change is assessed by the bounds of the value domains of the individual
  * (original) time series. For every timeStamp the relative changes in every
- * dimension are collected and represented as a
- * {@link NumericalDistributionUncertainty}.
+ * dimension are collected and represented as a NumericalDistributionUncertainty.
  * 
  * Can handle time stamps that are removed.
  * 
