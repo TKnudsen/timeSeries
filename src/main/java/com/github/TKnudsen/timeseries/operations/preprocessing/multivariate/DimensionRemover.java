@@ -17,7 +17,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcess
  * 
  * DimensionRemover is a pre-processing routine that removes the dimension with
  * a given name
- * </p>
+ *
  * 
  * @author Juergen Bernard
  * @version 1.01

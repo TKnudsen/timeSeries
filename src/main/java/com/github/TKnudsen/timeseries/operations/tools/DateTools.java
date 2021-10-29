@@ -104,7 +104,7 @@ public class DateTools {
 	/**
 	 * 
 	 * @param date
-	 * @param Calendar with respect to the Calendar Enum. Example: Calendar.DATE
+	 * @param calendar with respect to the Calendar Enum. Example: Calendar.DATE
 	 *                 refers to the date within the month[1-31]. Example:
 	 *                 DateTools.addDateOrTime(new Date(), Calendar.DATE, -10);
 	 * @param value    number of days +-

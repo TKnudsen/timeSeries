@@ -20,7 +20,7 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.dime
  * 
  * removes the signal of a time series and preserves the noise. the signal is
  * calculated with a moving average routine.
- * </p>
+ *
  * 
  * @author Juergen Bernard
  * 

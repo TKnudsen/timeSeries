@@ -19,7 +19,7 @@ import com.github.TKnudsen.timeseries.data.uncertainty.ITimeSeriesValueUncertain
  * <code>v + u * v</code>. When the uncertainties are absolute, then the actual
  * value may be <code>v + u</code>.
  * 
- * @param <V>
+ *
  */
 public interface ITimeSeriesUnivariateValueUncertaintyCalculationResult extends ITimeSeriesValueUncertaintyCalculationResult<IValueUncertainty> {
 }

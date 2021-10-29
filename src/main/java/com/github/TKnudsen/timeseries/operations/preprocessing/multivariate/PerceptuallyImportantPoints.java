@@ -22,11 +22,11 @@ import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcess
  * reduction purposes. The timeseries is subsequently reduced to the size of a
  * given pipCount.
  * 
- * </p>
+ *
  * In accordance to Chung, F.L., Fu, T.C., Luk, R., Ng, V., Flexible Time Series
  * Pattern Matching Based on Perceptually Important Points. In: Workshop on
  * Learning from Temporal and Spatial Data at IJCAI (2001) 1-7
- * </p>
+ *
  * 
  * <p>
  * Copyright: Copyright (c) 2016-2018

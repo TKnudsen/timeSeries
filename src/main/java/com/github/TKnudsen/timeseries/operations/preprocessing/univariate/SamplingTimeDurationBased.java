@@ -16,7 +16,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * 
  * <p>
  * Description: applies sampling based on a given time duration. all time-value
- * pairs within an interval < the duration are removed successively.
+ * pairs within an interval less than the duration are removed successively.
  * </p>
  * 
  * <p>
