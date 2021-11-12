@@ -303,9 +303,9 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 
 		if (newLong == timeStamp)
 			return newSplitIndex;
-		else if (newLong > timeStamp) // earlier bin
+		else if (newLong > timeStamp) // earlier bins
 			return interpolationSearch(indexStart, newSplitIndex, timeStamp, requireExactMatch);
-		else // later bin
+		else // later bins
 			return interpolationSearch(newSplitIndex, indexEnd, timeStamp, requireExactMatch);
 	}
 
