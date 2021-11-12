@@ -46,6 +46,9 @@ public abstract class TimeSeriesProcessor<TS extends ITimeSeries<?>> implements 
 	/**
 	 * This method has to be called when the values of a time series have been
 	 * changed and {@link ITimeSeriesListener} instances should be informed.
+	 * 
+	 * @param oldTimeSeries the old time series before processing
+	 * @param newTimeSeries the new time series after processing
 	 */
 	public final void fireValueDomainChanged(TS oldTimeSeries, TS newTimeSeries) {
 		if (!timeSeriesListeners.isEmpty()) {
@@ -58,6 +61,9 @@ public abstract class TimeSeriesProcessor<TS extends ITimeSeries<?>> implements 
 	/**
 	 * This method has to be called when the temporal domain of a time series have
 	 * been changed and {@link ITimeSeriesListener} instances should be informed.
+	 * 
+	 * @param oldTimeSeries the old time series before processing
+	 * @param newTimeSeries the new time series after processing
 	 */
 	public final void fireTemporalDomainChangedChanged(TS oldTimeSeries, TS newTimeSeries) {
 		if (!timeSeriesListeners.isEmpty()) {

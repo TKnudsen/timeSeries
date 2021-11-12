@@ -9,7 +9,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Description: inverts the function f(TS)->FV as good as possible. Useful to
+ * Description: inverts the function f(TS) to FV as good as possible. Useful to
  * assess the accuracy of descriptors visually.
  * </p>
  * 

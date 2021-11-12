@@ -37,8 +37,8 @@ public class WEKATimeSeriesConverter {
 	/**
 	 * converts a multivariate time series to an Instances object.
 	 * 
-	 * @param timeSeriesMultivariate
-	 * @return
+	 * @param timeSeriesMultivariate the multivariate time series
+	 * @return time series converted to an Instances object
 	 */
 	public static Instances toInstances(ITimeSeriesMultivariate timeSeriesMultivariate) {
 		Instances instances;
@@ -100,8 +100,8 @@ public class WEKATimeSeriesConverter {
 	/**
 	 * converts an Instances object to a multivariate time series, if possible.
 	 * 
-	 * @param instances
-	 * @return
+	 * @param instances the time series represented as Instances object
+	 * @return time series converted to a ITimeSeriesMultivariate object
 	 */
 	public static ITimeSeriesMultivariate toTimeSeriesMultivariate(Instances instances) {
 
