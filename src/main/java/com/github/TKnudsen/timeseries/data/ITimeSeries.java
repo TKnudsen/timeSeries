@@ -34,8 +34,8 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription, Iterable<Ent
 	/**
 	 * index access
 	 * 
-	 * @param index
-	 * @return
+	 * @param index the index in the
+	 * @return the time stamp as long
 	 */
 	long getTimestamp(int index);
 
@@ -47,8 +47,8 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription, Iterable<Ent
 	 * In case that no exact match is needed and not existing the index left
 	 * (earlier) should be returned.
 	 * 
-	 * @param timeStamp
-	 * @param requireExactMatch
+	 * @param timeStamp         the time stamp as long
+	 * @param requireExactMatch whether an exact match is needed
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
