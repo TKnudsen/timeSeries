@@ -45,7 +45,7 @@ public class DynamicTimeWarping implements IDistanceMeasure<NumericalFeatureVect
 
 	@Override
 	public String getDescription() {
-		return "DTW is a cross-bin comparison method for the calculation of distances. It is more dynamic but slower than ED.";
+		return "DTW is a cross-bins comparison method for the calculation of distances. It is more dynamic but slower than ED.";
 	}
 
 	@Override
