@@ -5,7 +5,7 @@
 
 	<groupId>com.github.tknudsen</groupId>
 	<artifactId>time-series</artifactId>
-	<version>0.0.8</version>
+	<version>0.0.9-SNAPSHOT</version>
 
 	<name>timeSeries</name>
 	<description>A library that provides data structures and algorithms for time series data</description>
@@ -133,10 +133,10 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-<!--						<configuration>-->
-							<!-- TODO: fix javadoc and remove this -->
-<!--							<additionalparam>-Xdoclint:none</additionalparam>-->
-<!--						</configuration>-->
+						<!-- <configuration> -->
+						<!-- TODO: fix javadoc and remove this -->
+						<!-- <additionalparam>-Xdoclint:none</additionalparam> -->
+						<!-- </configuration> -->
 					</execution>
 				</executions>
 			</plugin>
