@@ -1195,6 +1195,53 @@ public final class TimeSeriesTools {
 	}
 
 	/**
+	 * calculates a time series that represents the delta of the value domain of the
+	 * original time series between a given time stamp and an interpolated time
+	 * stamp in the past with temporal distance of comparisonDuration.
+	 * 
+	 * @param timeSeries
+	 * @param relativeValues     if percentage values of change is desired. be aware
+	 *                           that relative time series may produce infinite
+	 *                           values due to the division-by-zero problem.
+	 * @param comparisonDuration duration between two time stamps for the change
+	 *                           comparison
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate getChangeTimeSeries(ITimeSeriesUnivariate timeSeries, boolean relativeValues,
+			TimeDuration comparisonDuration) {
+
+		Objects.requireNonNull(timeSeries);
+		Objects.requireNonNull(comparisonDuration);
+
+		List<ITimeValuePair<Double>> timeValuePairs = new ArrayList<>();
+
+		for (Long timeStamp : timeSeries.getTimestamps()) {
+			double value = timeSeries.getValue(timeStamp, false);
+			long earlier = timeStamp - comparisonDuration.getDuration();
+
+			if (earlier < timeSeries.getFirstTimestamp())
+				continue;
+
+			double lastValue = getInterpolatedValue(timeSeries, earlier);
+
+			if (!Double.isNaN(lastValue)) {
+				if (relativeValues) {
+					if (lastValue == 0)
+						timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, 0.0));
+					else
+						timeValuePairs
+								.add(new TimeValuePairUnivariate(timeStamp, (value - lastValue) / Math.abs(lastValue)));
+				} else
+					timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, value - lastValue));
+			}
+
+			lastValue = value;
+		}
+
+		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
+	}
+
+	/**
 	 * creates a time series with a value domain according to the LN where possible.
 	 * 
 	 * NOTE: Negative values can be computed using a negation trick.
@@ -1236,9 +1283,9 @@ public final class TimeSeriesTools {
 	 * subtracts a constant value and returns a new time series
 	 * 
 	 * @param timeSeries
-	 * @param value if percentage values of change is desired. be aware
-	 *                       that relative time series may produce infinite values
-	 *                       due to the division-by-zero problem.
+	 * @param value      if percentage values of change is desired. be aware that
+	 *                   relative time series may produce infinite values due to the
+	 *                   division-by-zero problem.
 	 * @return
 	 */
 	public static ITimeSeriesUnivariate getSubstractedValueTimeSeries(ITimeSeriesUnivariate timeSeries, double value) {
