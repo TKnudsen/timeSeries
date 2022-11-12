@@ -58,7 +58,8 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 	}
 
 	public TimeSeriesWithTimeValuePairs(List<ITimeValuePair<T>> values) {
-		this(MathFunctions.randomLong(), TimeValuePairTools.getTimeStamps(values), TimeValuePairTools.getValues(values), null);
+		this(MathFunctions.randomLong(), TimeValuePairTools.getTimeStamps(values), TimeValuePairTools.getValues(values),
+				null);
 	}
 
 	public TimeSeriesWithTimeValuePairs(List<Long> timeStamps, List<T> values, T missingValueIndicator) {
@@ -90,7 +91,8 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 
 		for (int i = 0; i < timeStamps.size() - 1; i++)
 			if (timeStamps.get(i) >= timeStamps.get(i + 1))
-				throw new IllegalArgumentException("TimeSeriesUnivariate: temporal information needs to be sorted and unique");
+				throw new IllegalArgumentException(
+						"TimeSeriesUnivariate: temporal information needs to be sorted and unique");
 
 		resetHash();
 	}
@@ -171,7 +173,8 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 		return interpolationSearch(0, timeStamps.size() - 1, timeStamp, requireExactMatch);
 	}
 
-	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
+	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch)
+			throws IllegalArgumentException {
 		if (indexStart > indexEnd)
 			System.out.println("Debug: this must be fixed for the next release!");
 
@@ -222,6 +225,9 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 
 	@Override
 	public boolean containsTimestamp(long timestamp) {
+		if (isEmpty())
+			return false;
+
 		try {
 			int index = findByDate(timestamp, true);
 			if (index >= 0)
@@ -277,7 +283,7 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 
 		resetHash();
 	}
-	
+
 	@Override
 	public void replaceValue(int index, T value) throws IllegalArgumentException {
 		if (index < 0 || index >= timeStamps.size())
@@ -329,7 +335,8 @@ public abstract class TimeSeriesWithTimeValuePairs<T> implements ITimeSeries<T>,
 	public String toString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		for (int i = 0; i < this.size(); i++)
-			stringBuffer.append(new Date(timeStamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
+			stringBuffer
+					.append(new Date(timeStamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
 
 		return stringBuffer.toString();
 	}

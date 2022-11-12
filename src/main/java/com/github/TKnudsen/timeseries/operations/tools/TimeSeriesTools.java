@@ -33,22 +33,20 @@ import smile.math.Math;
 
 /**
  * <p>
- * timeSeries
- * </p>
- * 
- * <p>
  * Tools class for general statistical operations and routines applied on
  * univariate time series
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2020
+ * Copyright: Copyright (c) 2015-2022
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.11
+ * @version 1.13
  */
 public final class TimeSeriesTools {
+
+	public static Long YEAR_IN_MILLISECONDS = 31556952000L; // 365.2425 days a solar year
 
 	private TimeSeriesTools() {
 	}
@@ -445,6 +443,15 @@ public final class TimeSeriesTools {
 		return new TimeValuePairUnivariate(timeSeries.getTimestamp(index), timeSeries.getValue(index));
 	}
 
+	public static ITimeValuePair<Double> getTimeValuePair(ITimeSeries<Double> timeSeries, long timestamp) {
+		if (timeSeries == null)
+			throw new IllegalStateException("TimeSeries is null");
+		if (timeSeries.isEmpty())
+			throw new IllegalStateException("TimeSeries is empty");
+		Double value = timeSeries.getValue(timestamp, false);
+		return new TimeValuePairUnivariate(timestamp, value);
+	}
+
 	public static List<ITimeValuePair<Double>> getTimeValuePairs(ITimeSeries<Double> timeSeries) {
 		if (timeSeries == null)
 			throw new IllegalStateException("TimeSeries is null");
@@ -722,10 +729,178 @@ public final class TimeSeriesTools {
 
 		// identify precessor and successor
 		int index1 = timeSeries.findByDate(timeStamp, false);
-		Long leftTimeStamp = timeSeries.getTimestamp(index1);
-		Long rightTimeStamp = timeSeries.getTimestamp(index1 + 1);
+		if (index1 >= 0) {
+			Long leftTimeStamp = timeSeries.getTimestamp(index1);
+			Long rightTimeStamp = timeSeries.getTimestamp(index1 + 1);
 
-		return getInterpolatedValue(timeSeries, leftTimeStamp, rightTimeStamp, timeStamp);
+			return getInterpolatedValue(timeSeries, leftTimeStamp, rightTimeStamp, timeStamp);
+		} else {
+			Long ts = timeSeries.getFirstTimestamp();
+			for (Long l : timeSeries.getTimestamps()) {
+				if (l > timeStamp)
+					return getInterpolatedValue(timeSeries, ts, l, timeStamp);
+				ts = l;
+			}
+		}
+
+		throw new IndexOutOfBoundsException(
+				"TimeSeriesTools.getInterpolatedValue: ran through two more or less sophisticated algorithms but did not succeed in interpolating the value for time stamp "
+						+ timeStamp + " .");
+	}
+
+	/**
+	 * only uses the two very outer (earliest/latest) time-value pairs to make an
+	 * extrapolation. use the predict method for a more sophisticated approach.
+	 * 
+	 * @param timeSeries
+	 * @param target     the time stamp of the value to be extrapolated
+	 * @return
+	 */
+	public static double extrapolate(ITimeSeriesUnivariate timeSeries, long target) {
+		Objects.requireNonNull(timeSeries);
+
+		if (timeSeries.size() < 2)
+			throw new IndexOutOfBoundsException(
+					"TimeSeriesTools.extrapolate: cannot extrapolate for a time series with less than size two");
+
+		if (target >= timeSeries.getFirstTimestamp() && target <= timeSeries.getLastTimestamp())
+			return getInterpolatedValue(timeSeries, target);
+
+		long leftTimeStamp = 0L;
+		long rightTimeStamp = 0L;
+		double value1 = Double.NaN;
+		double value2 = Double.NaN;
+
+		if (target < timeSeries.getFirstTimestamp()) {
+			leftTimeStamp = timeSeries.getTimestamp(0);
+			rightTimeStamp = timeSeries.getTimestamp(1);
+		} else if (target > timeSeries.getLastTimestamp()) {
+			leftTimeStamp = timeSeries.getTimestamp(timeSeries.size() - 2);
+			rightTimeStamp = timeSeries.getTimestamp(timeSeries.size() - 1);
+		} else
+			throw new IndexOutOfBoundsException(
+					"TimeSeriesTools.extrapolate: problem with extrapolating time series " + target);
+
+		value1 = timeSeries.getValue(leftTimeStamp, false);
+		value2 = timeSeries.getValue(rightTimeStamp, false);
+
+		return value1 + ((target - leftTimeStamp) / (double) (rightTimeStamp - leftTimeStamp) * (value2 - value1));
+	}
+
+	/**
+	 * 
+	 * only towards the future direction. does not work for targets earlier than the
+	 * time series.
+	 * 
+	 * Insanely slow for long time series with high quantization
+	 * 
+	 * @param ts
+	 * @param target
+	 * @return
+	 */
+	public static double[] predict(ITimeSeriesUnivariate timeSeries, long target) {
+		Objects.requireNonNull(timeSeries);
+
+		if (timeSeries.isEmpty())
+			throw new IndexOutOfBoundsException("TimeSeriesTools.predict: cannot predict for an empty time series");
+
+		return predict(timeSeries, target, timeSeries.getFirstTimestamp());
+	}
+
+	/**
+	 * 
+	 * only towards the future direction. does not work for targets earlier than the
+	 * time series.
+	 * 
+	 * Insanely slow for long time series with high quantization
+	 * 
+	 * @param ts
+	 * @param target
+	 * @param maxAgeTimeStamp time stamps of this age or older receive 0.0 impact
+	 *                        for the prediction
+	 * @return
+	 */
+	public static double[] predict(ITimeSeriesUnivariate timeSeries, long target, long maxAgeTimeStamp) {
+
+		Objects.requireNonNull(timeSeries);
+
+		if (timeSeries.isEmpty())
+			throw new IndexOutOfBoundsException("TimeSeriesTools.predict: cannot predict for an empty time series");
+
+		if (target < timeSeries.getFirstTimestamp())
+			throw new IndexOutOfBoundsException(
+					"TimeSeriesTools.predict: cannot predict into the past earlier than the time series");
+
+		if (target >= timeSeries.getFirstTimestamp() && target <= timeSeries.getLastTimestamp())
+			return new double[] { getInterpolatedValue(timeSeries, target), 0.0 };
+
+		if (timeSeries.size() < 2) {
+			double durationInYears = ((target - timeSeries.getLastTimestamp())
+					/ (double) TimeSeriesTools.YEAR_IN_MILLISECONDS);
+			double pow = Math.pow(0.5, durationInYears);
+			double temporalUncertainty = Math.min(1.0, Math.max(0.0, 1 - pow));
+
+			return new double[] { timeSeries.getValue(timeSeries.getLastTimestamp(), false),
+					Math.max(0, Math.min(1.0, temporalUncertainty)) };
+		}
+
+		long maxAgeDuration = target - maxAgeTimeStamp;
+		if (maxAgeDuration < 0)
+			throw new IndexOutOfBoundsException(
+					"TimeSeriesTools.predict: prediction target time stamp must be greater than maxAgeTimeStamp");
+		maxAgeDuration *= 2; // because there will always be two time stamps involved for the calculations,
+		// the ages of which will be added
+
+		// identify all pairwise trends the considered past
+		List<Double> trends = new ArrayList<>();
+		List<Double> predictions = new ArrayList<>();
+		List<Double> weights = new ArrayList<>();
+		long deltaTimeUnknown = target - timeSeries.getLastTimestamp();
+		for (long k : timeSeries.getTimestamps())
+			for (long l : timeSeries.getTimestamps())
+				if (l <= k)
+					continue;
+				else {
+					double trend = (timeSeries.getValue(l, false) - timeSeries.getValue(k, false)) / (l - k);
+					// value at last time stamp + trend* delta t until today
+					double prediction = timeSeries.getValue(timeSeries.getLastTimestamp(), false)
+							+ trend * (deltaTimeUnknown);
+					double w = 1 - ((target - k) + (target - l)) / (double) maxAgeDuration;
+
+					if (w <= 0)
+						continue;
+
+					trends.add(trend);
+					predictions.add(prediction);
+					weights.add(w);
+				}
+
+//		StatisticsSupport p = new StatisticsSupport(predictions);
+//		StatisticsSupport w = new StatisticsSupport(weights);
+
+		// create weighted average
+		double weightedAverage = 0.0;
+		double weightsum = 0.0;
+		for (int i = 0; i < predictions.size(); i++) {
+			weightedAverage += (predictions.get(i) * weights.get(i));
+			weightsum += weights.get(i);
+		}
+		weightedAverage /= weightsum;
+
+		double weightedVariance = 0.0;
+		for (int i = 0; i < predictions.size(); i++)
+			weightedVariance += (java.lang.Math.pow(predictions.get(i) - weightedAverage, 2.0));
+		weightedVariance = weightedVariance /= weightsum;
+		double std = Math.sqrt(weightedVariance);
+
+		double valueUncertainty = std / weightedAverage;
+
+		double durationInYears = (deltaTimeUnknown / (double) TimeSeriesTools.YEAR_IN_MILLISECONDS);
+		double pow = Math.pow(0.5, durationInYears);
+		double temporalUncertainty = Math.min(1.0, Math.max(0.0, 1 - pow));
+
+		return new double[] { weightedAverage,
+				Math.max(0, Math.min(1.0, (valueUncertainty + temporalUncertainty) * 0.5)) };
 	}
 
 	/**
@@ -756,7 +931,9 @@ public final class TimeSeriesTools {
 			return null;
 
 		int indexStart = timeSeries.findByDate(start, requireStartEndTimestampsExist);
-		if (indexStart < 0 && indexStart >= timeSeries.size())
+		if (indexStart < 0) // lower bound violation
+			return null;
+		if (indexStart >= timeSeries.size()) // upper bound violation
 			return null;
 
 		int indexEnd = timeSeries.findByDate(end, requireStartEndTimestampsExist);
@@ -1346,6 +1523,32 @@ public final class TimeSeriesTools {
 				return true;
 
 		return false;
+	}
+
+	/**
+	 * removes all occurrences / time value pairs with values equals a given T.
+	 * 
+	 * @param <T>        type of object
+	 * @param timeSeries
+	 * @param value      value
+	 * @return
+	 */
+	public static <T> void remove(ITimeSeries<T> timeSeries, T value) {
+		if (timeSeries == null)
+			return;
+
+		if (timeSeries.isEmpty())
+			return;
+
+		int i = 0;
+		while (i < timeSeries.size())
+			if (value instanceof Double && Double.isNaN((double) value)
+					&& Double.isNaN((double) timeSeries.getValue(i)))
+				timeSeries.removeTimeValue(i);
+			else if (timeSeries.getValue(i) == value)
+				timeSeries.removeTimeValue(i);
+			else
+				i++;
 	}
 
 }

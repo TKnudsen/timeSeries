@@ -235,6 +235,10 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	protected abstract V interpolateValue(long timeStamp, long lBefore, long lAfter, V vBefore, V vAfter);
 
 	@Override
+	/**
+	 * retrieves the index for a given time stamp. In case no exact match is needed
+	 * and not existing the index left (earlier) is returned.
+	 */
 	public int findByDate(long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
 		if (getFirstTimestamp() > timeStamp)
 			throw new IllegalArgumentException("Time stamp outside time interval");
@@ -242,7 +246,20 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 		if (getLastTimestamp() < timeStamp)
 			throw new IllegalArgumentException("Time stamp outside time interval");
 
-		return interpolationSearch(0, timeStamps.size() - 1, timeStamp, requireExactMatch);
+		int index = interpolationSearch(0, timeStamps.size() - 1, timeStamp, requireExactMatch);
+
+		if (index >= 0)
+			return index;
+		else {
+			for (int i = 0; i < size(); i++) {
+				if (getTimestamp(i) == timeStamp)
+					return i;
+				else if (getTimestamp(i) > timeStamp && !requireExactMatch)
+					return i - 1;
+			}
+		}
+
+		return -1;
 	}
 
 	/**
@@ -311,6 +328,9 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 
 	@Override
 	public boolean containsTimestamp(long timeStamp) {
+		if (isEmpty())
+			return false;
+
 		try {
 			int index = findByDate(timeStamp, true);
 			if (index >= 0)
