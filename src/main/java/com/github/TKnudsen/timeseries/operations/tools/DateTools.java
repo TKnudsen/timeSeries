@@ -258,4 +258,18 @@ public class DateTools {
 
 		return timeUnit.convert(diff, TimeUnit.MILLISECONDS);
 	}
+
+	/**
+	 * returns the day of the year.
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static int dayOfTheYear(Date date) {
+		Objects.requireNonNull(date);
+
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(date);
+		return cal.get(Calendar.DAY_OF_YEAR);
+	}
 }
