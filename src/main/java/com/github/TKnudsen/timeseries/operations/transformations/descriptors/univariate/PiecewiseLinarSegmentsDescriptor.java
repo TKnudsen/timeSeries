@@ -54,15 +54,16 @@ public class PiecewiseLinarSegmentsDescriptor extends PerceptuallyImporantPoints
 	}
 
 	/**
-	 * The transformation from time series to features. Separated from the
-	 * eariler time series processing for inheritance reasons.
+	 * The transformation from time series to features. Separated from the earlier
+	 * time series processing for inheritance reasons.
 	 * 
-	 * @param processedTimeSeries
-	 * @param originalTimeSeries
-	 * @return
+	 * @param processedTimeSeries processed
+	 * @param originalTimeSeries  original
+	 * @return FV
 	 */
 	@Override
-	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries, ITimeSeriesUnivariate originalTimeSeries) {
+	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries,
+			ITimeSeriesUnivariate originalTimeSeries) {
 		List<Long> timeStamps = processedTimeSeries.getTimestamps();
 		List<Double> values = processedTimeSeries.getValues();
 

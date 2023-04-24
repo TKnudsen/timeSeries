@@ -109,10 +109,10 @@ public class FourierTransformDescriptor implements INumericFeatureVectorDescript
 
 	/**
 	 * calculates the Fourier Coefficients from a given signal. Per design, it is
-	 * assumed that the signal is equidistant.
+	 * assumed that the signal is equi-distant.
 	 * 
-	 * @param signal
-	 * @return
+	 * @param signal signal
+	 * @return matrix
 	 */
 	private Double[][] calculateFFT(double[] signal) {
 		if (signal == null)
@@ -152,9 +152,9 @@ public class FourierTransformDescriptor implements INumericFeatureVectorDescript
 	 * Inverts the descriptor operation. synthesizes a TimeSeries from the FFT
 	 * coefficients. Uses only the imaginary parts.
 	 * 
-	 * @param quantization
-	 * @param size
-	 * @return
+	 * @param quantization quantization
+	 * @param size         size
+	 * @return time series
 	 */
 	public ITimeSeriesUnivariate invertFT(long quantization, int size) {
 		if (complex == null)

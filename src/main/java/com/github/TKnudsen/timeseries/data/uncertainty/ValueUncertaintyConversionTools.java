@@ -35,8 +35,8 @@ public class ValueUncertaintyConversionTools {
 	 * Converts an uncertainty time series into a general time series. The default
 	 * uncertainty value is used (getAmount()).
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeries<Double> computeAmounts(ITimeSeries<? extends IValueUncertainty> uncertainties) {
 		List<Long> timeStamps = uncertainties.getTimestamps();
@@ -52,8 +52,8 @@ public class ValueUncertaintyConversionTools {
 	 * Converts an uncertainty time series into a general time series. The upper
 	 * bounds of the value uncertainty ranges are used).
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeries<Double> computeUpperBound(ITimeSeries<? extends IValueUncertaintyRange> uncertainties) {
 		List<Long> timeStamps = uncertainties.getTimestamps();
@@ -69,8 +69,8 @@ public class ValueUncertaintyConversionTools {
 	 * Converts an uncertainty time series into a general time series. The lower
 	 * bounds of the value uncertainty ranges are used).
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeries<Double> computeLowerBound(ITimeSeries<? extends IValueUncertaintyRange> uncertainties) {
 		List<Long> timeStamps = uncertainties.getTimestamps();
@@ -88,8 +88,8 @@ public class ValueUncertaintyConversionTools {
 	 * Converts a multivariate uncertainty time series into an 1D general time
 	 * series. The default uncertainty values are used (getAmount()).
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeries<Double> computeAggregationWithAmounts(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
@@ -112,8 +112,8 @@ public class ValueUncertaintyConversionTools {
 	 * transforms value uncertainty information for every time stamp and dimension
 	 * into a MultivariateTimeSeries with Double values.
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate computeAmountsForEachDimension(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
@@ -127,8 +127,9 @@ public class ValueUncertaintyConversionTools {
 	 * representation. Either each dimension is treated individually or an aggregate
 	 * of all dimensions is calculated.
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties       uncertainties
+	 * @param aggregateDimensions aggregateDimensions
+	 * @return doubles
 	 */
 	public static List<ITimeSeries<Double>> computeAmountsTimeSeriesList(
 			ITimeSeries<List<IValueUncertainty>> uncertainties, boolean aggregateDimensions) {
@@ -148,8 +149,8 @@ public class ValueUncertaintyConversionTools {
 	 * transforms value uncertainty information for every time stamp and dimension
 	 * into a MultivariateTimeSeries with Double values.
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate computeLowerBoundForEachDimension(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
@@ -162,8 +163,8 @@ public class ValueUncertaintyConversionTools {
 	 * transforms value uncertainty information for every time stamp and dimension
 	 * into a MultivariateTimeSeries with Double values.
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate computeUpperBoundForEachDimension(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
@@ -176,7 +177,8 @@ public class ValueUncertaintyConversionTools {
 	 * returns a list of three ITimeSeriesMultivariate. The time series contain
 	 * lower bound, amount, upper bound for each dimension.
 	 * 
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static List<ITimeSeriesMultivariate> computeRangeUncertaintyTimeSeries(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
@@ -199,8 +201,8 @@ public class ValueUncertaintyConversionTools {
 
 	/**
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate computeLowerQuartileForEachDimension(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
@@ -211,8 +213,8 @@ public class ValueUncertaintyConversionTools {
 
 	/**
 	 * 
-	 * @param uncertainties
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate computeUpperQuartileForEachDimension(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {
@@ -226,7 +228,8 @@ public class ValueUncertaintyConversionTools {
 	 * returns a list of five ITimeSeriesMultivariate. The time series contain lower
 	 * bound, 25% quartile, amount, 75% quartile, upper bound for each dimension.
 	 * 
-	 * @return
+	 * @param uncertainties uncertainties
+	 * @return time series
 	 */
 	public static List<ITimeSeriesMultivariate> computeDistributionUncertaintiesTimeSeriesForEachDimension(
 			ITimeSeries<List<IValueUncertainty>> uncertainties) {

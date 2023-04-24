@@ -24,10 +24,8 @@ public class AbstractTimeValuePair<T> implements ITimeValuePair<T> {
 	protected T value;
 
 	/**
-	 * @param timestamp
-	 *            the time stamp
-	 * @param value
-	 *            the value
+	 * @param timestamp the time stamp
+	 * @param value     the value
 	 */
 	public AbstractTimeValuePair(long timestamp, T value) {
 		this.timestamp = timestamp;
@@ -45,8 +43,8 @@ public class AbstractTimeValuePair<T> implements ITimeValuePair<T> {
 	/**
 	 * equals function for a general time value pair.
 	 * 
-	 * @param obj
-	 * @return
+	 * @param obj obj
+	 * @return equals?
 	 */
 	@Override
 	public boolean equals(Object obj) {

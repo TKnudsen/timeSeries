@@ -13,6 +13,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.github.TKnudsen.ComplexDataObject.model.io.parsers.objects.DoubleParser;
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.ComplexDataObject.model.tools.StatisticsSupport;
 import com.github.TKnudsen.ComplexDataObject.model.weighting.Long.LinearLongWeightingKernel;
@@ -48,14 +49,16 @@ public final class TimeSeriesTools {
 
 	public static Long YEAR_IN_MILLISECONDS = 31556952000L; // 365.2425 days a solar year
 
+	private static DoubleParser doubleParser = new DoubleParser();
+
 	private TimeSeriesTools() {
 	}
 
 	/**
 	 * retrieves the minimum time stamp of all time series
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param timeSeries time series
+	 * @return long
 	 */
 	public static long getMinStart(Collection<ITimeSeriesUnivariate> timeSeries) {
 		long min = Long.MAX_VALUE - 1;
@@ -73,8 +76,8 @@ public final class TimeSeriesTools {
 	/**
 	 * retrieves the minimum time stamp of all time series
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param timeSeries time series
+	 * @return long
 	 */
 	public static long getMaxEnd(Collection<ITimeSeriesUnivariate> timeSeries) {
 		long max = Long.MIN_VALUE + 1;
@@ -145,13 +148,40 @@ public final class TimeSeriesTools {
 	 * 
 	 * Attention: ignores null and NaN values in the time series.
 	 * 
-	 * @param timeSeries
+	 * @param timeSeries                     time series
 	 * @param weightIncreaseOverTimeAdditive additive way to add more weight to
-	 *                                       later time stamps
-	 * @return
+	 *                                       later time stamps. 0 means no increase
+	 * @return double
 	 */
 	public static final double getMeanWeighted(ITimeSeries<? extends Double> timeSeries,
 			double weightIncreaseOverTimeAdditive) {
+
+		return getMeanWeighted(timeSeries, weightIncreaseOverTimeAdditive, 1.0);
+	}
+
+	/**
+	 * calculates the mean/average of a time series. With the flag
+	 * 'weightIncreaseOverTime', it is possible to weight later time stamps stronger
+	 * than earlier ones. In this way a trend-like tendency can be inferred in a
+	 * single value.
+	 * 
+	 * Attention: ignores null and NaN values in the time series.
+	 * 
+	 * @param timeSeries                           time series
+	 * @param weightIncreaseOverTimeAdditive       additive way to add more weight
+	 *                                             to later time stamps. 0 means no
+	 *                                             increase
+	 * @param weightIncreaseOverTimeMultiplicative multiplicative way to add more
+	 *                                             weight to later time stamps,
+	 *                                             suited to model recent weightings
+	 *                                             even for long (high-frequent)
+	 *                                             time series where additive models
+	 *                                             do not work well. 1 means no
+	 *                                             increase
+	 * @return double
+	 */
+	public static final double getMeanWeighted(ITimeSeries<? extends Double> timeSeries,
+			double weightIncreaseOverTimeAdditive, double weightIncreaseOverTimeMultiplicative) {
 
 		Objects.requireNonNull(timeSeries);
 
@@ -163,15 +193,18 @@ public final class TimeSeriesTools {
 		double sum = 0;
 
 		for (Long timeStamp : timeSeries.getTimestamps()) {
-			w += weightIncreaseOverTimeAdditive;
-
 			Double v = timeSeries.getValue(timeStamp, false);
 
-			if (v == null || Double.isNaN(v))
+			if (v == null || Double.isNaN(v)) {
+				w *= weightIncreaseOverTimeMultiplicative;
+				w += weightIncreaseOverTimeAdditive;
 				continue;
-
-			sum += (v * w);
-			wSum += w;
+			} else {
+				sum += (v * w);
+				wSum += w;
+				w *= weightIncreaseOverTimeMultiplicative;
+				w += weightIncreaseOverTimeAdditive;
+			}
 		}
 
 		return MathFunctions.round(sum / wSum, 8);
@@ -180,8 +213,8 @@ public final class TimeSeriesTools {
 	/**
 	 * ignores Double.NaN leading to results even with NaN values.
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param timeSeries time series
+	 * @return double
 	 */
 	public static double getMean(ITimeSeries<? extends Double> timeSeries) {
 		if (timeSeries == null)
@@ -272,8 +305,10 @@ public final class TimeSeriesTools {
 	 * Dividing the result by the mean value of the time series allows percentage
 	 * trend assessment.
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * Attention: has problems with values between [-1 ... 1]
+	 * 
+	 * @param timeSeries time series
+	 * @return double
 	 */
 	public static double getLinearTrend(ITimeSeries<Double> timeSeries) {
 		if (timeSeries == null)
@@ -550,9 +585,9 @@ public final class TimeSeriesTools {
 	 * series interval. if the TimeQuantization of the patternInterval is at least
 	 * of one day length, the next 00:00:00 GMT time is achieved
 	 * 
-	 * @param startTime
-	 * @param patternInterval
-	 * @return
+	 * @param startTime       start
+	 * @param patternInterval interval
+	 * @return date
 	 */
 	public static Date getDateAfterStartTimeAccordingToPatternInterval(long startTime, TimeDuration patternInterval) {
 
@@ -602,8 +637,8 @@ public final class TimeSeriesTools {
 	/**
 	 * Provides a clone of a given time series.
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param timeSeries time series
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate cloneTimeSeries(ITimeSeriesUnivariate timeSeries) {
 		if (timeSeries == null)
@@ -645,9 +680,9 @@ public final class TimeSeriesTools {
 
 	/**
 	 * 
-	 * @param timeSeries
-	 * @param time
-	 * @return
+	 * @param timeSeries time series
+	 * @param time       time
+	 * @return list
 	 */
 	public static List<Long> getNearestTimeStampNeighbors(ITimeSeries<Double> timeSeries, Long time) {
 
@@ -670,13 +705,13 @@ public final class TimeSeriesTools {
 	 * returns the value of a time series at a given position in time (timeStamp).
 	 * Uses left and right timeStamps for the linear interpolation.
 	 * 
-	 * @param timeSeries
-	 * @param leftTimeStamp
-	 * @param rightTimeStamp
-	 * @param timeStamp
-	 * @return
-	 * @throws IllegalArgumentException
-	 * @throws IndexOutOfBoundsException
+	 * @param timeSeries     time series
+	 * @param leftTimeStamp  left
+	 * @param rightTimeStamp right
+	 * @param timeStamp      time stamp
+	 * @return double
+	 * @throws IllegalArgumentException  e
+	 * @throws IndexOutOfBoundsException e
 	 */
 	public static double getInterpolatedValue(ITimeSeries<Double> timeSeries, long leftTimeStamp, long rightTimeStamp,
 			long timeStamp) throws IllegalArgumentException, IndexOutOfBoundsException {
@@ -708,9 +743,9 @@ public final class TimeSeriesTools {
 	 * time (timeStamp). Uses left and right timeStamps for the linear
 	 * interpolation.
 	 * 
-	 * @param timeSeries
-	 * @param timeStamp
-	 * @return
+	 * @param timeSeries time series
+	 * @param timeStamp  time stamp
+	 * @return double
 	 */
 	public static double getInterpolatedValue(ITimeSeries<Double> timeSeries, long timeStamp) {
 
@@ -752,9 +787,9 @@ public final class TimeSeriesTools {
 	 * only uses the two very outer (earliest/latest) time-value pairs to make an
 	 * extrapolation. use the predict method for a more sophisticated approach.
 	 * 
-	 * @param timeSeries
+	 * @param timeSeries time series
 	 * @param target     the time stamp of the value to be extrapolated
-	 * @return
+	 * @return double
 	 */
 	public static double extrapolate(ITimeSeriesUnivariate timeSeries, long target) {
 		Objects.requireNonNull(timeSeries);
@@ -794,9 +829,9 @@ public final class TimeSeriesTools {
 	 * 
 	 * Insanely slow for long time series with high quantization
 	 * 
-	 * @param ts
-	 * @param target
-	 * @return
+	 * @param timeSeries time series
+	 * @param target     target
+	 * @return doubles
 	 */
 	public static double[] predict(ITimeSeriesUnivariate timeSeries, long target) {
 		Objects.requireNonNull(timeSeries);
@@ -808,17 +843,19 @@ public final class TimeSeriesTools {
 	}
 
 	/**
+	 * uses past pairwise segments to model a robust future value. an aggregation of
+	 * a great many to be precise.
 	 * 
 	 * only towards the future direction. does not work for targets earlier than the
 	 * time series.
 	 * 
 	 * Insanely slow for long time series with high quantization
 	 * 
-	 * @param ts
-	 * @param target
-	 * @param maxAgeTimeStamp time stamps of this age or older receive 0.0 impact
-	 *                        for the prediction
-	 * @return
+	 * @param timeSeries      time series
+	 * @param target          target
+	 * @param maxAgeTimeStamp the time stamp in the past from which on value
+	 *                        prediction will have an impact on the result.
+	 * @return doubles
 	 */
 	public static double[] predict(ITimeSeriesUnivariate timeSeries, long target, long maxAgeTimeStamp) {
 
@@ -875,9 +912,6 @@ public final class TimeSeriesTools {
 					weights.add(w);
 				}
 
-//		StatisticsSupport p = new StatisticsSupport(predictions);
-//		StatisticsSupport w = new StatisticsSupport(weights);
-
 		// create weighted average
 		double weightedAverage = 0.0;
 		double weightsum = 0.0;
@@ -906,16 +940,16 @@ public final class TimeSeriesTools {
 	/**
 	 * segments a given time series
 	 * 
-	 * @param timeSeries
-	 * @param start
-	 * @param end
+	 * @param timeSeries                     time series
+	 * @param start                          star
+	 * @param end                            end
 	 * @param requireStartEndTimestampsExist whether or not the identification of
 	 *                                       the subsequence is sort of
 	 *                                       sophisticated in case of NOT exact
 	 *                                       matches. If not a subsequence is
 	 *                                       returned with start/end time stamps
 	 *                                       larger than the defined interval.
-	 * @return
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
 			boolean requireStartEndTimestampsExist) {
@@ -962,9 +996,9 @@ public final class TimeSeriesTools {
 	/**
 	 * segments a given time series
 	 * 
-	 * @param timeSeries
-	 * @param start
-	 * @param end
+	 * @param timeSeries                     time series
+	 * @param start                          start
+	 * @param end                            end
 	 * @param requireStartEndTimestampsExist whether or not the identification of
 	 *                                       the subsequence requires exact matches
 	 *                                       at start and end. If not a subsequence
@@ -973,7 +1007,7 @@ public final class TimeSeriesTools {
 	 * @param cropIfTimeStampsDontExist      if no exact match is needed this
 	 *                                       routine crops start and end time stamps
 	 *                                       by linear interpolation.
-	 * @return
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeriesUnivariate timeSeries, long start, long end,
 			boolean requireStartEndTimestampsExist, boolean cropIfTimeStampsDontExist) {
@@ -1021,11 +1055,11 @@ public final class TimeSeriesTools {
 	 * No extrapolation is applied if the existing temporal subset does not cover
 	 * the entire required interval (start end).
 	 * 
-	 * @param timeSeries
-	 * @param start
-	 * @param end
-	 * @param temporalCropStrategy
-	 * @return
+	 * @param timeSeries           time series
+	 * @param start                start
+	 * @param end                  end
+	 * @param temporalCropStrategy category
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getSubsequence(ITimeSeries<Double> timeSeries, long start, long end,
 			TemporalCropStrategy temporalCropStrategy) {
@@ -1123,9 +1157,9 @@ public final class TimeSeriesTools {
 	/**
 	 * segments a time series w.r.t. a given duration pattern.
 	 * 
-	 * @param timeSeries
-	 * @param timeDuration
-	 * @return
+	 * @param timeSeries   time series
+	 * @param timeDuration duration
+	 * @return time series list
 	 */
 	public static List<ITimeSeriesUnivariate> segmentTimeSeries(ITimeSeriesUnivariate timeSeries,
 			TimeDuration timeDuration) {
@@ -1152,8 +1186,8 @@ public final class TimeSeriesTools {
 	 * merges a list of time series. builds up on identical timestamps. does not
 	 * check consistencies such as gaps in between series.
 	 * 
-	 * @param timeSeriesList
-	 * @return
+	 * @param timeSeriesList time series
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getMeanTimeSeries(Collection<ITimeSeriesUnivariate> timeSeriesList) {
 		SortedMap<Long, List<Double>> rawValues = new TreeMap<>();
@@ -1193,9 +1227,9 @@ public final class TimeSeriesTools {
 	 * [5] upper quantile
 	 * </p>
 	 * 
-	 * @param timeSeriesList
+	 * @param timeSeriesList time series
 	 * @param quantil        between [0-100]
-	 * @return
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate[] createQuantilesQuartilesMeanTimeSeries(
 			Collection<ITimeSeriesUnivariate> timeSeriesList, double quantil) {
@@ -1249,8 +1283,8 @@ public final class TimeSeriesTools {
 	 * Checks whether a timeSeries is equidistant. A time series is equidistant iff
 	 * the time intervals (the quantization) between any to time stamps are equal.
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param timeSeries time series
+	 * @return boolean
 	 */
 	public static boolean isEquidistant(ITimeSeries<Double> timeSeries) {
 		long[] quantizations = getQuantizationsAsLong(timeSeries);
@@ -1274,10 +1308,10 @@ public final class TimeSeriesTools {
 	/**
 	 * gathers the average value within a given interval.
 	 * 
-	 * @param timeSeries
-	 * @param start
-	 * @param end
-	 * @return
+	 * @param timeSeries time series
+	 * @param start      start
+	 * @param end        end
+	 * @return value
 	 */
 	public static double getValueFromInterval(ITimeSeries<? extends Double> timeSeries, long start, long end) {
 		if (start > timeSeries.getLastTimestamp())
@@ -1335,14 +1369,14 @@ public final class TimeSeriesTools {
 
 	/**
 	 * calculates a time series that represents the delta of the value domain of the
-	 * original time series between any two neighboring time stamps. does not take
-	 * the duration between time stamps into account
+	 * original time series between any two neighboring time stamps. Does take the
+	 * duration between time stamps into account, normalized to years.
 	 * 
-	 * @param timeSeries
+	 * @param timeSeries     time series
 	 * @param relativeValues if percentage values of change is desired. be aware
 	 *                       that relative time series may produce infinite values
 	 *                       due to the division-by-zero problem.
-	 * @return
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getChangeTimeSeries(ITimeSeriesUnivariate timeSeries, boolean relativeValues) {
 
@@ -1350,21 +1384,29 @@ public final class TimeSeriesTools {
 
 		List<ITimeValuePair<Double>> timeValuePairs = new ArrayList<>();
 
+		Long lastTimeStamp = null;
 		Double lastValue = null;
 		for (Long timeStamp : timeSeries.getTimestamps()) {
 			double value = timeSeries.getValue(timeStamp, false);
 
-			if (lastValue != null) {
+			if (lastValue != null && lastTimeStamp != null) {
+				long dur = Math.abs(timeStamp - lastTimeStamp);
+				double y = dur / (double) DateTools.YEAR_IN_MILLISECONDS_EXACT;
+
 				if (relativeValues) {
 					if (lastValue == 0)
 						timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, 0.0));
-					else
-						timeValuePairs
-								.add(new TimeValuePairUnivariate(timeStamp, (value - lastValue) / Math.abs(lastValue)));
-				} else
-					timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, value - lastValue));
+					else {
+						double relative = ((value - lastValue) / Math.abs(lastValue)) * 100 / y;
+						timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, relative));
+					}
+				} else {
+					double diff = (value - lastValue) / y;
+					timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, diff));
+				}
 			}
 
+			lastTimeStamp = timeStamp;
 			lastValue = value;
 		}
 
@@ -1374,15 +1416,16 @@ public final class TimeSeriesTools {
 	/**
 	 * calculates a time series that represents the delta of the value domain of the
 	 * original time series between a given time stamp and an interpolated time
-	 * stamp in the past with temporal distance of comparisonDuration.
+	 * stamp in the past with temporal distance of comparisonDuration. Does take the
+	 * duration between time stamps into account, normalized to years.
 	 * 
-	 * @param timeSeries
+	 * @param timeSeries         time series
 	 * @param relativeValues     if percentage values of change is desired. be aware
 	 *                           that relative time series may produce infinite
 	 *                           values due to the division-by-zero problem.
 	 * @param comparisonDuration duration between two time stamps for the change
 	 *                           comparison
-	 * @return
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getChangeTimeSeries(ITimeSeriesUnivariate timeSeries, boolean relativeValues,
 			TimeDuration comparisonDuration) {
@@ -1402,17 +1445,20 @@ public final class TimeSeriesTools {
 			double lastValue = getInterpolatedValue(timeSeries, earlier);
 
 			if (!Double.isNaN(lastValue)) {
-				if (relativeValues) {
-					if (lastValue == 0)
-						timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, 0.0));
-					else
-						timeValuePairs
-								.add(new TimeValuePairUnivariate(timeStamp, (value - lastValue) / Math.abs(lastValue)));
-				} else
-					timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, value - lastValue));
-			}
+				long dur = Math.abs(timeStamp - earlier);
+				double y = dur / (double) DateTools.YEAR_IN_MILLISECONDS_EXACT;
 
-			lastValue = value;
+				if (relativeValues) {
+					if (lastValue == 0) {
+					} else {
+						double relative = ((value - lastValue) / Math.abs(lastValue)) * 100 / y;
+						timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, relative));
+					}
+				} else {
+					double diff = (value - lastValue) / y;
+					timeValuePairs.add(new TimeValuePairUnivariate(timeStamp, diff));
+				}
+			}
 		}
 
 		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
@@ -1426,10 +1472,10 @@ public final class TimeSeriesTools {
 	 * NOTE: Values in the interval [-2...2] are handled with a linear function
 	 * (*0,345) to fit the overall ln curve of the function.
 	 * 
-	 * @param timeSeries
+	 * @param timeSeries          time series
 	 * @param allowNegativeValues uses negation to produce numbers. if false NaN is
 	 *                            returned for particular time stamps.
-	 * @return
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getLogarithmLikeTimeSeries(ITimeSeriesUnivariate timeSeries,
 			boolean allowNegativeValues) {
@@ -1459,11 +1505,9 @@ public final class TimeSeriesTools {
 	/**
 	 * subtracts a constant value and returns a new time series
 	 * 
-	 * @param timeSeries
-	 * @param value      if percentage values of change is desired. be aware that
-	 *                   relative time series may produce infinite values due to the
-	 *                   division-by-zero problem.
-	 * @return
+	 * @param timeSeries time series
+	 * @param value
+	 * @return time series
 	 */
 	public static ITimeSeriesUnivariate getSubstractedValueTimeSeries(ITimeSeriesUnivariate timeSeries, double value) {
 
@@ -1477,6 +1521,17 @@ public final class TimeSeriesTools {
 		}
 
 		return TimeSeriesUnivariateFactory.newTimeSeries(timeValuePairs);
+	}
+
+	/**
+	 * adds a constant value and returns a new time series
+	 * 
+	 * @param timeSeries time series
+	 * @param value
+	 * @return time series
+	 */
+	public static ITimeSeriesUnivariate getAddedValueTimeSeries(ITimeSeriesUnivariate timeSeries, double value) {
+		return getSubstractedValueTimeSeries(timeSeries, -value);
 	}
 
 	public static long getFirstTimestamp(Collection<ITimeSeriesUnivariate> timeSeriesList) {
@@ -1514,8 +1569,8 @@ public final class TimeSeriesTools {
 	/**
 	 * checks whether a time series contains NaN.
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param timeSeries time series
+	 * @return boolean
 	 */
 	public static boolean containsNaN(ITimeSeries<? extends Double> timeSeries) {
 		for (Double d : timeSeries.getValues())
@@ -1529,9 +1584,8 @@ public final class TimeSeriesTools {
 	 * removes all occurrences / time value pairs with values equals a given T.
 	 * 
 	 * @param <T>        type of object
-	 * @param timeSeries
+	 * @param timeSeries time series
 	 * @param value      value
-	 * @return
 	 */
 	public static <T> void remove(ITimeSeries<T> timeSeries, T value) {
 		if (timeSeries == null)
@@ -1541,14 +1595,19 @@ public final class TimeSeriesTools {
 			return;
 
 		int i = 0;
-		while (i < timeSeries.size())
-			if (value instanceof Double && Double.isNaN((double) value)
-					&& Double.isNaN((double) timeSeries.getValue(i)))
-				timeSeries.removeTimeValue(i);
-			else if (timeSeries.getValue(i) == value)
+		while (i < timeSeries.size()) {
+			if (value instanceof Double) {
+				double d = doubleParser.apply(value);
+				if (d == doubleParser.apply(timeSeries.getValue(i)))
+//				if (Double.isNaN(d) && Double.isNaN(doubleParser.apply(timeSeries.getValue(i))))
+					timeSeries.removeTimeValue(i);
+				else
+					i++;
+			} else if (timeSeries.getValue(i) == value)
 				timeSeries.removeTimeValue(i);
 			else
 				i++;
+		}
 	}
 
 }

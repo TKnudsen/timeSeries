@@ -62,8 +62,8 @@ public class JsonWorkflowLoader {
 	/**
 	 * needs testing whether an interface can be defined as a type reference
 	 * 
-	 * @param file
-	 * @return
+	 * @param file file
+	 * @return time series workflow
 	 */
 	public static List<ITimeSeriesDataMiningWorkflow<ITimeSeriesUnivariate>> loadWorkflowListFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesWorkflowObjectMapper();

@@ -32,12 +32,12 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 public class TimeDurationTools {
 
 	/**
-	 * Calculates the flat date before the start time according to the given
-	 * time series interval. example: 00:00:00 @ hourly means 01:00:00
+	 * Calculates the flat date before the start time according to the given time
+	 * series interval. example: 00:00:00 @ hourly means 01:00:00
 	 * 
-	 * @param startTime
-	 * @param patternInterval
-	 * @return
+	 * @param startTime       start
+	 * @param patternInterval interval
+	 * @return date
 	 */
 	@SuppressWarnings("deprecation")
 	public static Date getDateBeforeStartTimeAccordingToPatternInterval(long startTime, TimeDuration patternInterval) {
@@ -82,12 +82,12 @@ public class TimeDurationTools {
 
 	/**
 	 * Calculates the flat date/time after the start time according to the given
-	 * time series interval. if the TimeQuantization of the patternInterval is
-	 * at least of one day length, the next 00:00:00 GMT time is acchieved
+	 * time series interval. if the TimeQuantization of the patternInterval is at
+	 * least of one day length, the next 00:00:00 GMT time is acchieved
 	 * 
-	 * @param startTime
-	 * @param patternInterval
-	 * @return
+	 * @param startTime       start
+	 * @param patternInterval interval
+	 * @return date
 	 */
 	public static Date getDateAfterStartTimeAccordingToPatternInterval(long startTime, TimeDuration patternInterval) {
 
@@ -102,10 +102,10 @@ public class TimeDurationTools {
 	}
 
 	/**
-	 * Heuristics that calculates the most suitable equi-distance of a given
-	 * time series.
+	 * Heuristics that calculates the most suitable equi-distance of a given time
+	 * series.
 	 * 
-	 * @param timeSeries
+	 * @param timeSeries time series
 	 * @return TimeSeriesInterval of the dominating quantization
 	 */
 	public static TimeDuration getDominatingTimeSeriesQuantization(ITimeSeries<?> timeSeries) {
@@ -135,8 +135,8 @@ public class TimeDurationTools {
 	/**
 	 * Calculates the TimeDuration representation of a given duration in long.
 	 * 
-	 * @param duration
-	 * @return
+	 * @param duration duration
+	 * @return time duration
 	 */
 	public static TimeDuration calculateTimeDuration(long duration) {
 		// Milliseconds
@@ -167,46 +167,46 @@ public class TimeDurationTools {
 		}
 	}
 
-	/**
-	 * @deprecated use calculateTimeDuration.
-	 * @param equidistanceInMillis
-	 * @return
-	 */
-	public static TimeDuration calculateEquidistanceFromLongMillis(long equidistanceInMillis) {
-		// Milliseconds
-		if (equidistanceInMillis % 1000 == 0) {
-			equidistanceInMillis /= 1000;
-			// Seconds
-			if (equidistanceInMillis % 60 == 0) {
-				equidistanceInMillis /= 60;
-				// Minutes
-				if (equidistanceInMillis % 60 == 0) {
-					equidistanceInMillis /= 60;
-					// Hours
-					if (equidistanceInMillis % 24 == 0) {
-						equidistanceInMillis /= 24;
-						// Days
-						return new TimeDuration(TimeQuantization.DAYS, equidistanceInMillis);
-					} else {
-						return new TimeDuration(TimeQuantization.HOURS, equidistanceInMillis);
-					}
-				} else {
-					return new TimeDuration(TimeQuantization.MINUTES, equidistanceInMillis);
-				}
-			} else {
-				return new TimeDuration(TimeQuantization.SECONDS, equidistanceInMillis);
-			}
-		} else {
-			return new TimeDuration(TimeQuantization.MILLISECONDS, equidistanceInMillis);
-		}
-	}
+//	/**
+//	 * @deprecated use calculateTimeDuration.
+//	 * @param equidistanceInMillis
+//	 * @return
+//	 */
+//	public static TimeDuration calculateEquidistanceFromLongMillis(long equidistanceInMillis) {
+//		// Milliseconds
+//		if (equidistanceInMillis % 1000 == 0) {
+//			equidistanceInMillis /= 1000;
+//			// Seconds
+//			if (equidistanceInMillis % 60 == 0) {
+//				equidistanceInMillis /= 60;
+//				// Minutes
+//				if (equidistanceInMillis % 60 == 0) {
+//					equidistanceInMillis /= 60;
+//					// Hours
+//					if (equidistanceInMillis % 24 == 0) {
+//						equidistanceInMillis /= 24;
+//						// Days
+//						return new TimeDuration(TimeQuantization.DAYS, equidistanceInMillis);
+//					} else {
+//						return new TimeDuration(TimeQuantization.HOURS, equidistanceInMillis);
+//					}
+//				} else {
+//					return new TimeDuration(TimeQuantization.MINUTES, equidistanceInMillis);
+//				}
+//			} else {
+//				return new TimeDuration(TimeQuantization.SECONDS, equidistanceInMillis);
+//			}
+//		} else {
+//			return new TimeDuration(TimeQuantization.MILLISECONDS, equidistanceInMillis);
+//		}
+//	}
 
 	/**
-	 * Estimates the most appropriate TimeQuantization (minutes, hours, days) of
-	 * a given duration.
+	 * Estimates the most appropriate TimeQuantization (minutes, hours, days) of a
+	 * given duration.
 	 * 
-	 * @param duration
-	 * @return
+	 * @param duration duration
+	 * @return timeQuantization
 	 */
 	public static TimeQuantization guessTimeQuantization(long duration) {
 		// Milliseconds?
@@ -241,40 +241,40 @@ public class TimeDurationTools {
 
 	}
 
-	/**
-	 * @deprecated use guessTimeQuantization
-	 * @param equidistanceInMillis
-	 * @return
-	 */
-	public static TimeQuantization calculateSuitableTimeQuantization(long equidistanceInMillis) {
-		// Milliseconds?
-		if (equidistanceInMillis < 1000)
-			return TimeQuantization.MILLISECONDS;
-		else {
-			equidistanceInMillis /= 1000;
-			// Seconds?
-			if (equidistanceInMillis < 60)
-				return TimeQuantization.SECONDS;
-			else {
-				equidistanceInMillis /= 60;
-				// Minutes?
-				if (equidistanceInMillis < 60)
-					return TimeQuantization.MINUTES;
-				else {
-					equidistanceInMillis /= 60;
-					// Hours?
-					if (equidistanceInMillis < 24)
-						return TimeQuantization.HOURS;
-					else {
-						equidistanceInMillis /= 24;
-						// Days?
-						if (equidistanceInMillis < 365)
-							return TimeQuantization.DAYS;
-						else
-							return TimeQuantization.YEARS;
-					}
-				}
-			}
-		}
-	}
+//	/**
+//	 * @deprecated use guessTimeQuantization
+//	 * @param equidistanceInMillis
+//	 * @return
+//	 */
+//	public static TimeQuantization calculateSuitableTimeQuantization(long equidistanceInMillis) {
+//		// Milliseconds?
+//		if (equidistanceInMillis < 1000)
+//			return TimeQuantization.MILLISECONDS;
+//		else {
+//			equidistanceInMillis /= 1000;
+//			// Seconds?
+//			if (equidistanceInMillis < 60)
+//				return TimeQuantization.SECONDS;
+//			else {
+//				equidistanceInMillis /= 60;
+//				// Minutes?
+//				if (equidistanceInMillis < 60)
+//					return TimeQuantization.MINUTES;
+//				else {
+//					equidistanceInMillis /= 60;
+//					// Hours?
+//					if (equidistanceInMillis < 24)
+//						return TimeQuantization.HOURS;
+//					else {
+//						equidistanceInMillis /= 24;
+//						// Days?
+//						if (equidistanceInMillis < 365)
+//							return TimeQuantization.DAYS;
+//						else
+//							return TimeQuantization.YEARS;
+//					}
+//				}
+//			}
+//		}
+//	}
 }

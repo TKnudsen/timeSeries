@@ -86,9 +86,9 @@ public class PerceptuallyImporantPointsDescriptor
 	 * The transformation from time series to features. Separated from the eariler
 	 * time series processing for inheritance reasons.
 	 * 
-	 * @param processedTimeSeries
-	 * @param originalTimeSeries
-	 * @return
+	 * @param processedTimeSeries processed
+	 * @param originalTimeSeries  original
+	 * @return FV
 	 */
 	protected NumericalFeatureVector createFeatureVector(ITimeSeriesUnivariate processedTimeSeries,
 			ITimeSeriesUnivariate originalTimeSeries) {

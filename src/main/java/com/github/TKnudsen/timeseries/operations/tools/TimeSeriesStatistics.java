@@ -49,7 +49,7 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	/**
 	 * NANs are removed!
 	 * 
-	 * @param timeSeries
+	 * @param timeSeries time series
 	 */
 	public TimeSeriesStatistics(ITimeSeriesUnivariate timeSeries) {
 		if (timeSeries == null)
@@ -104,8 +104,8 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	/**
 	 * Must be between 0 and 100
 	 * 
-	 * @param percent
-	 * @return
+	 * @param percent percent
+	 * @return percentile
 	 */
 	public double getPercentile(int percent) {
 		return super.getPercentile((double) percent);
@@ -114,8 +114,8 @@ public class TimeSeriesStatistics extends DescriptiveStatistics {
 	/**
 	 * Must be between 0 and 100
 	 * 
-	 * @param percent
-	 * @return
+	 * @param percent percent
+	 * @return percentile
 	 */
 	public double getPercentile(double percent) {
 		return super.getPercentile((double) percent);
