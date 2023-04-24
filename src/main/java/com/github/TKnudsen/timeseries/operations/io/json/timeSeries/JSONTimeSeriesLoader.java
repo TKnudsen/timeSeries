@@ -75,8 +75,8 @@ public class JSONTimeSeriesLoader {
 	/**
 	 * needs testing whether an interface can be defined as a type reference
 	 * 
-	 * @param file
-	 * @return
+	 * @param file file
+	 * @return time series
 	 */
 	public static List<ITimeSeriesUnivariate> loadTSListFromFile(String file) {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();

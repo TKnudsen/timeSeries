@@ -36,11 +36,11 @@ public class TimeSeriesLabelingTools {
 	}
 
 	/**
-	 * retrieves events of changing labels for a ITemporalLabeling data
-	 * structure
+	 * retrieves events of changing labels for a ITemporalLabeling data structure
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param <O>        o
+	 * @param timeSeries time series
+	 * @return o
 	 */
 	public static <O extends Object> SortedMap<Long, O> getLabelChangeEvents(ITemporalLabeling<O> timeSeries) {
 		if (timeSeries == null)
@@ -54,12 +54,14 @@ public class TimeSeriesLabelingTools {
 		SortedMap<Long, O> eventLabels = timeSeries.getEventLabels();
 
 		if (ts == null)
-			return getLabelChangeEvents(intervalLabels, eventLabels, new TimeDuration(TimeQuantization.MILLISECONDS, 1));
+			return getLabelChangeEvents(intervalLabels, eventLabels,
+					new TimeDuration(TimeQuantization.MILLISECONDS, 1));
 
 		SortedMap<Long, O> sortedEvents = new TreeMap<Long, O>();
 
 		SortedMap<Long, O> labelProgressionOverTime = getLabelProgressionOverTime(timeSeries);
-		sortedEvents.put(labelProgressionOverTime.firstKey(), labelProgressionOverTime.get(labelProgressionOverTime.firstKey()));
+		sortedEvents.put(labelProgressionOverTime.firstKey(),
+				labelProgressionOverTime.get(labelProgressionOverTime.firstKey()));
 		O labelTmp = sortedEvents.get(labelProgressionOverTime.firstKey());
 		for (Long l : labelProgressionOverTime.keySet())
 			if (labelProgressionOverTime.get(l) != labelTmp) {
@@ -71,14 +73,16 @@ public class TimeSeriesLabelingTools {
 	}
 
 	/**
-	 * pure label signature without temporal information of a (e.g.) time
-	 * series.
+	 * pure label signature without temporal information of a (e.g.) time series.
 	 * 
-	 * @param intervalLabels
-	 * @param eventLabels
-	 * @return
+	 * @param <O>            o
+	 * @param intervalLabels labels
+	 * @param eventLabels    labels
+	 * @param timeDuration   timeDuration
+	 * @return objects
 	 */
-	public static <O extends Object> SortedMap<Long, O> getLabelChangeEvents(Ranking<TimeIntervalLabel<O>> intervalLabels, SortedMap<Long, O> eventLabels, TimeDuration timeDuration) {
+	public static <O extends Object> SortedMap<Long, O> getLabelChangeEvents(
+			Ranking<TimeIntervalLabel<O>> intervalLabels, SortedMap<Long, O> eventLabels, TimeDuration timeDuration) {
 
 		SortedMap<Long, O> sortedEvents = new TreeMap<Long, O>();
 
@@ -176,8 +180,9 @@ public class TimeSeriesLabelingTools {
 	/**
 	 * Attention: O will not be copied but also added to the clone
 	 * 
-	 * @param eventMap
-	 * @return
+	 * @param <O>      o
+	 * @param eventMap map
+	 * @return object
 	 */
 	public static <O extends Object> SortedMap<Long, O> cloneEventLabels(SortedMap<Long, O> eventMap) {
 		SortedMap<Long, O> newMap = new TreeMap<>();
@@ -194,8 +199,8 @@ public class TimeSeriesLabelingTools {
 	/**
 	 * clones labels
 	 * 
-	 * @param eventMap
-	 * @return
+	 * @param eventMap map
+	 * @return map
 	 */
 	public static SortedMap<Long, String> cloneEventLabelStrings(SortedMap<Long, String> eventMap) {
 		SortedMap<Long, String> newMap = new TreeMap<>();
@@ -212,24 +217,29 @@ public class TimeSeriesLabelingTools {
 	/**
 	 * Attention: O will not be copied but also added to the clone
 	 * 
-	 * @param intervalLabels
-	 * @return
+	 * @param <O>            o
+	 * @param intervalLabels labels
+	 * @return object
 	 */
-	public static <O extends Object> Ranking<TimeIntervalLabel<O>> cloneIntervalLabels(Ranking<TimeIntervalLabel<O>> intervalLabels) {
+	public static <O extends Object> Ranking<TimeIntervalLabel<O>> cloneIntervalLabels(
+			Ranking<TimeIntervalLabel<O>> intervalLabels) {
 		Ranking<TimeIntervalLabel<O>> newIntervalLabels = new Ranking<TimeIntervalLabel<O>>();
 
 		for (int i = 0; i < intervalLabels.size(); i++) {
-			newIntervalLabels.add(new TimeIntervalLabel<O>(new Long(intervalLabels.get(i).getStartTime()), new Long(intervalLabels.get(i).getEndTime()), intervalLabels.get(i).getLabel()));
+			newIntervalLabels.add(new TimeIntervalLabel<O>(new Long(intervalLabels.get(i).getStartTime()),
+					new Long(intervalLabels.get(i).getEndTime()), intervalLabels.get(i).getLabel()));
 		}
 
 		return newIntervalLabels;
 	}
 
-	public static Ranking<TimeIntervalLabel<String>> cloneIntervalLabelStrings(Ranking<TimeIntervalLabel<String>> intervalLabels) {
+	public static Ranking<TimeIntervalLabel<String>> cloneIntervalLabelStrings(
+			Ranking<TimeIntervalLabel<String>> intervalLabels) {
 		Ranking<TimeIntervalLabel<String>> newIntervalLabels = new Ranking<TimeIntervalLabel<String>>();
 
 		for (int i = 0; i < intervalLabels.size(); i++) {
-			newIntervalLabels.add(new TimeIntervalLabel<String>(new Long(intervalLabels.get(i).getStartTime()), new Long(intervalLabels.get(i).getEndTime()), new String(intervalLabels.get(i).getLabel())));
+			newIntervalLabels.add(new TimeIntervalLabel<String>(new Long(intervalLabels.get(i).getStartTime()),
+					new Long(intervalLabels.get(i).getEndTime()), new String(intervalLabels.get(i).getLabel())));
 		}
 
 		return newIntervalLabels;

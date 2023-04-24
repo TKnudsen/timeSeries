@@ -67,9 +67,11 @@ public class MinMaxNormalization extends TimeSeriesProcessor<ITimeSeriesUnivaria
 			double max = TimeSeriesTools.getMaxValue(timeSeries);
 			for (int i = 0; i < timeSeries.size(); i++)
 				if (globalMinMax) // also true when this.globalmin/max are set
-					timeSeries.replaceValue(i, MathFunctions.linearScale(globalMin, globalMax, timeSeries.getValue(i)));
+					timeSeries.replaceValue(i,
+							MathFunctions.linearScale(globalMin, globalMax, timeSeries.getValue(i).doubleValue()));
 				else
-					timeSeries.replaceValue(i, MathFunctions.linearScale(min, max, timeSeries.getValue(i)));
+					timeSeries.replaceValue(i,
+							MathFunctions.linearScale(min, max, timeSeries.getValue(i).doubleValue()));
 		}
 	}
 

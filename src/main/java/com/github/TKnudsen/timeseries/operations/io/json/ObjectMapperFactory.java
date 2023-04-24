@@ -29,7 +29,7 @@ public class ObjectMapperFactory {
 	/**
 	 * retrieves an ObjectMapper for the JSON-IO of timeseries datao
 	 * 
-	 * @return
+	 * @return object mapper
 	 */
 	public static ObjectMapper getTimeSeriesObjectMapper() {
 		if (timeSeriesObjectMapper == null)
@@ -48,10 +48,9 @@ public class ObjectMapperFactory {
 	}
 
 	/**
-	 * retrieves an ObjectMapper for the JSON-IO of timeseries data mining
-	 * workflows
+	 * retrieves an ObjectMapper for the JSON-IO of timeseries data mining workflows
 	 * 
-	 * @return
+	 * @return object mapper
 	 */
 	public static ObjectMapper getTimeSeriesWorkflowObjectMapper() {
 		if (timeSeriesWorkflowObjectMapper == null)

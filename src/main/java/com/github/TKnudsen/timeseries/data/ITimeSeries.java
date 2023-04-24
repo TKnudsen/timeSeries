@@ -49,27 +49,27 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription, Iterable<Ent
 	 * 
 	 * @param timeStamp         the time stamp as long
 	 * @param requireExactMatch whether an exact match is needed
-	 * @return
-	 * @throws IllegalArgumentException
+	 * @return index
+	 * @throws IllegalArgumentException if an illegal argument is given
 	 */
 	int findByDate(long timeStamp, boolean requireExactMatch) throws IllegalArgumentException;
 
 	/**
 	 * temporal access
 	 * 
-	 * @param timeStamp
-	 * @return
+	 * @param timeStamp time stamp
+	 * @return boolean
 	 */
 	boolean containsTimestamp(long timeStamp);
 
 	/**
 	 * temporal access
 	 * 
-	 * @param timeStamp
-	 * @param allowInterpolation
-	 * @return
-	 * @throws IndexOutOfBoundsException
-	 * @throws IllegalArgumentException
+	 * @param timeStamp          time stamp
+	 * @param allowInterpolation allow interpolation?
+	 * @return value
+	 * @throws IndexOutOfBoundsException e
+	 * @throws IllegalArgumentException  e
 	 */
 	T getValue(long timeStamp, boolean allowInterpolation) throws IndexOutOfBoundsException, IllegalArgumentException;
 
@@ -100,7 +100,7 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription, Iterable<Ent
 	/**
 	 * time series can be renamed
 	 * 
-	 * @param name
+	 * @param name name
 	 */
 	public void setName(String name);
 

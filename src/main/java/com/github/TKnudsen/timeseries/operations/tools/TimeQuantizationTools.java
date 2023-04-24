@@ -63,7 +63,7 @@ public class TimeQuantizationTools {
 
 	/**
 	 * 
-	 * @param timeStamps
+	 * @param timeStamps time stamps
 	 * @return List of timeStamp distances
 	 */
 	public static List<Long> getQuantizationList(List<Long> timeStamps) {
@@ -81,7 +81,7 @@ public class TimeQuantizationTools {
 
 	/**
 	 * 
-	 * @param quantizationList
+	 * @param quantizationList list
 	 * @return Sorted distribution of timeStamp distances
 	 */
 	public static SortedMap<Long, Integer> calculateQuantizationDistribution(List<Long> quantizationList) {
@@ -100,18 +100,18 @@ public class TimeQuantizationTools {
 	 * 
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return long
 	 */
 	private static Long gcd(Long a, Long b) {
 		if (a == 0)
 			return b;
 		return gcd(b % a, a);
 	}
-		
+
 	/**
 	 * 
-	 * @param quantizationList
-	 * @return
+	 * @param quantizationList list
+	 * @return long
 	 */
 	private static Long findGCD(List<Long> quantizationList) {
 		Long result = quantizationList.get(0);
@@ -120,20 +120,20 @@ public class TimeQuantizationTools {
 		}
 		return result;
 	}
-		
+
 	/**
 	 * 
-	 * @param quantizationList
-	 * @return
+	 * @param quantizationList list
+	 * @return longs
 	 */
 	private static List<Long> findQuantizationWithMostOccurences(List<Long> quantizationList) {
-		
+
 		List<Long> result = new ArrayList<Long>();
-		
+
 		SortedMap<Long, Integer> quantizationDist = calculateQuantizationDistribution(quantizationList);
 		List<Entry<Long, Integer>> quantizationDistEntryList = new ArrayList<>(quantizationDist.entrySet());
 		quantizationDistEntryList.sort(Collections.reverseOrder(Entry.comparingByValue()));
-		
+
 		if (quantizationDistEntryList.size() > 0) {
 			long firstGuess = quantizationDistEntryList.get(0).getKey();
 			long firstGuessOccurences = quantizationDistEntryList.get(0).getValue();
@@ -152,25 +152,27 @@ public class TimeQuantizationTools {
 
 	/**
 	 * 
-	 * @param quantizationList
-	 * @return List with quantization suggestions, criterion: most occurrences and greatest common divisor
+	 * @param quantizationList list
+	 * @param gcd              gcd
+	 * @return List with quantization suggestions, criterion: most occurrences and
+	 *         greatest common divisor
 	 */
 	public static List<Long> guessQuantization(List<Long> quantizationList, boolean gcd) {
-		
+
 		List<Long> quantizationGuesses = new ArrayList<Long>();
-		
-		if(!gcd) {
+
+		if (!gcd) {
 			quantizationGuesses.addAll(findQuantizationWithMostOccurences(quantizationList));
 		} else {
 			quantizationGuesses.add(findGCD(quantizationList));
-		} 
+		}
 		return quantizationGuesses;
 	}
 
 	/**
 	 *
-	 * @param <X>
-	 * @param <Y>
+	 * @param <X> x
+	 * @param <Y> y
 	 */
 	public static class TimeStampQuantizationTuple<X, Y> {
 		public final X timeStamp;
@@ -184,9 +186,9 @@ public class TimeQuantizationTools {
 
 	/**
 	 * 
-	 * @param quantizationGuesses
-	 * @param timeStamps
-	 * @return
+	 * @param quantizationGuesses q
+	 * @param timeStamps          time stamps
+	 * @return time stamp quantization
 	 */
 	public static TimeStampQuantizationTuple<Long, Long> guessStartTimeStamp(List<Long> quantizationGuesses,
 			List<Long> timeStamps) {

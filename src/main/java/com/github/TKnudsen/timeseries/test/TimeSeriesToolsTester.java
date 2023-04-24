@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
@@ -14,7 +15,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * </p>
  * 
  * <p>
- * Description: 
+ * Description:
  * </p>
  * 
  * <p>
@@ -47,6 +48,17 @@ public class TimeSeriesToolsTester {
 		cloneTimeSeries.replaceValue(cloneTimeSeries.getFirstTimestamp(), 1.0);
 		System.out.println(ts);
 		System.out.println(cloneTimeSeries);
+
+		cloneTimeSeries.replaceValue(cloneTimeSeries.getFirstTimestamp(), Double.NaN);
+		cloneTimeSeries.replaceValue(1, null);
+
+		testRemove(cloneTimeSeries, Double.NaN);
+		testRemove(cloneTimeSeries, null);
+	}
+
+	private static <T> void testRemove(ITimeSeries<T> timeSeries, T value) {
+		TimeSeriesTools.remove(timeSeries, value);
+		System.out.println();
 	}
 
 }

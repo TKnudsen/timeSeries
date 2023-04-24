@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
 /**
@@ -21,19 +22,26 @@ import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2016
+ * Copyright: Copyright (c) 2016-2023
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.0
+ * @version 1.02
  */
 public class DateTools {
 
 	/**
+	 * a standard year, not a leap year
+	 */
+	public static long YEAR_IN_MILLISECONDS = new TimeDuration(TimeQuantization.YEARS, 1).getDuration();
+
+	public static long YEAR_IN_MILLISECONDS_EXACT = 31556952000L;
+
+	/**
 	 * Retrieves whether or not a date is within a leap year.
 	 * 
-	 * @param y
-	 * @return
+	 * @param y y
+	 * @return boolean
 	 */
 	public static boolean isLeapYear(int y) {
 		return ((y % 4 == 0) && ((y % 100 != 0) || (y % 400 == 0)));
@@ -42,8 +50,8 @@ public class DateTools {
 	/**
 	 * whether a date is on weekend.
 	 * 
-	 * @param date
-	 * @return
+	 * @param date date
+	 * @return boolean
 	 */
 	public static boolean isWeekend(Date date) {
 		Objects.requireNonNull(date);
@@ -68,8 +76,7 @@ public class DateTools {
 	 * @param year  the actual year. no -1900 needed.
 	 * @param month from 0-11
 	 * @param day   from 1-31
-	 * 
-	 * @return
+	 * @return date
 	 */
 	public static Date createDate(int year, int month, int day) {
 		return createDate(year, month, day, 0, 0, 0, 0);
@@ -79,13 +86,14 @@ public class DateTools {
 	 * Creates a Date object with the given arguments. Please consider argument
 	 * constraints.
 	 * 
-	 * @param year   the actual year. no -1900 needed.
-	 * @param month  from 0-11
-	 * @param day    from 1-31
-	 * @param hour   from 0-23
-	 * @param minute from 0-59
-	 * @param second from 0-59
-	 * @return
+	 * @param year        the actual year. no -1900 needed.
+	 * @param month       from 0-11
+	 * @param day         from 1-31
+	 * @param hour        from 0-23
+	 * @param minute      from 0-59
+	 * @param second      from 0-59
+	 * @param milliSecond milliSecond
+	 * @return date
 	 */
 	public static Date createDate(int year, int month, int day, int hour, int minute, int second, int milliSecond) {
 		Calendar cal = Calendar.getInstance();
@@ -103,7 +111,7 @@ public class DateTools {
 
 	/**
 	 * 
-	 * @param date
+	 * @param date     date
 	 * @param calendar with respect to the Calendar Enum. Example: Calendar.DATE
 	 *                 refers to the date within the month[1-31]. Example:
 	 *                 DateTools.addDateOrTime(new Date(), Calendar.DATE, -10);
@@ -121,9 +129,9 @@ public class DateTools {
 	 * Rounds down a date object with respect to a given time quantization.
 	 * Attention: weeks is an anomaly in the calendar an is not supported.
 	 * 
-	 * @param date
-	 * @param timeQuantization
-	 * @return
+	 * @param date             date
+	 * @param timeQuantization quant
+	 * @return dateo
 	 */
 	public static Date roundDown(Date date, TimeQuantization timeQuantization) {
 		if (timeQuantization.equals(TimeQuantization.WEEKS))
@@ -171,9 +179,9 @@ public class DateTools {
 	 * Rounds up a date object with respect to a given time quantization. Attention:
 	 * weeks is an anomaly in the calendar an is not supported.
 	 * 
-	 * @param date
-	 * @param timeQuantization
-	 * @return
+	 * @param date             date
+	 * @param timeQuantization quant
+	 * @return date
 	 */
 	public static Date roundUp(Date date, TimeQuantization timeQuantization) {
 		if (timeQuantization.equals(TimeQuantization.WEEKS))
@@ -203,9 +211,9 @@ public class DateTools {
 	/**
 	 * Retrieves the age of a date.
 	 * 
-	 * @param birthday
-	 * @param today
-	 * @return
+	 * @param birthday birthday
+	 * @param today    today
+	 * @return int
 	 */
 	public static int getAge(Date birthday, Date today) {
 		GregorianCalendar birthd = new GregorianCalendar();
@@ -232,7 +240,7 @@ public class DateTools {
 
 	/**
 	 * 
-	 * @return
+	 * @return year
 	 */
 	public static int getCurrentYear() {
 		return Calendar.getInstance().get(Calendar.YEAR);
@@ -248,10 +256,10 @@ public class DateTools {
 	 * calculates the absolute difference between two dates. the time quantization
 	 * can be chosen.
 	 * 
-	 * @param date1
-	 * @param date2
-	 * @param timeUnit
-	 * @return
+	 * @param date1    date
+	 * @param date2    date
+	 * @param timeUnit time unit
+	 * @return long
 	 */
 	public static long diff(Date date1, Date date2, TimeUnit timeUnit) {
 		long diff = Math.abs(date2.getTime() - date1.getTime());
@@ -262,8 +270,8 @@ public class DateTools {
 	/**
 	 * returns the day of the year.
 	 * 
-	 * @param date
-	 * @return
+	 * @param date date
+	 * @return day
 	 */
 	public static int dayOfTheYear(Date date) {
 		Objects.requireNonNull(date);

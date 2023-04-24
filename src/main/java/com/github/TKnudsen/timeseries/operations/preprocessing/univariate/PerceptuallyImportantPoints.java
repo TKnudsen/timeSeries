@@ -101,9 +101,9 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 	 * identifies the next pip. For that purpose all intervals between existing pips
 	 * are investigated.
 	 * 
-	 * @param data
-	 * @param pipTimeStamps
-	 * @return
+	 * @param data          data
+	 * @param pipTimeStamps time stamps
+	 * @return long
 	 */
 	public static Long calculateNextPip(ITimeSeriesUnivariate data, SortedSet<Long> pipTimeStamps) {
 
@@ -159,8 +159,8 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 	 * calculates the interestingness value of every remaining time stamp to be the
 	 * next pip.
 	 * 
-	 * @param data
-	 * @param pipTimeStamps
+	 * @param data          data
+	 * @param pipTimeStamps pip
 	 * @param rankCount     parameter that limits the length of the ranking. Can be
 	 *                      used to cope with scalability issues.
 	 * 
@@ -221,9 +221,9 @@ public class PerceptuallyImportantPoints extends TimeSeriesProcessor<ITimeSeries
 	 * calculates the interestingness value of every remaining time stamp to be the
 	 * next pip.
 	 * 
-	 * @param data
-	 * @param pipTimeStamps
-	 * @return
+	 * @param data          data
+	 * @param pipTimeStamps time stamps
+	 * @return ranking
 	 */
 	public static Ranking<EntryWithComparableKey<Double, Long>> calculateNextPipCandidates(ITimeSeriesUnivariate data,
 			SortedSet<Long> pipTimeStamps) {

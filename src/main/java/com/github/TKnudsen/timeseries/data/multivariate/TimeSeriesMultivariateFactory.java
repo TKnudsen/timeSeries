@@ -28,9 +28,9 @@ public class TimeSeriesMultivariateFactory {
 
 	/**
 	 * 
-	 * @param pairs
-	 * @param missingValueIndicator
-	 * @return
+	 * @param pairs                 pairs
+	 * @param missingValueIndicator indicator
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<? extends Entry<Long, Double[]>> pairs,
 			double missingValueIndicator) {
@@ -54,10 +54,10 @@ public class TimeSeriesMultivariateFactory {
 
 	/**
 	 * 
-	 * @param pairs
-	 * @param missingValueIndicator
-	 * @param timeSeriesNames
-	 * @return
+	 * @param pairs                 pairs
+	 * @param missingValueIndicator indicator
+	 * @param timeSeriesNames       names
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<? extends Entry<Long, Double[]>> pairs,
 			double missingValueIndicator, List<String> timeSeriesNames) {
@@ -82,10 +82,10 @@ public class TimeSeriesMultivariateFactory {
 	/**
 	 * Creates a new TimeSeriesMultivariate object from the given data input.
 	 * 
-	 * @param timestamps
+	 * @param timestamps            time stamps
 	 * @param values                List of univariate "Timeseries" Data
-	 * @param missingValueIndicator
-	 * @return
+	 * @param missingValueIndicator missing value indicator
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values,
 			double missingValueIndicator) {
@@ -122,12 +122,12 @@ public class TimeSeriesMultivariateFactory {
 
 	/**
 	 * 
-	 * @param timestamps
-	 * @param values
-	 * @param missingValueIndicator
-	 * @param timeSeriesNames
-	 * @param descriptions
-	 * @return
+	 * @param timestamps            time stamps
+	 * @param values                values
+	 * @param missingValueIndicator missing value indicator
+	 * @param timeSeriesNames       time series
+	 * @param descriptions          descriptions
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values,
 			double missingValueIndicator, List<String> timeSeriesNames, List<String> descriptions) {
@@ -147,12 +147,12 @@ public class TimeSeriesMultivariateFactory {
 
 	/**
 	 * 
-	 * @param timestamps
-	 * @param values
-	 * @param missingValueIndicator
-	 * @param timeSeriesNames
-	 * @param id
-	 * @return
+	 * @param timestamps            time stamps
+	 * @param values                values
+	 * @param missingValueIndicator indicators
+	 * @param timeSeriesNames       names
+	 * @param id                    id
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate createTimeSeriesMultivatiate(List<Long> timestamps, List<List<Double>> values,
 			double missingValueIndicator, List<String> timeSeriesNames, long id) {
@@ -172,11 +172,12 @@ public class TimeSeriesMultivariateFactory {
 
 	/**
 	 * 
-	 * @param pairs
-	 * @param missingValueIndicator
-	 * @param labelsForTimeStamps
-	 * @param descriptions
-	 * @return
+	 * @param pairs                 pairs
+	 * @param missingValueIndicator indicator
+	 * @param labelsForTimeStamps   labels
+	 * @param timeSeriesNames       timeSeriesNames
+	 * @param descriptions          descriptions
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate createTimeSeriesMultivatiateLabeled(List<Entry<Long, Double[]>> pairs,
 			double missingValueIndicator, List<String> timeSeriesNames, List<String> descriptions,
@@ -211,10 +212,11 @@ public class TimeSeriesMultivariateFactory {
 	/**
 	 * Creates a new TimeSeriesMultivariate object from the given data input.
 	 * 
-	 * @param timestamps
+	 * @param timestamps            time stamps
 	 * @param values                List of univariate "Timeseries" Data
-	 * @param missingValueIndicator
-	 * @return
+	 * @param missingValueIndicator indicator
+	 * @param labelsForTimeStamps   labelsForTimeStamps
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate createTimeSeriesMultivatiateLabeled(List<Long> timestamps,
 			List<List<Double>> values, double missingValueIndicator, List<String> labelsForTimeStamps) {

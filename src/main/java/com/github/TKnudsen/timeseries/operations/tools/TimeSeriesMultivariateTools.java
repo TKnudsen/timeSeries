@@ -82,7 +82,7 @@ public class TimeSeriesMultivariateTools {
 	 * creates an univariate timeSeries representing the mean value progression of
 	 * all dimensions.
 	 * 
-	 * @param tsmv
+	 * @param tsmv time series
 	 * @return mean time series
 	 */
 	public static ITimeSeriesUnivariate createMeanTimeSeries(ITimeSeriesMultivariate tsmv) {
@@ -102,7 +102,7 @@ public class TimeSeriesMultivariateTools {
 	 * creates an univariate timeSeries representing the mean value progression of
 	 * all dimensions.
 	 * 
-	 * @param tsmv
+	 * @param tsmv time series
 	 * @return mean time series
 	 */
 	public static ITimeSeriesUnivariate createMeanTimeSeries(List<ITimeSeriesUnivariate> tsmv) {
@@ -131,8 +131,8 @@ public class TimeSeriesMultivariateTools {
 	/**
 	 * Provides a clone of a given multivariate time series.
 	 * 
-	 * @param timeSeries
-	 * @return
+	 * @param timeSeries time series
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate cloneTimeSeries(ITimeSeriesMultivariate timeSeries) {
 		if (timeSeries == null)
@@ -170,10 +170,10 @@ public class TimeSeriesMultivariateTools {
 	/**
 	 * creates a subsequence on the basis of a cloned time series.
 	 * 
-	 * @param timeSeriesMultivariate
-	 * @param start
-	 * @param end
-	 * @return
+	 * @param timeSeriesMultivariate time series
+	 * @param start                  start
+	 * @param end                    end
+	 * @return time series
 	 */
 	public static ITimeSeriesMultivariate getSubSequence(ITimeSeriesMultivariate timeSeriesMultivariate, Date start,
 			Date end) {
@@ -192,7 +192,7 @@ public class TimeSeriesMultivariateTools {
 	 * retrieves lists of univariate time series, i.e., one list per dimension.
 	 * assumes that multivariateTimeSeriesList contains equally indexed time series.
 	 * 
-	 * @param multivariateTimeSeriesList
+	 * @param multivariateTimeSeriesList time series
 	 * @return list of lists. outer list is the number of dimensions of the MVTS.
 	 */
 	public static List<List<ITimeSeriesUnivariate>> getUnivariateTimeSeriesLists(
@@ -223,13 +223,13 @@ public class TimeSeriesMultivariateTools {
 	 * time (timeStamp). Uses left and right timeStamps for the linear
 	 * interpolation.
 	 * 
-	 * @param timeSeries
-	 * @param leftTimeStamp
-	 * @param rightTimeStamp
-	 * @param timeStamp
-	 * @return
-	 * @throws IllegalArgumentException
-	 * @throws IndexOutOfBoundsException
+	 * @param timeSeries     time series
+	 * @param leftTimeStamp  left
+	 * @param rightTimeStamp right
+	 * @param timeStamp      time stamp
+	 * @return doubles
+	 * @throws IllegalArgumentException  e
+	 * @throws IndexOutOfBoundsException e
 	 */
 	public static List<Double> getInterpolatedValue(ITimeSeriesMultivariate timeSeries, long leftTimeStamp,
 			long rightTimeStamp, long timeStamp) throws IllegalArgumentException, IndexOutOfBoundsException {
@@ -269,9 +269,9 @@ public class TimeSeriesMultivariateTools {
 	 * time (timeStamp). Uses left and right timeStamps for the linear
 	 * interpolation.
 	 * 
-	 * @param timeSeries
-	 * @param timeStamp
-	 * @return
+	 * @param timeSeries time series
+	 * @param timeStamp  time stamp
+	 * @return doubles
 	 */
 	public static List<Double> getInterpolatedValue(ITimeSeriesMultivariate timeSeries, long timeStamp) {
 

@@ -16,7 +16,7 @@ import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 20127
+ * Copyright: Copyright (c) 2017
  * </p>
  * 
  * @author Juergen Bernard
@@ -26,9 +26,9 @@ public class TimeSeriesComparisonTools {
 	/**
 	 * calculates the difference between the mean values of two time series.
 	 * 
-	 * @param timeSeries1
-	 * @param timeSeries2
-	 * @return
+	 * @param timeSeries1 time series
+	 * @param timeSeries2 time series
+	 * @return double
 	 */
 	public static double compareMeanValues(ITimeSeriesUnivariate timeSeries1, ITimeSeriesUnivariate timeSeries2) {
 		double means1 = TimeSeriesTools.getMean(timeSeries1);
@@ -41,9 +41,9 @@ public class TimeSeriesComparisonTools {
 	 * calculates the average difference of the value domains of two time series for
 	 * every common time stamp.
 	 * 
-	 * @param timeSeries1
-	 * @param timeSeries2
-	 * @return
+	 * @param timeSeries1 time series
+	 * @param timeSeries2 time series
+	 * @return double
 	 */
 	public static double compareValueDifferenceOnAverage(ITimeSeriesUnivariate timeSeries1,
 			ITimeSeriesUnivariate timeSeries2) {

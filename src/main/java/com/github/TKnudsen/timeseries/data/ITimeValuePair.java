@@ -30,6 +30,8 @@ public interface ITimeValuePair<V extends Object> extends Comparable<ITimeValueP
 
 	/**
 	 * sets the value
+	 * 
+	 * @param value value
 	 */
 	public void setValue(V value);
 }
