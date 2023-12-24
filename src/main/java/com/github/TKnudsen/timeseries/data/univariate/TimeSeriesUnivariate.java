@@ -65,8 +65,9 @@ public class TimeSeriesUnivariate extends TimeSeries<Double> implements ITimeSer
 		StringBuffer stringBuffer = new StringBuffer();
 
 		if (!timeStamps.isEmpty())
-			stringBuffer.append("Start: " + new Date(getFirstTimestamp()) + ", end: " + new Date(getLastTimestamp())
-					+ ", size: " + size() + "\n");
+			stringBuffer.append("Start:\t" + new Date(getFirstTimestamp()) + "(" + getValue(getFirstTimestamp(), false)
+					+ ")\nEnd:\t" + new Date(getLastTimestamp()) + "(" + getValue(getLastTimestamp(), false)
+					+ "), size: " + size() + "\n");
 
 		for (int i = 0; i < this.size(); i++)
 			stringBuffer

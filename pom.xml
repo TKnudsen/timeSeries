@@ -140,7 +140,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
+				<!--<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>3.0.1</version>
 				<executions>
@@ -150,6 +150,27 @@
 						<goals>
 							<goal>sign</goal>
 						</goals>
+					</execution>
+				</executions>	-->
+				<groupId>org.simplify4u.plugins</groupId>
+				<artifactId>sign-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<keyId>
+								<!-- key id in hex, optional -->
+							</keyId>
+							<keyPass>
+								<!-- private key passphrase, can be encrypted -->
+							</keyPass>
+							<keyFile>
+								<!-- private key file location -->
+							</keyFile>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
