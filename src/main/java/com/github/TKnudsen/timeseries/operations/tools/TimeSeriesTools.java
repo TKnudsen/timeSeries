@@ -3,6 +3,7 @@ package com.github.TKnudsen.timeseries.operations.tools;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -530,6 +531,25 @@ public final class TimeSeriesTools {
 		}
 
 		return new TimeSeriesUnivariate(timeStamps, values, missingValueIndicator);
+	}
+
+	/**
+	 * creates a time series with a constant value, e.g., to draw a horizontal
+	 * threshold line in a line chart.
+	 * 
+	 * @param timeStamps
+	 * @param constantValue
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate createConstantTimeSeries(List<Long> timeStamps, double constantValue) {
+		List<Long> list = new ArrayList<>(timeStamps);
+		Collections.sort(list);
+
+		List<Double> values = new ArrayList<>();
+		for (Long l : list)
+			values.add(constantValue);
+
+		return new TimeSeriesUnivariate(list, values);
 	}
 
 	public static long[] getQuantizationsAsLong(ITimeSeries<Double> timeSeries) {
