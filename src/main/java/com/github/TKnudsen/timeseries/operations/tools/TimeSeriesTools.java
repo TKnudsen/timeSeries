@@ -40,11 +40,11 @@ import smile.math.Math;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2015-2022
+ * Copyright: Copyright (c) 2015-2024
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.13
+ * @version 1.14
  */
 public final class TimeSeriesTools {
 
@@ -950,11 +950,13 @@ public final class TimeSeriesTools {
 		double valueUncertainty = std / weightedAverage;
 
 		double durationInYears = (deltaTimeUnknown / (double) TimeSeriesTools.YEAR_IN_MILLISECONDS);
-		double pow = Math.pow(0.5, durationInYears);
+		double pow = Math.pow(0.33, durationInYears);
 		double temporalUncertainty = Math.min(1.0, Math.max(0.0, 1 - pow));
 
+//		return new double[] { weightedAverage,
+//				Math.max(0, Math.min(1.0, (valueUncertainty + temporalUncertainty) * 0.5)) };
 		return new double[] { weightedAverage,
-				Math.max(0, Math.min(1.0, (valueUncertainty + temporalUncertainty) * 0.5)) };
+				Math.max(0, Math.min(1.0, Math.max(valueUncertainty, temporalUncertainty))) };
 	}
 
 	/**
@@ -1209,13 +1211,14 @@ public final class TimeSeriesTools {
 	 * @param timeSeriesList time series
 	 * @return time series
 	 */
-	public static ITimeSeriesUnivariate getMeanTimeSeries(Collection<ITimeSeriesUnivariate> timeSeriesList) {
+	public static ITimeSeriesUnivariate getMeanTimeSeries(Iterable<ITimeSeriesUnivariate> timeSeriesList) {
 		SortedMap<Long, List<Double>> rawValues = new TreeMap<>();
 
 		for (ITimeSeriesUnivariate ts : timeSeriesList)
 			if (ts != null)
 				for (Long timeStamp : ts.getTimestamps())
-					rawValues.put(timeStamp, new ArrayList<>());
+					if (!rawValues.containsKey(timeStamp))
+						rawValues.put(timeStamp, new ArrayList<>());
 
 		for (ITimeSeriesUnivariate ts : timeSeriesList)
 			if (ts != null)
@@ -1240,6 +1243,17 @@ public final class TimeSeriesTools {
 	}
 
 	/**
+	 * @deprecated
+	 * @param timeSeriesList
+	 * @param quantil
+	 * @return
+	 */
+	public static ITimeSeriesUnivariate[] createQuantilesQuartilesMeanTimeSeries(
+			Collection<ITimeSeriesUnivariate> timeSeriesList, double quantil) {
+		return computeQuantilesQuartilesMeanTimeSeries(timeSeriesList, quantil);
+	}
+
+	/**
 	 * returns six time series for a list of time series
 	 * 
 	 * <p>
@@ -1251,8 +1265,8 @@ public final class TimeSeriesTools {
 	 * @param quantil        between [0-100]
 	 * @return time series
 	 */
-	public static ITimeSeriesUnivariate[] createQuantilesQuartilesMeanTimeSeries(
-			Collection<ITimeSeriesUnivariate> timeSeriesList, double quantil) {
+	public static ITimeSeriesUnivariate[] computeQuantilesQuartilesMeanTimeSeries(
+			Iterable<ITimeSeriesUnivariate> timeSeriesList, double quantil) {
 
 		// gather all available time stamps
 		SortedSet<Long> timeStamps = new TreeSet<>();
@@ -1271,9 +1285,11 @@ public final class TimeSeriesTools {
 		for (Long timeStamp : timeStamps) {
 			List<Double> values = new ArrayList<>();
 			for (ITimeSeries<? extends Double> timeSeries : timeSeriesList) {
-				double v = timeSeries.getValue(timeStamp, false);
-				if (!Double.isNaN(v))
-					values.add(v);
+				if (timeSeries.containsTimestamp(timeStamp)) {
+					Double v = timeSeries.getValue(timeStamp, false);
+					if (v != null && !Double.isNaN(v))
+						values.add(v);
+				}
 			}
 
 			StatisticsSupport statistics = new StatisticsSupport(values);
@@ -1628,6 +1644,26 @@ public final class TimeSeriesTools {
 			else
 				i++;
 		}
+	}
+
+	/**
+	 * clamps values of the time series larger/smaller than a given minimum/maximum.
+	 * 
+	 * @param timeSeries
+	 * @param minValue
+	 * @param maxValue
+	 */
+	public static ITimeSeriesUnivariate clampTimeSeries(ITimeSeriesUnivariate timeSeries, Double minValue,
+			Double maxValue) {
+
+		for (Long l : timeSeries.getTimestamps()) {
+			if (timeSeries.getValue(l, false) < minValue)
+				timeSeries.replaceValue(l, minValue);
+			if (timeSeries.getValue(l, false) > maxValue)
+				timeSeries.replaceValue(l, maxValue);
+		}
+
+		return timeSeries;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.github.TKnudsen.timeseries.data.univariate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 
 import com.github.TKnudsen.timeseries.data.ITimeValuePair;
 
@@ -11,15 +12,11 @@ import com.github.TKnudsen.timeseries.data.ITimeValuePair;
  * </p>
  * 
  * <p>
- * Description:
- * </p>
- * 
- * <p>
- * Copyright: Copyright (c) 2016-2018
+ * Copyright: Copyright (c) 2016-2024
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.01
+ * @version 1.02
  */
 public class TimeSeriesUnivariateFactory {
 
@@ -46,5 +43,10 @@ public class TimeSeriesUnivariateFactory {
 		}
 
 		return new TimeSeriesUnivariate(timeStamps, values, missingValueIndicator);
+	}
+
+	public static ITimeSeriesUnivariate newTimeSeries(SortedMap<Long, Double> data, Double missingValueIndicator) {
+		return new TimeSeriesUnivariate(new ArrayList<Long>(data.keySet()), new ArrayList<>(data.values()),
+				missingValueIndicator);
 	}
 }
