@@ -71,7 +71,7 @@ public class TimeSeriesUnivariate extends TimeSeries<Double> implements ITimeSer
 
 		for (int i = 0; i < this.size(); i++)
 			stringBuffer
-					.append(new Date(timeStamps.get(i)).toString() + ", " + String.format("%f", values.get(i)) + "\n");
+					.append(new Date(timeStamps.get(i)).toString() + ",\t" + String.format("%f", values.get(i)) + "\n");
 
 		return stringBuffer.toString();
 	}
