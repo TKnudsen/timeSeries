@@ -212,7 +212,7 @@ public final class TimeSeriesTools {
 	}
 
 	/**
-	 * ignores Double.NaN leading to results even with NaN values.
+	 * ignores Double.NaN values.
 	 * 
 	 * @param timeSeries time series
 	 * @return double
@@ -1284,15 +1284,34 @@ public final class TimeSeriesTools {
 		// calculate statistical information
 		for (Long timeStamp : timeStamps) {
 			List<Double> values = new ArrayList<>();
+
+			// variant where only existing time stamps are used, leading to a created times
+			// series with time stamps based on few values
+			// for (ITimeSeries<? extends Double> timeSeries : timeSeriesList) {
+			// if (timeSeries.containsTimestamp(timeStamp)) {
+			// Double v = timeSeries.getValue(timeStamp, false);
+			// if (v != null && !Double.isNaN(v))
+			// values.add(v);
+			// }
+			// }
+
+			// variant where every time series provides interpolated time stamps also, to
+			// have values for every time stamp asked for.
+			// Note: takes longer (three times in a recent comparison). If this becomes a
+			// problem, sampling of time stamps may be a useful approach.
 			for (ITimeSeries<? extends Double> timeSeries : timeSeriesList) {
-				if (timeSeries.containsTimestamp(timeStamp)) {
-					Double v = timeSeries.getValue(timeStamp, false);
-					if (v != null && !Double.isNaN(v))
-						values.add(v);
-				}
+				if (timeSeries.getFirstTimestamp() > timeStamp)
+					continue;
+				if (timeSeries.getLastTimestamp() < timeStamp)
+					continue;
+
+				Double v = timeSeries.getValue(timeStamp, true);
+				if (v != null && !Double.isNaN(v))
+					values.add(v);
 			}
 
 			StatisticsSupport statistics = new StatisticsSupport(values);
+			// System.out.println(statistics.getCount());
 
 			lowerQuantil.add(statistics.getPercentile(quantil));
 			lowerQuartil.add(statistics.getPercentile(25));
@@ -1313,6 +1332,43 @@ public final class TimeSeriesTools {
 		timeSeriesArray[5] = new TimeSeriesUnivariate(new ArrayList<>(timeStamps), upperQuantil);
 
 		return timeSeriesArray;
+	}
+
+	/**
+	 * returns an integer time series representing the count of existing time
+	 * stamps.
+	 * 
+	 * @param timeSeriesList    the time series time series.
+	 * @param requireExactMatch if, for a time stamp, a time stamp in a time series
+	 *                          must exist (true), of if within start-end interval
+	 *                          is a sufficient criterion (false).
+	 * @return time series
+	 */
+	public static ITimeSeriesUnivariate getCountsTimeSeries(Iterable<ITimeSeriesUnivariate> timeSeriesList,
+			boolean requireExactMatch) {
+
+		// gather all available time stamps
+		SortedSet<Long> timeStamps = new TreeSet<>();
+		for (ITimeSeries<? extends Double> timeSeries : timeSeriesList)
+			for (long l : timeSeries.getTimestamps())
+				timeStamps.add(l);
+
+		List<Double> counts = new ArrayList<>();
+
+		// calculate counts
+		for (Long timeStamp : timeStamps) {
+			double i = 0;
+			for (ITimeSeries<? extends Double> timeSeries : timeSeriesList)
+				if (requireExactMatch)
+					i = timeSeries.containsTimestamp(timeStamp) ? i++ : i;
+				else if (!timeSeries.isEmpty() && timeSeries.getFirstTimestamp() <= timeStamp
+						&& timeSeries.getLastTimestamp() >= timeStamp)
+					i++;
+
+			counts.add(i);
+		}
+
+		return new TimeSeriesUnivariate(new ArrayList<>(timeStamps), counts);
 	}
 
 	/**

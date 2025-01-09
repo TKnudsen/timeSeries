@@ -13,24 +13,23 @@ import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
  * </p>
  * 
  * <p>
- * Models an general time series, i.e., data structure that stores univariate
- * phenomena observed over time. The value domain is stored with a generics
- * parameter.
+ * Characterizes a time series, i.e., it contains values each depending on time.
+ * The type of value is yet not specified.
  * </p>
  * 
  * <p>
- * Data modeling is done with two lists, one for the temporal and one for the
- * value domain. As such, the design does not build upon a single list with
- * time-value pairs which would be an alternative.
+ * The implementation uses two lists, one for time and one for the values. An
+ * alternative implementation would be the use of one list with time-value
+ * pairs.
  * </p>
  * 
  * <p>
- * Copyright: (c) 2016-2020 Juergen Bernard,
+ * Copyright: (c) 2016-2024 Juergen Bernard,
  * https://github.com/TKnudsen/timeSeries
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.02
+ * @version 1.03
  */
 public abstract class TimeSeries<V> implements ITimeSeries<V> {
 
@@ -327,18 +326,19 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 	}
 
 	@Override
+	/**
+	 * was revised in 2024. Now only uses the contains method. Was based on
+	 * findByDate before, which appeared to be much slower.
+	 */
 	public boolean containsTimestamp(long timeStamp) {
 		if (isEmpty())
 			return false;
+		if (getFirstTimestamp() > timeStamp)
+			return false;
+		if (getLastTimestamp() < timeStamp)
+			return false;
 
-		try {
-			int index = findByDate(timeStamp, true);
-			if (index >= 0)
-				return true;
-		} catch (IllegalArgumentException e) {
-		}
-
-		return false;
+		return timeStamps.contains(timeStamp);
 	}
 
 	@Override
