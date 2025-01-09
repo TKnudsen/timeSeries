@@ -17,11 +17,11 @@ import com.github.TKnudsen.ComplexDataObject.data.interfaces.ISelfDescription;
  * </p>
  * 
  * <p>
- * Copyright: Copyright (c) 2017-2018
+ * Copyright: Copyright (c) 2017-2024
  * </p>
  * 
  * @author Juergen Bernard
- * @version 1.04
+ * @version 1.05
  */
 public interface ITimeSeries<T> extends IDObject, ISelfDescription, Iterable<Entry<Long, T>> {
 
@@ -75,7 +75,25 @@ public interface ITimeSeries<T> extends IDObject, ISelfDescription, Iterable<Ent
 
 	long getFirstTimestamp();
 
+	/**
+	 * convenient method for quicker value access.
+	 * 
+	 * @return
+	 */
+	default T getFirstValue() {
+		return getValue(getFirstTimestamp(), false);
+	}
+
 	long getLastTimestamp();
+
+	/**
+	 * convenient method for quicker value access.
+	 * 
+	 * @return
+	 */
+	default T getLastValue() {
+		return getValue(getLastTimestamp(), false);
+	}
 
 	/**
 	 * @return the sorted list of time stamps
