@@ -804,8 +804,9 @@ public final class TimeSeriesTools {
 	}
 
 	/**
-	 * only uses the two very outer (earliest/latest) time-value pairs to make an
-	 * extrapolation. use the predict method for a more sophisticated approach.
+	 * Attention: only uses the two very outer (earliest/latest) time-value pairs to
+	 * make an extrapolation. use the predict method for a more sophisticated
+	 * approach.
 	 * 
 	 * @param timeSeries time series
 	 * @param target     the time stamp of the value to be extrapolated
@@ -873,7 +874,7 @@ public final class TimeSeriesTools {
 	 * 
 	 * @param timeSeries      time series
 	 * @param target          target
-	 * @param maxAgeTimeStamp the time stamp in the past from which on value
+	 * @param maxAgeTimeStamp the time stamp prior to the target from which on value
 	 *                        prediction will have an impact on the result.
 	 * @return doubles
 	 */
@@ -918,14 +919,15 @@ public final class TimeSeriesTools {
 				if (l <= k)
 					continue;
 				else {
-					double trend = (timeSeries.getValue(l, false) - timeSeries.getValue(k, false)) / (l - k);
-					// value at last time stamp + trend* delta t until today
-					double prediction = timeSeries.getValue(timeSeries.getLastTimestamp(), false)
-							+ trend * (deltaTimeUnknown);
 					double w = 1 - ((target - k) + (target - l)) / (double) maxAgeDuration;
 
 					if (w <= 0)
 						continue;
+
+					double trend = (timeSeries.getValue(l, false) - timeSeries.getValue(k, false)) / (l - k);
+					// value at last time stamp + trend* delta t until today
+					double prediction = timeSeries.getValue(timeSeries.getLastTimestamp(), false)
+							+ trend * (deltaTimeUnknown);
 
 					trends.add(trend);
 					predictions.add(prediction);
