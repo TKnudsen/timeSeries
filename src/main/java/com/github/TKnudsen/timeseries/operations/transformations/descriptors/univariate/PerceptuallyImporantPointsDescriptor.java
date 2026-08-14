@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.data.features.Features;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
 import com.github.TKnudsen.ComplexDataObject.model.processors.ParameterSupportTools;
@@ -96,7 +97,7 @@ public class PerceptuallyImporantPointsDescriptor
 
 		List<NumericalFeature> features = new ArrayList<>();
 		for (int i = 0; i < values.size(); i++)
-			features.add(new NumericalFeature("Dim " + i, values.get(i)));
+			features.add(new NumericalFeature(Features.DEFAULT_FEATURE_NAME_PREFIX + " " + (i + 1), values.get(i)));
 
 		NumericalFeatureVector featureVector = new NumericalFeatureVector(features);
 		featureVector.setMaster(originalTimeSeries);

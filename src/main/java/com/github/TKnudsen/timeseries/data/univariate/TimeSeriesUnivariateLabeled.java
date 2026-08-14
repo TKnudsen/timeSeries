@@ -5,9 +5,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeInterval;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
-import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
 import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
 
 /**
@@ -44,7 +44,8 @@ public class TimeSeriesUnivariateLabeled extends TimeSeriesUnivariate implements
 		super(id, timestamps, values);
 	}
 
-	public TimeSeriesUnivariateLabeled(long id, List<Long> timestamps, List<Double> values, Double missingValueIndicator) {
+	public TimeSeriesUnivariateLabeled(long id, List<Long> timestamps, List<Double> values,
+			Double missingValueIndicator) {
 		super(id, timestamps, values, missingValueIndicator);
 	}
 
@@ -62,7 +63,8 @@ public class TimeSeriesUnivariateLabeled extends TimeSeriesUnivariate implements
 		if (duration == null)
 			eventLabels.put(timeStamp, label);
 		else {
-			TimeIntervalLabel<String> labeledTimeInterval = new TimeIntervalLabel<String>(timeStamp, timeStamp + duration.getDuration(), label);
+			TimeIntervalLabel<String> labeledTimeInterval = new TimeIntervalLabel<String>(timeStamp,
+					timeStamp + duration.getDuration(), label);
 			getIntervalLabels().add(labeledTimeInterval);
 		}
 	}
@@ -96,23 +98,4 @@ public class TimeSeriesUnivariateLabeled extends TimeSeriesUnivariate implements
 		this.intervalLabels = intervalLabels;
 	}
 
-	@Override
-	public int hashCode() {
-		if (hashCode != -1)
-			return hashCode;
-
-		hashCode = super.hashCode();
-
-		if (eventLabels == null)
-			hashCode = 23 * hashCode;
-		else
-			hashCode = 31 * hashCode + eventLabels.hashCode();
-
-		if (intervalLabels == null)
-			hashCode = 23 * hashCode;
-		else
-			hashCode = 31 * hashCode + intervalLabels.hashCode();
-
-		return hashCode;
-	}
 }

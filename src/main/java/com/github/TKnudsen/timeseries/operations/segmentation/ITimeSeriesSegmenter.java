@@ -7,20 +7,11 @@ import com.github.TKnudsen.timeseries.data.ITimeSeries;
 
 /**
  * <p>
- * Title: TimeSeriesSegmenter
+ * Interface for time series segmentation tasks.
  * </p>
- * 
- * <p>
- * Description: interface for time series Segmentation tasks
- * </p>
- * 
- * <p>
- * Copyright: (c) 2016-2017 J�rgen Bernard,
- * https://github.com/TKnudsen/timeSeries
- * </p>
- * 
- * @author Juergen Bernard
+ *
  * @version 1.02
+ * @since 2016
  */
 public interface ITimeSeriesSegmenter<O, T extends ITimeSeries<O>> {
 

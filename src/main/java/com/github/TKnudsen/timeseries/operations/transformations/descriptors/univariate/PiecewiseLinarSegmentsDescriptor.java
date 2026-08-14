@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.data.features.Features;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeature;
 import com.github.TKnudsen.ComplexDataObject.data.features.numericalData.NumericalFeatureVector;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
-import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
@@ -73,7 +74,7 @@ public class PiecewiseLinarSegmentsDescriptor extends PerceptuallyImporantPoints
 		List<NumericalFeature> features = new ArrayList<>();
 		for (int i = 0; i < values.size() - 1; i++) {
 			double value = (values.get(i + 1) - values.get(i)) / (double) temporalReference;
-			features.add(new NumericalFeature("Dim " + i, value));
+			features.add(new NumericalFeature(Features.DEFAULT_FEATURE_NAME_PREFIX + " " + (i + 1), value));
 		}
 
 		NumericalFeatureVector featureVector = new NumericalFeatureVector(features);

@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 

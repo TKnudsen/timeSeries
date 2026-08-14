@@ -3,14 +3,14 @@ package com.github.TKnudsen.timeseries.test;
 import java.util.Date;
 import java.util.SortedMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeInterval;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeQuantization;
+import com.github.TKnudsen.ComplexDataObject.model.tools.DateTools;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
-import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
-import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariateLabeled;
-import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesLabelingTools;
 
 public class TimeSeriesLabelingTester {

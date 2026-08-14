@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
-import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
  * <p>
@@ -55,7 +55,7 @@ public class MissingValueRemover extends TimeSeriesProcessor<ITimeSeriesMultivar
 	private void process(ITimeSeriesMultivariate data) {
 		for (int i = 0; i < data.size(); i++) {
 			for (Double d : data.getValue(i))
-				if (TimeSeriesTools.compareDoubleObjects(missingValueIndicator, d)) {
+				if (MathFunctions.compareDoubles(missingValueIndicator, d)) {
 					data.removeTimeValue(i);
 					i--;
 
