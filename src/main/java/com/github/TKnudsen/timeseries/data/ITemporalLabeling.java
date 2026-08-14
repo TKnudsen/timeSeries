@@ -3,8 +3,8 @@ package com.github.TKnudsen.timeseries.data;
 import java.util.SortedMap;
 
 import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
-import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeInterval;
 import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
 
 /**

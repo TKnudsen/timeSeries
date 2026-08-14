@@ -1,16 +1,17 @@
 package com.github.TKnudsen.timeseries.operations.io.json.timeSeries;
 
+import java.io.IOException;
 import java.util.Date;
 
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeInterval;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeQuantization;
+import com.github.TKnudsen.ComplexDataObject.model.tools.DateTools;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariateLabeledWithEventsIntervalsAndDurations;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
-import com.github.TKnudsen.timeseries.data.primitives.TimeInterval;
-import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
-import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 
 /**
  * <p>
@@ -30,7 +31,7 @@ import com.github.TKnudsen.timeseries.operations.tools.DateTools;
  */
 public class JSONIOTimeSeriesTester {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		// create dummy time series
 		Date startDate = DateTools.createDate(2016, 4, 3, 2, 1, 0, 0);

@@ -3,9 +3,9 @@ package com.github.TKnudsen.timeseries.operations.tools;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
-import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
 /**
  * <p>

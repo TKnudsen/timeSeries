@@ -1,6 +1,7 @@
 package com.github.TKnudsen.timeseries.data.univariate;
 
-import java.util.Date;
+import java.time.Instant;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,30 +12,40 @@ import java.util.TreeMap;
 import com.github.TKnudsen.timeseries.data.TimeSeries;
 
 /**
+ * Univariate time series storing {@link Double} values indexed by {@code long}
+ * time stamps (milliseconds since epoch).
+ *
  * <p>
- * timeSeries
+ * Adds:
  * </p>
- * 
+ * <ul>
+ * <li>Linear interpolation between neighbors</li>
+ * <li>Optional key-value attributes for metadata (not part of hash or
+ * equality)</li>
+ * <li>Truncated {@link #toString()} for large series</li>
+ * </ul>
+ *
  * <p>
- * Models an univariate time series, i.e., data structure that stores univariate
- * phenomena observed over time, expressed with numerical values.
- * </p>
- * 
- * <p>
- * Copyright: (c) 2016-2018 Juergen Bernard,
+ * Copyright: (c) 2016-2026 Juergen Bernard,
  * https://github.com/TKnudsen/timeSeries
  * </p>
- * 
+ *
  * @author Juergen Bernard
- * @version 1.05
+ * @version 2.0 revised in February 2026
  */
 public class TimeSeriesUnivariate extends TimeSeries<Double> implements ITimeSeriesUnivariate {
 
-	protected SortedMap<String, Object> attributes = new TreeMap<String, Object>();
+	private static final int TOSTRING_MAX_ROWS_DEFAULT = 50;
+	private static final int TOSTRING_BYTES_PER_ROW = 48;
 
-	/**
-	 * used for JSON, reflection, serialization & stuff
-	 */
+	/** Optional metadata attributes - not included in hash or equality. */
+	protected final SortedMap<String, Object> attributes = new TreeMap<>();
+
+	// -----------------------------------------------------------------------
+	// Construction
+	// -----------------------------------------------------------------------
+
+	/** For JSON / reflection / serialization only. */
 	@SuppressWarnings("unused")
 	private TimeSeriesUnivariate() {
 		super();
@@ -46,7 +57,6 @@ public class TimeSeriesUnivariate extends TimeSeries<Double> implements ITimeSer
 
 	public TimeSeriesUnivariate(List<Long> timeStamps, List<Double> values, Double missingValueIndicator) {
 		super(timeStamps, values);
-
 		setMissingValueIndicator(missingValueIndicator);
 	}
 
@@ -56,29 +66,60 @@ public class TimeSeriesUnivariate extends TimeSeries<Double> implements ITimeSer
 
 	public TimeSeriesUnivariate(long id, List<Long> timeStamps, List<Double> values, Double missingValueIndicator) {
 		super(id, timeStamps, values);
-
 		setMissingValueIndicator(missingValueIndicator);
 	}
 
+	// -----------------------------------------------------------------------
+	// String representation
+	// -----------------------------------------------------------------------
+
 	@Override
 	public String toString() {
-		StringBuffer stringBuffer = new StringBuffer();
-
-		if (!timeStamps.isEmpty())
-			stringBuffer.append("Start:\t" + new Date(getFirstTimestamp()) + "("
-					+ String.format("%f", getValue(getFirstTimestamp(), false)) + ")\nEnd:\t"
-					+ new Date(getLastTimestamp()) + "(" + String.format("%f", getValue(getLastTimestamp(), false))
-					+ "), size: " + size() + "\n");
-
-		for (int i = 0; i < this.size(); i++)
-			stringBuffer
-					.append(new Date(timeStamps.get(i)).toString() + ",\t" + String.format("%f", values.get(i)) + "\n");
-
-		return stringBuffer.toString();
+		return toString(TOSTRING_MAX_ROWS_DEFAULT);
 	}
+
+	/**
+	 * Human-readable summary of the series, showing at most {@code maxRows} data
+	 * rows.
+	 *
+	 * <p>
+	 * Time stamps are rendered as ISO-8601 instants for readability. For large
+	 * series the output is truncated.
+	 * </p>
+	 *
+	 * @param maxRows maximum number of data rows; clamped to {@code [0, size()]}
+	 * @return summary string
+	 */
+	public String toString(int maxRows) {
+		int n = size();
+		if (n == 0)
+			return "TimeSeriesUnivariate: empty";
+
+		int shown = Math.min(n, Math.max(0, maxRows));
+		StringBuilder sb = new StringBuilder(128 + shown * TOSTRING_BYTES_PER_ROW);
+
+		sb.append("Start:\t").append(Instant.ofEpochMilli(getTimestamp(0))).append(" (").append(getValue(0))
+				.append(")\n");
+		sb.append("End:\t").append(Instant.ofEpochMilli(getTimestamp(n - 1))).append(" (").append(getValue(n - 1))
+				.append("), size: ").append(n).append("\n");
+
+		for (int i = 0; i < shown; i++)
+			sb.append(Instant.ofEpochMilli(getTimestamp(i))).append(",\t").append(getValue(i)).append('\n');
+
+		if (shown < n)
+			sb.append("...\n").append("rows shown: ").append(shown).append(" of ").append(n).append('\n');
+
+		return sb.toString();
+	}
+
+	// -----------------------------------------------------------------------
+	// Attribute store
+	// -----------------------------------------------------------------------
 
 	@Override
 	public void add(String attribute, Object value) {
+		if (attribute == null)
+			throw new IllegalArgumentException("attribute must not be null");
 		attributes.put(attribute, value);
 	}
 
@@ -89,47 +130,50 @@ public class TimeSeriesUnivariate extends TimeSeries<Double> implements ITimeSer
 
 	@Override
 	public Class<?> getType(String attribute) {
-		if (attributes.get(attribute) != null)
-			return attributes.get(attribute).getClass();
-		return null;
+		Object v = attributes.get(attribute);
+		return v != null ? v.getClass() : null;
 	}
 
 	@Override
 	public Set<String> keySet() {
-		return attributes.keySet();
+		return Collections.unmodifiableSet(attributes.keySet());
 	}
 
 	@Override
 	public Map<String, Class<?>> getTypes() {
-		Map<String, Class<?>> ret = new HashMap<>();
-		for (String string : attributes.keySet())
-			if (attributes.get(string) == null)
-				ret.put(string, null);
-			else
-				ret.put(string, attributes.get(string).getClass());
-		return ret;
+		Map<String, Class<?>> result = new HashMap<>((int) (attributes.size() / 0.75f) + 1);
+		for (Map.Entry<String, Object> e : attributes.entrySet()) {
+			Object v = e.getValue();
+			result.put(e.getKey(), v != null ? v.getClass() : null);
+		}
+		return result;
 	}
 
 	@Override
 	public Object removeAttribute(String attribute) {
-		if (attributes.get(attribute) != null)
-			return attributes.remove(attribute);
-		return null;
-
-		// no resetHash: attributes are not part of the value-building hash
-		// components
+		return attributes.remove(attribute);
+		// attributes are not part of the hash - no resetHash needed
 	}
+
+	// -----------------------------------------------------------------------
+	// TimeSeries hooks
+	// -----------------------------------------------------------------------
 
 	@Override
 	protected long valueToHash(Double value) {
-		return Double.doubleToLongBits(value);
+		return value == null ? 0L : Double.doubleToLongBits(value);
 	}
 
 	@Override
 	protected Double interpolateValue(long timeStamp, long lBefore, long lAfter, Double vBefore, Double vAfter) {
-		long deltaBefore = timeStamp - lBefore;
-		Double value = vBefore + ((vAfter - vBefore) * ((double) deltaBefore / (lAfter - lBefore)));
-		return value;
-	}
+		if (vBefore == null || vAfter == null)
+			return getMissingValueIndicator();
 
+		long denom = lAfter - lBefore;
+		if (denom == 0)
+			return vBefore;
+
+		double alpha = (double) (timeStamp - lBefore) / (double) denom;
+		return vBefore + (vAfter - vBefore) * alpha;
+	}
 }

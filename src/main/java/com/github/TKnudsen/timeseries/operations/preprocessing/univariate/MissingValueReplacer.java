@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.github.TKnudsen.ComplexDataObject.model.processors.IDataProcessor;
 import com.github.TKnudsen.ComplexDataObject.model.processors.complexDataObject.DataProcessingCategory;
+import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.TimeSeriesProcessor;
-import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
 
 /**
  * Replaces a specific (missing) value with a pre-determined default value
@@ -48,7 +48,8 @@ public class MissingValueReplacer extends TimeSeriesProcessor<ITimeSeriesUnivari
 
 	private void process(ITimeSeriesUnivariate data) {
 		for (int i = 0; i < data.size(); i++) {
-			if (TimeSeriesTools.compareDoubleObjects(missingValueIndicator, data.getValue(i))) {
+			Double value = data.getValue(i);
+			if (value == null || MathFunctions.compareDoubles(missingValueIndicator, value)) {
 				data.replaceValue(i, defaultValue);
 				i--;
 			}
