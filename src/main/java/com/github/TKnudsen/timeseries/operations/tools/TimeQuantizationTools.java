@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
-import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
 /**
  * <p>

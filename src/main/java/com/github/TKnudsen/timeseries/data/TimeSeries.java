@@ -3,33 +3,36 @@ package com.github.TKnudsen.timeseries.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.github.TKnudsen.ComplexDataObject.model.tools.MathFunctions;
-import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 
 /**
+ * Abstract base class for time series storing ordered (time stamp, value) pairs
+ * in parallel lists.
+ *
  * <p>
- * timeSeries
+ * Lists are accepted directly - no defensive copying for performance. Callers
+ * must not modify the lists after passing them to the constructor.
  * </p>
- * 
+ *
  * <p>
- * Characterizes a time series, i.e., it contains values each depending on time.
- * The type of value is yet not specified.
+ * <b>Invariants:</b>
  * </p>
- * 
+ * <ul>
+ * <li>{@code timeStamps} and {@code values} are non-null</li>
+ * <li>{@code timeStamps.size() == values.size()}</li>
+ * <li>Time stamps are strictly ascending and unique</li>
+ * </ul>
+ *
  * <p>
- * The implementation uses two lists, one for time and one for the values. An
- * alternative implementation would be the use of one list with time-value
- * pairs.
+ * Hash code is cached and invalidated on any structural mutation.
  * </p>
- * 
- * <p>
- * Copyright: (c) 2016-2024 Juergen Bernard,
- * https://github.com/TKnudsen/timeSeries
- * </p>
- * 
+ *
+ * @param <V> the value type
+ *
  * @author Juergen Bernard
- * @version 1.03
+ * @version 2.0 revised February 2026
  */
 public abstract class TimeSeries<V> implements ITimeSeries<V> {
 
@@ -39,397 +42,413 @@ public abstract class TimeSeries<V> implements ITimeSeries<V> {
 
 	protected final List<Long> timeStamps;
 	protected final List<V> values;
+
 	private V missingValueIndicator;
 
-	protected int hashCode;
+	private boolean hashDirty = true;
+	private int cachedHash;
+
+	// -----------------------------------------------------------------------
+	// Construction
+	// -----------------------------------------------------------------------
 
 	protected TimeSeries() {
-		this.id = MathFunctions.randomLong();
-		this.timeStamps = new ArrayList<>();
-		this.values = new ArrayList<>();
-		this.missingValueIndicator = null;
-
-		initialize();
+		this(MathFunctions.randomLong(), new ArrayList<>(), new ArrayList<>(), true);
 	}
 
 	public TimeSeries(List<Long> timeStamps, List<V> values) {
-		this.id = MathFunctions.randomLong();
-		this.timeStamps = timeStamps;
-		this.values = values;
-		this.missingValueIndicator = null;
-
-		initialize();
+		this(MathFunctions.randomLong(), timeStamps, values, true);
 	}
 
 	public TimeSeries(long id, List<Long> timeStamps, List<V> values) {
+		this(id, timeStamps, values, true);
+	}
+
+	/**
+	 * Primary constructor. All other constructors delegate here.
+	 *
+	 * @param validate if {@code false}, invariants are assumed - use only for
+	 *                 trusted inputs from internal factory paths
+	 */
+	protected TimeSeries(long id, List<Long> timeStamps, List<V> values, boolean validate) {
 		this.id = id;
 		this.timeStamps = timeStamps;
 		this.values = values;
 		this.missingValueIndicator = null;
-
-		initialize();
-	}
-
-	private void initialize() {
-		if (timeStamps == null)
-			throw new IllegalArgumentException(getName() + " : time stamps null");
-
-		if (values == null)
-			throw new IllegalArgumentException(getName() + " : values null");
-
-		if (timeStamps.size() != values.size())
-			throw new IllegalArgumentException(getName() + " : input data inconsistent");
-
-		for (int i = 0; i < timeStamps.size() - 1; i++)
-			if (timeStamps.get(i) >= timeStamps.get(i + 1))
-				throw new IllegalArgumentException(getName() + " : temporal information needs to be sorted and unique");
-
+		if (validate)
+			validateInvariants();
 		resetHash();
 	}
 
-	protected void resetHash() {
-		hashCode = -1;
-	}
-
-	@Override
-	public int hashCode() {
-		if (hashCode != -1)
-			return hashCode;
-
-		hashCode = 23;
-
-		if (values == null)
-			hashCode = 23 * hashCode;
-		else
-			for (V value : values) {
-				long l = valueToHash(value);
-				hashCode = 31 * hashCode + (int) (l ^ (l >>> 32));
-			}
-
+	private void validateInvariants() {
 		if (timeStamps == null)
-			hashCode = 23 * hashCode;
-		else
-			for (long l : timeStamps)
-				hashCode = 23 * hashCode + (int) l;
-
-		return hashCode;
+			throw new IllegalArgumentException(getClass().getSimpleName() + ": timeStamps must not be null");
+		if (values == null)
+			throw new IllegalArgumentException(getClass().getSimpleName() + ": values must not be null");
+		if (timeStamps.size() != values.size())
+			throw new IllegalArgumentException(getClass().getSimpleName() + ": size mismatch (" + timeStamps.size()
+					+ " vs " + values.size() + ")");
+		for (int i = 0; i < timeStamps.size() - 1; i++)
+			if (timeStamps.get(i) >= timeStamps.get(i + 1))
+				throw new IllegalArgumentException(
+						getClass().getSimpleName() + ": timestamps must be strictly ascending and unique");
 	}
 
-	protected abstract long valueToHash(V value);
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-
-		if (!(obj instanceof TimeSeriesUnivariate))
-			return false;
-
-		if (hashCode() != obj.hashCode())
-			return false;
-
-		TimeSeriesUnivariate otherTimeSeries = (TimeSeriesUnivariate) obj;
-
-		if (size() != otherTimeSeries.size())
-			return false;
-
-		for (int i = 0; i < size(); i++)
-			if (getTimestamp(i) != otherTimeSeries.getTimestamp(i) || getValue(i) != otherTimeSeries.getValue(i))
-				return false;
-
-		return true;
+	protected final void resetHash() {
+		hashDirty = true;
 	}
 
+	// -----------------------------------------------------------------------
+	// Identity and equality
+	// -----------------------------------------------------------------------
+
 	@Override
-	public long getID() {
+	public final long getID() {
 		return id;
 	}
 
 	@Override
-	public String getName() {
+	public final int hashCode() {
+		if (!hashDirty)
+			return cachedHash;
+
+		int h = 23;
+		for (V v : values) {
+			long l = valueToHash(v);
+			h = 31 * h + (int) (l ^ (l >>> 32));
+		}
+		// mix both halves of each time stamp to avoid hash collisions between
+		// series whose time stamps differ only in the high 32 bits
+		for (int i = 0; i < timeStamps.size(); i++) {
+			long t = timeStamps.get(i);
+			h = 23 * h + (int) (t ^ (t >>> 32));
+		}
+		cachedHash = h;
+		hashDirty = false;
+		return cachedHash;
+	}
+
+	/**
+	 * Returns a {@code long} hash of a single value for use in {@link #hashCode()}.
+	 */
+	protected abstract long valueToHash(V value);
+
+	@Override
+	public final boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+
+		TimeSeries<?> other = (TimeSeries<?>) obj;
+
+		int n = size();
+		if (n != other.size())
+			return false;
+		if (hashCode() != other.hashCode())
+			return false;
+
+		for (int i = 0; i < n; i++) {
+			if (getTimestamp(i) != other.getTimestamp(i))
+				return false;
+			if (!Objects.equals(getValue(i), other.getValue(i)))
+				return false;
+		}
+		return true;
+	}
+
+	// -----------------------------------------------------------------------
+	// Metadata
+	// -----------------------------------------------------------------------
+
+	@Override
+	public final String getName() {
 		return name;
 	}
 
 	@Override
-	public void setName(String name) {
+	public final void setName(String name) {
 		this.name = name;
 	}
 
 	@Override
-	public String getDescription() {
+	public final String getDescription() {
 		return description;
 	}
 
 	@Override
-	public void setDescription(String description) {
-		this.description = description;
+	public final void setDescription(String desc) {
+		this.description = desc;
 	}
 
+	// -----------------------------------------------------------------------
+	// Size and missing value
+	// -----------------------------------------------------------------------
+
 	@Override
-	public int size() {
+	public final int size() {
 		return timeStamps.size();
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return timeStamps.isEmpty() && values.isEmpty();
+	public final boolean isEmpty() {
+		return timeStamps.isEmpty();
 	}
 
 	@Override
-	public V getMissingValueIndicator() {
+	public final V getMissingValueIndicator() {
 		return missingValueIndicator;
 	}
 
-	public void setMissingValueIndicator(V missingValueIndicator) {
+	public final void setMissingValueIndicator(V missingValueIndicator) {
 		this.missingValueIndicator = missingValueIndicator;
 	}
 
-	@Override
-	public long getTimestamp(int index) {
-		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeries: index out of bounds");
+	// -----------------------------------------------------------------------
+	// Index-based access
+	// -----------------------------------------------------------------------
 
+	@Override
+	public final long getTimestamp(int index) {
+		if (index < 0 || index >= timeStamps.size())
+			throw new IndexOutOfBoundsException("TimeSeries: index " + index + " out of bounds for size " + size());
 		return timeStamps.get(index);
 	}
 
 	@Override
-	public V getValue(int index) {
-		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeries: index out of bounds");
-
+	public final V getValue(int index) {
+		if (index < 0 || index >= values.size())
+			throw new IndexOutOfBoundsException("TimeSeries: index " + index + " out of bounds for size " + size());
 		return values.get(index);
 	}
 
-	@Override
-	public V getValue(long timeStamp, boolean allowInterpolation)
-			throws IndexOutOfBoundsException, IllegalArgumentException {
-		if (allowInterpolation) {
-			int index = findByDate(timeStamp, false);
-			if (getTimestamp(index) == timeStamp)
-				return getValue(index);
-			else {
-				long lBefore = getTimestamp(index);
-				V vBefore = getValue(index);
+	// -----------------------------------------------------------------------
+	// Search primitives
+	// -----------------------------------------------------------------------
 
-				if (timeStamps.size() - 1 < index + 1)
-					throw new IndexOutOfBoundsException("TimeSeries.getValue: given time stamp outside bouds");
-				long lAfter = getTimestamp(index + 1);
-				V vAfter = getValue(index + 1);
-
-				V value = interpolateValue(timeStamp, lBefore, lAfter, vBefore, vAfter);
-				return value;
-			}
-		} else {
-			try {
-				int index = findByDate(timeStamp, true);
-				return getValue(index);
-			} catch (IllegalArgumentException e) {
-
-			}
-		}
-
-		throw new IllegalArgumentException("TimeSeries.getValue(long): time stamp does not exist");
-	}
-
-	protected abstract V interpolateValue(long timeStamp, long lBefore, long lAfter, V vBefore, V vAfter);
-
-	@Override
 	/**
-	 * retrieves the index for a given time stamp. In case no exact match is needed
-	 * and not existing the index left (earlier) is returned.
+	 * Exact-match binary search.
+	 *
+	 * @return the index of {@code timeStamp}, or {@code -1} if not found
 	 */
-	public int findByDate(long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
-		if (getFirstTimestamp() > timeStamp)
-			throw new IllegalArgumentException("Time stamp outside time interval");
+	protected final int indexOfExact(long timeStamp) {
+		if (isEmpty())
+			return -1;
 
-		if (getLastTimestamp() < timeStamp)
-			throw new IllegalArgumentException("Time stamp outside time interval");
+		long first = timeStamps.get(0);
+		long last = timeStamps.get(timeStamps.size() - 1);
+		if (timeStamp < first || timeStamp > last)
+			return -1;
 
-		int index = interpolationSearch(0, timeStamps.size() - 1, timeStamp, requireExactMatch);
-
-		if (index >= 0)
-			return index;
-		else {
-			for (int i = 0; i < size(); i++) {
-				if (getTimestamp(i) == timeStamp)
-					return i;
-				else if (getTimestamp(i) > timeStamp && !requireExactMatch)
-					return i - 1;
-			}
+		int lo = 0;
+		int hi = timeStamps.size() - 1;
+		while (lo <= hi) {
+			int mid = (lo + hi) >>> 1;
+			long t = timeStamps.get(mid);
+			if (t < timeStamp)
+				lo = mid + 1;
+			else if (t > timeStamp)
+				hi = mid - 1;
+			else
+				return mid;
 		}
-
 		return -1;
 	}
 
 	/**
-	 * retrieves the index for a given time stamp. In case that no exact match is
-	 * needed and not existing the index left (earlier) is returned.
-	 * 
-	 * @param indexStart
-	 * @param indexEnd
-	 * @param timeStamp
-	 * @param requireExactMatch
-	 * @return
-	 * @throws IllegalArgumentException
+	 * Floor binary search.
+	 *
+	 * <p>
+	 * Returns the largest index {@code i} such that
+	 * {@code timeStamps[i] <= timeStamp}.
+	 * </p>
+	 *
+	 * <p>
+	 * <b>Precondition:</b> series is non-empty and {@code timeStamp} is within
+	 * {@code [timeStamps[0], timeStamps[size-1]]}. Violating this precondition
+	 * produces an unspecified result - callers are responsible for range validation
+	 * before calling.
+	 * </p>
 	 */
-	private int interpolationSearch(int indexStart, int indexEnd, long timeStamp, boolean requireExactMatch)
-			throws IllegalArgumentException {
-		if (indexStart > indexEnd)
-			throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
-
-		if (indexStart == indexEnd)
-			return indexStart;
-
-		if (indexEnd - indexStart == 1)
-			if (!requireExactMatch)
-				if (getTimestamp(indexEnd) == timeStamp)
-					return indexEnd;
-				else
-					return indexStart;
-			else {
-				if (getTimestamp(indexStart) == timeStamp)
-					return indexStart;
-				else if (getTimestamp(indexEnd) == timeStamp)
-					return indexEnd;
-				throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
-			}
-
-		// interpolate appropriate index
-		long l1 = getTimestamp(indexStart);
-		long l2 = getTimestamp(indexEnd);
-
-		if (l1 == timeStamp)
-			return indexStart;
-
-		if (l2 == timeStamp)
-			return indexEnd;
-
-		if (l1 > timeStamp && requireExactMatch)
-			throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
-
-		if (l2 < timeStamp && requireExactMatch)
-			throw new IllegalArgumentException("TimeSeries: given time stamp does not exist");
-
-		double deltaLStartToEnd = l2 - l1;
-		double deltaLStartToTime = timeStamp - l1;
-		double deltaIndex = indexEnd - indexStart;
-		int newSplitIndex = indexStart + Math.max(1, (int) (deltaIndex * deltaLStartToTime / deltaLStartToEnd));
-
-		long newLong = getTimestamp(newSplitIndex);
-
-		if (newLong == timeStamp)
-			return newSplitIndex;
-		else if (newLong > timeStamp) // earlier bins
-			return interpolationSearch(indexStart, newSplitIndex, timeStamp, requireExactMatch);
-		else // later bins
-			return interpolationSearch(newSplitIndex, indexEnd, timeStamp, requireExactMatch);
+	protected final int floorIndexInRange(long timeStamp) {
+		int lo = 0;
+		int hi = timeStamps.size() - 1;
+		while (lo <= hi) {
+			int mid = (lo + hi) >>> 1;
+			if (timeStamps.get(mid) <= timeStamp)
+				lo = mid + 1;
+			else
+				hi = mid - 1;
+		}
+		return hi;
 	}
 
+	// -----------------------------------------------------------------------
+	// Timestamp-based access
+	// -----------------------------------------------------------------------
+
 	@Override
-	/**
-	 * was revised in 2024. Now only uses the contains method. Was based on
-	 * findByDate before, which appeared to be much slower.
-	 */
-	public boolean containsTimestamp(long timeStamp) {
+	public final V getValue(long timeStamp, boolean allowInterpolation)
+			throws IndexOutOfBoundsException, IllegalArgumentException {
 		if (isEmpty())
-			return false;
-		if (getFirstTimestamp() > timeStamp)
-			return false;
-		if (getLastTimestamp() < timeStamp)
-			return false;
+			throw new IllegalArgumentException("TimeSeries.getValue: series is empty");
 
-		return timeStamps.contains(timeStamp);
+		long first = timeStamps.get(0);
+		long last = timeStamps.get(timeStamps.size() - 1);
+		if (timeStamp < first || timeStamp > last)
+			throw new IllegalArgumentException("TimeSeries.getValue: timestamp outside series range");
+
+		// exact lookup - O(log n), covers the common case
+		int exact = indexOfExact(timeStamp);
+		if (exact >= 0)
+			return getValue(exact);
+
+		if (!allowInterpolation)
+			throw new IllegalArgumentException("TimeSeries.getValue: timestamp not found");
+
+		// interpolation - floor search is safe: range already validated above
+		int left = floorIndexInRange(timeStamp);
+		int right = left + 1;
+		if (left < 0 || right >= size())
+			throw new IndexOutOfBoundsException("TimeSeries.getValue: interpolation needs two neighbours");
+
+		return interpolateValue(timeStamp, getTimestamp(left), getTimestamp(right), getValue(left), getValue(right));
+	}
+
+	/** Interpolates a value between two neighboring entries. */
+	protected abstract V interpolateValue(long timeStamp, long lBefore, long lAfter, V vBefore, V vAfter);
+
+	@Override
+	public final int findByDate(long timeStamp, boolean requireExactMatch) throws IllegalArgumentException {
+		if (isEmpty())
+			throw new IllegalArgumentException("TimeSeries.findByDate: series is empty");
+
+		long first = timeStamps.get(0);
+		long last = timeStamps.get(timeStamps.size() - 1);
+		if (timeStamp < first || timeStamp > last)
+			throw new IllegalArgumentException(
+					"TimeSeries.findByDate: timestamp outside series range [" + first + ", " + last + "]");
+
+		// exact lookup first - avoids a second search for the common case
+		int exact = indexOfExact(timeStamp);
+		if (exact >= 0)
+			return exact;
+
+		if (!requireExactMatch)
+			return floorIndexInRange(timeStamp);
+
+		throw new IllegalArgumentException("TimeSeries.findByDate: timestamp " + timeStamp + " not found");
 	}
 
 	@Override
-	public long getFirstTimestamp() {
-		if (timeStamps.size() == 0)
-			throw new NullPointerException("TimeSeries: time series empty");
+	public final boolean containsTimestamp(long timeStamp) {
+		return indexOfExact(timeStamp) >= 0;
+	}
 
+	// -----------------------------------------------------------------------
+	// Boundary access
+	// -----------------------------------------------------------------------
+
+	@Override
+	public final long getFirstTimestamp() {
+		if (isEmpty())
+			throw new IllegalStateException("TimeSeries: series is empty");
 		return timeStamps.get(0);
 	}
 
 	@Override
-	public long getLastTimestamp() {
-		if (timeStamps.size() == 0)
-			throw new NullPointerException("TimeSeries: time series empty");
-
+	public final long getLastTimestamp() {
+		if (isEmpty())
+			throw new IllegalStateException("TimeSeries: series is empty");
 		return timeStamps.get(timeStamps.size() - 1);
 	}
 
 	@Override
-	public List<Long> getTimestamps() {
+	public final List<Long> getTimestamps() {
 		return Collections.unmodifiableList(timeStamps);
 	}
 
 	@Override
-	public List<V> getValues() {
+	public final List<V> getValues() {
 		return Collections.unmodifiableList(values);
 	}
 
+	// -----------------------------------------------------------------------
+	// Mutation
+	// -----------------------------------------------------------------------
+
 	@Override
-	public void insert(long timeStamp, V value) {
-		if (isEmpty() || timeStamp > getLastTimestamp()) {
+	public final void insert(long timeStamp, V value) {
+		if (isEmpty()) {
 			timeStamps.add(timeStamp);
 			values.add(value);
-		} else if (timeStamp < getFirstTimestamp()) {
+			resetHash();
+			return;
+		}
+
+		long first = timeStamps.get(0);
+		long last = timeStamps.get(timeStamps.size() - 1);
+
+		if (timeStamp > last) {
+			timeStamps.add(timeStamp);
+			values.add(value);
+			resetHash();
+			return;
+		}
+		if (timeStamp < first) {
 			timeStamps.add(0, timeStamp);
 			values.add(0, value);
-		} else {
-			int indexLeftIfNotExisting = findByDate(timeStamp, false);
-			if (timeStamps.get(indexLeftIfNotExisting).longValue() == timeStamp)
-				replaceValue(indexLeftIfNotExisting, value);
-			else {
-				timeStamps.add(indexLeftIfNotExisting + 1, timeStamp);
-				values.add(indexLeftIfNotExisting + 1, value);
-			}
+			resetHash();
+			return;
 		}
 
+		// in-range: exact check first to decide replace vs insert
+		int exact = indexOfExact(timeStamp);
+		if (exact >= 0) {
+			values.set(exact, value);
+			resetHash();
+			return;
+		}
+
+		int left = floorIndexInRange(timeStamp);
+		timeStamps.add(left + 1, timeStamp);
+		values.add(left + 1, value);
 		resetHash();
 	}
 
 	@Override
-	public void removeTimeValue(long timeStamp) {
-		int index = 0;
-		while (timeStamps.get(index) < timeStamp)
-			index++;
-
-		if (timeStamps.get(index).longValue() == timeStamp) {
-			timeStamps.remove(index);
-			values.remove(index);
-		}
-
+	public final void removeTimeValue(long timeStamp) {
+		int idx = indexOfExact(timeStamp);
+		if (idx < 0)
+			return;
+		timeStamps.remove(idx);
+		values.remove(idx);
 		resetHash();
 	}
 
 	@Override
-	public void removeTimeValue(int index) {
+	public final void removeTimeValue(int index) {
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException("TimeSeries: index " + index + " out of bounds for size " + size());
 		timeStamps.remove(index);
 		values.remove(index);
-
 		resetHash();
 	}
 
 	@Override
-	public void replaceValue(int index, V value) throws IllegalArgumentException {
-		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeries: index out of bounds");
-
+	public final void replaceValue(int index, V value) {
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException("TimeSeries: index " + index + " out of bounds for size " + size());
 		values.set(index, value);
-
 		resetHash();
 	}
 
 	@Override
-	public void replaceValue(long timeStamp, V value) throws IllegalArgumentException {
-		int index = findByDate(timeStamp, true);
-
-		if (index < 0 || index >= timeStamps.size())
-			throw new IndexOutOfBoundsException("TimeSeries: timeStamp out of bounds");
-
-		values.set(index, value);
-
+	public final void replaceValue(long timeStamp, V value) {
+		int idx = findByDate(timeStamp, true);
+		values.set(idx, value);
 		resetHash();
 	}
-
 }

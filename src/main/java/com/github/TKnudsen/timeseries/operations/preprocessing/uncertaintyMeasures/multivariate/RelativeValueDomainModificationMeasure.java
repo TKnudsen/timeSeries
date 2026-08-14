@@ -183,7 +183,7 @@ public class RelativeValueDomainModificationMeasure extends TimeSeriesMultivaria
 
 				if (calculateDistributionUncertainty)
 					valueUncertainties.add(new ValueUncertaintyDistribution(
-							DataConversion.doublePrimitivesToList(samplingStatsList.get(i).getValues())));
+							DataConversion.doubleToList(samplingStatsList.get(i).getValues())));
 				else
 					valueUncertainties.add(new ValueUncertainty(vu));
 			}

@@ -8,11 +8,11 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.github.TKnudsen.ComplexDataObject.data.ranking.Ranking;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.ITemporalLabeling;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
 import com.github.TKnudsen.timeseries.data.primitives.TimeIntervalLabel;
-import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 
 public class TimeSeriesLabelingTools {
 

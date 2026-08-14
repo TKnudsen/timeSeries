@@ -3,15 +3,15 @@ package com.github.TKnudsen.timeseries.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeDuration;
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeQuantization;
+import com.github.TKnudsen.ComplexDataObject.model.tools.DateTools;
 import com.github.TKnudsen.timeseries.data.dataGeneration.TimeSeriesGenerator;
 import com.github.TKnudsen.timeseries.data.multivariate.ITimeSeriesMultivariate;
 import com.github.TKnudsen.timeseries.data.multivariate.TimeSeriesMultivariate;
-import com.github.TKnudsen.timeseries.data.primitives.TimeDuration;
-import com.github.TKnudsen.timeseries.data.primitives.TimeQuantization;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.data.univariate.TimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.preprocessing.multivariate.Equidistance;
-import com.github.TKnudsen.timeseries.operations.tools.DateTools;
 
 public class EquidistanceProcessorTester {
 

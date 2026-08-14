@@ -16,7 +16,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * 
  * timeSeries
  *
- * Copyright: (c) 2016-2018 Juergen Bernard,
+ * Copyright: (c) 2016-2025 Juergen Bernard,
  * https://github.com/TKnudsen/timeSeries<br>
  * <br>
  * 
@@ -26,7 +26,7 @@ import com.github.TKnudsen.timeseries.operations.tools.TimeSeriesTools;
  * 
  * @author Juergen Bernard
  * 
- * @version 1.02
+ * @version 1.03
  */
 public class MovingAverageTimeBased extends TimeSeriesProcessor<ITimeSeriesUnivariate> {
 
@@ -48,6 +48,9 @@ public class MovingAverageTimeBased extends TimeSeriesProcessor<ITimeSeriesUniva
 
 	public MovingAverageTimeBased(LinearLongWeightingKernel kernel, boolean considerFutureValues) {
 		Objects.requireNonNull(kernel);
+		if (kernel.getInterval() < 1)
+			throw new IllegalArgumentException(
+					"MovingAverageTimeBased: kernel with negative duration: " + kernel.getInterval());
 
 		this.kernel = kernel;
 		this.considerFutureValues = considerFutureValues;

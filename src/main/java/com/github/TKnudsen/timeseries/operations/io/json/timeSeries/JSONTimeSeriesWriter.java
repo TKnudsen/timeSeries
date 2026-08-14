@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.github.TKnudsen.ComplexDataObject.model.tools.FileTools;
 import com.github.TKnudsen.timeseries.data.ITimeSeries;
 import com.github.TKnudsen.timeseries.data.univariate.ITimeSeriesUnivariate;
 import com.github.TKnudsen.timeseries.operations.io.json.ObjectMapperFactory;
@@ -42,7 +43,7 @@ public class JSONTimeSeriesWriter {
 		return null;
 	}
 
-	public static void writeToFile(ITimeSeries ts, String fileName) {
+	public static void writeToFile(ITimeSeries ts, String fileName) throws IOException {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -50,7 +51,8 @@ public class JSONTimeSeriesWriter {
 		// create dirs when necessary
 		File file = new File(fileName);
 		if (file.getParentFile() != null)
-			file.getParentFile().mkdirs();
+			FileTools.createParentDirectory(file);
+		// file.getParentFile().mkdirs();
 
 		try {
 			mapper.writeValue(file, ts);
@@ -61,13 +63,14 @@ public class JSONTimeSeriesWriter {
 		return;
 	}
 
-	public static void writeTSListToFile(List<ITimeSeriesUnivariate> tsList, String fileName) {
+	public static void writeTSListToFile(List<ITimeSeriesUnivariate> tsList, String fileName) throws IOException {
 		ObjectMapper mapper = ObjectMapperFactory.getTimeSeriesObjectMapper();
 
 		// create dirs when necessary
 		File file = new File(fileName);
 		if (file.getParentFile() != null)
-			file.getParentFile().mkdirs();
+			FileTools.createParentDirectory(file);
+			//file.getParentFile().mkdirs();
 
 		try {
 			mapper.writeValue(file, tsList);

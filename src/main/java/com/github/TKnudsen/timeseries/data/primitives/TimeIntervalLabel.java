@@ -1,5 +1,7 @@
 package com.github.TKnudsen.timeseries.data.primitives;
 
+import com.github.TKnudsen.ComplexDataObject.data.time.TimeInterval;
+
 /**
  * <p>
  * Title: TimeIntervalLabel
