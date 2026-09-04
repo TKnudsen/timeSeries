@@ -1865,7 +1865,11 @@ public final class TimeSeriesTools {
 		if (subsequence == null || subsequence.size() < 2)
 			return Double.NaN;
 
-		return getMeanWeighted(timeSeries, 0.0);
+		// Must average the cropped subsequence, not the original, untouched
+		// timeSeries -- otherwise every call for the same series returns that
+		// series' own overall mean regardless of [start, end], which is exactly
+		// what happened here before this fix.
+		return getMeanWeighted(subsequence, 0.0);
 	}
 
 	/**
